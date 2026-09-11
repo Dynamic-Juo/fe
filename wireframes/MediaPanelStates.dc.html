@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&amp;family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&amp;display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #edeae4; color: #1c1b19; font-size: 14px;
+      font-family: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      -webkit-font-smoothing: antialiased; }
+    a { color: #8a5a12; }
+    a:hover { color: #5f3d0b; }
+    h1, h2, h3, p { margin: 0; }
+
+    .board { display: flex; gap: 26px; padding: 26px; align-items: flex-start; }
+    .col { display: flex; flex-direction: column; }
+    .screen { background: #fff; border: 1px solid #cbc7bf; position: relative; display: flex; flex-direction: column; }
+    .cap { font-family: 'Gaegu', cursive; font-size: 18px; color: #57544e; margin: 0 0 9px 2px; }
+    .cap em { font-style: normal; color: #a8a49b; font-size: 15px; }
+
+    .fold { position: absolute; left: 0; right: 0; border-top: 1.5px dashed #b5793c; z-index: 4; }
+    .fold b { position: absolute; right: 9px; top: -12px; background: #fff; padding: 0 7px;
+      font-family: 'Gaegu', cursive; font-weight: 400; font-size: 14px; color: #8a5a12; }
+
+    .appbar { display: flex; align-items: center; gap: 10px; padding: 0 20px; height: 56px;
+      border-bottom: 1px solid #e8e5df; flex-shrink: 0; }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; letter-spacing: -.02em; }
+    .mark { border: 1.5px solid #1c1b19; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; }
+    .iconbtn { width: 36px; height: 36px; border: 1px solid #d5d1c9; display: grid; place-items: center; background: #fff; flex-shrink: 0; }
+
+    .sec { padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+    .sectitle { display: flex; align-items: center; gap: 8px; }
+    .sectitle h2 { font-size: 15px; font-weight: 600; letter-spacing: -.02em; }
+    .sectitle .n { font-size: 12px; color: #9b968d; margin-left: auto; }
+    .divider { height: 9px; background: #f2efe9; border-top: 1px solid #e8e5df; border-bottom: 1px solid #e8e5df; flex-shrink: 0; }
+    .rule { border: 0; border-top: 1px solid #ece9e3; margin: 0; }
+
+    .card { border: 1px solid #d5d1c9; background: #fff; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .card.muted { background: #faf9f6; border-color: #e3dfd8; }
+    .card.dash { border-style: dashed; border-color: #c6c2b9; }
+
+    .chip { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #b8b4ac; padding: 3px 9px;
+      font-size: 11px; line-height: 1.6; color: #3d3b37; white-space: nowrap; flex-shrink: 0; }
+    .chip.on { background: #1c1b19; color: #fff; border-color: #1c1b19; }
+    .chip.dash { border-style: dashed; color: #8c8880; }
+    .chip.off { border-color: #e3dfd8; color: #a8a49b; }
+    .chip.hv { border-width: 2px; font-weight: 600; }
+
+    .ph { background: #e2ded6; height: 10px; display: block; }
+    .ph.d { background: #efece5; }
+    .slot { color: #8c8880; font-size: 13px; line-height: 1.6; }
+    .slot.big { font-size: 14.5px; color: #3d3b37; line-height: 1.55; }
+    .meta { font-size: 11.5px; color: #9b968d; line-height: 1.65; }
+    .imgph { border: 1px dashed #b8b4ac; color: #a8a49b; font-size: 11px; display: grid; place-items: center; flex-shrink: 0;
+      background: repeating-linear-gradient(45deg, #f7f5f1, #f7f5f1 5px, #efece5 5px, #efece5 10px); }
+
+    .btn { height: 48px; border: 1.5px solid #1c1b19; background: #1c1b19; color: #fff; display: grid; place-items: center;
+      font-size: 15px; font-weight: 500; letter-spacing: -.01em; }
+    .btn.sec { background: #fff; color: #1c1b19; }
+    .btn.sm { height: 42px; font-size: 13.5px; font-weight: 400; }
+    .field { height: 52px; border: 1.5px solid #1c1b19; display: flex; align-items: center; padding: 0 15px; gap: 10px;
+      color: #a8a49b; font-size: 14px; }
+
+    .track { height: 6px; background: #e8e5df; }
+    .track i { display: block; height: 100%; background: #1c1b19; }
+    .steps { display: flex; gap: 5px; }
+    .steps span { flex: 1; height: 4px; background: #e8e5df; }
+    .steps span.on { background: #1c1b19; }
+    .steps span.now { background: #8c8880; }
+
+    .notes { width: 300px; display: flex; flex-direction: column; gap: 11px; padding-top: 36px; flex-shrink: 0; }
+    .nn { display: flex; gap: 9px; align-items: flex-start; }
+    .nn i, .m { border: 1px solid #b5793c; border-radius: 50%; display: grid; place-items: center; font-style: normal;
+      color: #8a5a12; flex-shrink: 0; font-family: 'IBM Plex Sans KR', sans-serif; background: #fdf6e8; }
+    .nn i { width: 20px; height: 20px; font-size: 11px; margin-top: 2px; }
+    .m { width: 18px; height: 18px; font-size: 10.5px; display: inline-grid; }
+    .nn p { font-family: 'Gaegu', cursive; font-size: 16px; line-height: 1.4; color: #6b5636; }
+    .nn p b { color: #8a5a12; font-weight: 700; }
+    .ref { font-family: 'IBM Plex Sans KR', sans-serif; font-size: 10px; color: #b09a76; letter-spacing: .02em; display: block; margin-top: 2px; }
+    .legend { border: 1px solid #e8d6b0; background: #fdf6e8; padding: 12px 13px; display: flex; flex-direction: column; gap: 7px; }
+    .legend p { font-family: 'Gaegu', cursive; font-size: 15px; color: #6b5636; line-height: 1.35; }
+  </style>
+</helmet>
+<div class="board" style="width: 1146px;">
+  <div class="col">
+    <p class="cap">C-02 · 미디어 조작 영역 상태 사전 <em>— 탐지 2종 × 단계 4</em></p>
+    <div class="screen" style="width: 794px; padding: 30px;">
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 26px;">
+        <h2 style="font-size: 16px; font-weight: 600; letter-spacing: -.02em;">영역 구성</h2>
+        <p class="slot">두 탐지를 <b style="color: #3d3b37; font-weight: 600;">항상 각각</b> 표시한다. 하나로 합치거나 둘 중 하나만 보여주지 않는다. 주장 검증과는 완전히 분리된 영역이며 서로를 기다리지 않는다.</p>
+        <div style="display: flex; gap: 12px;">
+          <div class="card" style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="flex: 1; font-size: 13.5px; font-weight: 500;">얼굴 합성 · 변형</span>
+              <span class="chip hv">조작 의심</span>
+            </div>
+            <p class="slot">판단 근거 요약 · 분석한 구간과 프레임 범위.</p>
+          </div>
+          <div class="card" style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="flex: 1; font-size: 13.5px; font-weight: 500;">영상 전체 AI 생성</span>
+              <span class="chip">뚜렷한 조작 징후 없음</span>
+            </div>
+            <p class="slot">분석 범위 · 이 결과가 무엇을 뜻하지 않는지.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="rule" style="margin-bottom: 22px;">
+      <h2 style="font-size: 16px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 14px;">4단계 (각 탐지에 동일 적용)</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 26px;">
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 8px;"><span style="flex: 1; font-size: 13.5px; font-weight: 500;">탐지 이름</span><span class="chip hv">조작 의심</span></div>
+          <p class="slot" style="font-size: 12.5px;">판정 기준을 넘는 조작 징후가 확인됐다. 어느 구간에서 나왔는지 함께 적는다.</p>
+        </div>
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 8px;"><span style="flex: 1; font-size: 13.5px; font-weight: 500;">탐지 이름</span><span class="chip">뚜렷한 조작 징후 없음</span></div>
+          <p class="slot" style="font-size: 12.5px;">분석 범위 안에서 기준을 넘는 징후가 없었다. 분석 범위를 반드시 함께 적는다.</p>
+        </div>
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 8px;"><span style="flex: 1; font-size: 13.5px; font-weight: 500;">탐지 이름</span><span class="chip dash">판단 보류</span></div>
+          <p class="slot" style="font-size: 12.5px;">결과가 기준 부근이거나 입력 품질이 낮아 한쪽으로 판단하기 어렵다.</p>
+        </div>
+        <div class="card muted">
+          <div style="display: flex; align-items: center; gap: 8px;"><span style="flex: 1; font-size: 13.5px; font-weight: 500;">탐지 이름</span><span class="chip off">분석 불가</span></div>
+          <p class="slot" style="font-size: 12.5px;">얼굴 없음 · 프레임 부족 · 모델 오류로 수행하지 못했다. 이유를 적는다.</p>
+        </div>
+      </div>
+
+      <hr class="rule" style="margin-bottom: 22px;">
+      <h2 style="font-size: 16px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 6px;">자주 나올 조합</h2>
+      <p class="slot" style="margin-bottom: 14px;">한쪽 탐지가 실패해도 다른 탐지와 주장 검증은 계속된다.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="flex: 1; display: flex; gap: 12px;">
+            <div class="card muted" style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="flex: 1; font-size: 13px;">얼굴 합성 · 변형</span><span class="chip off">분석 불가</span></div>
+              <p class="slot" style="font-size: 12.5px;">영상에서 분석할 수 있는 얼굴을 찾지 못했습니다.</p>
+            </div>
+            <div class="card" style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="flex: 1; font-size: 13px;">영상 전체 AI 생성</span><span class="chip hv">조작 의심</span></div>
+            </div>
+          </div>
+          <p class="meta" style="width: 150px; padding-top: 12px;">얼굴 없는 영상.<br>주장 검증은 정상 진행.</p>
+        </div>
+
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="flex: 1; display: flex; gap: 12px;">
+            <div class="card" style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="flex: 1; font-size: 13px;">얼굴 합성 · 변형</span><span class="chip">뚜렷한 조작 징후 없음</span></div>
+            </div>
+            <div class="card muted" style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="flex: 1; font-size: 13px;">영상 전체 AI 생성</span><span class="chip off">분석 불가</span></div>
+              <p class="slot" style="font-size: 12.5px;">모델 실행 오류로 분석하지 못했습니다.</p>
+            </div>
+          </div>
+          <p class="meta" style="width: 150px; padding-top: 12px;">한쪽 모델만 오류.<br>부분 결과로 종료 가능.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="legend">
+      <p><b style="color: #8a5a12;">금지 표현</b></p>
+      <p>조작되지 않음 · 실제 영상 · 진짜 · 안전함 · 정상 영상</p>
+      <p>탐지 모델이 지원하지 않는 조작이 있을 수 있어 <b>없음을 단정할 수 없다</b></p>
+      <p class="ref">U-04 · result-ui 미디어 조작 결과</p>
+    </div>
+    <div class="nn"><i>!</i><p><b>판단 보류</b>와 <b>분석 불가</b>는 다르다. 보류는 분석했으나 못 정한 것, 불가는 실행 자체를 못 한 것<span class="ref">U-04</span></p></div>
+    <div class="nn"><i>!</i><p>징후 없음에는 <b>분석 범위</b>를 반드시 붙인다. 범위 없는 없음은 안전하다는 뜻으로 읽힌다</p></div>
+    <div class="nn"><i>!</i><p>음성 합성 탐지는 <b>MVP 제외</b>다. 자리도 만들지 않는다<span class="ref">M-03</span></p></div>
+    <div class="nn"><i>!</i><p>숫자 점수 · 확률 · 신뢰도 % 표시하지 않는다<span class="ref">U-03 · U-04</span></p></div>
+    <div class="nn"><i>?</i><p><b>결정 필요</b> — 조작 의심 구간을 타임라인이나 프레임 썸네일로 보여줄지. 문서에는 없다</p></div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

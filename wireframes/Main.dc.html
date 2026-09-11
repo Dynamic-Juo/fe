@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&amp;family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&amp;display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #edeae4; color: #1c1b19; font-size: 14px;
+      font-family: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      -webkit-font-smoothing: antialiased; }
+    a { color: #8a5a12; }
+    a:hover { color: #5f3d0b; }
+    h1, h2, h3, p { margin: 0; }
+
+    .board { display: flex; gap: 26px; padding: 26px; align-items: flex-start; }
+    .col { display: flex; flex-direction: column; }
+    .screen { background: #fff; border: 1px solid #cbc7bf; position: relative; display: flex; flex-direction: column; }
+    .cap { font-family: 'Gaegu', cursive; font-size: 18px; color: #57544e; margin: 0 0 9px 2px; }
+    .cap em { font-style: normal; color: #a8a49b; font-size: 15px; }
+
+    .fold { position: absolute; left: 0; right: 0; border-top: 1.5px dashed #b5793c; z-index: 4; }
+    .fold b { position: absolute; right: 9px; top: -12px; background: #fff; padding: 0 7px;
+      font-family: 'Gaegu', cursive; font-weight: 400; font-size: 14px; color: #8a5a12; }
+
+    .appbar { display: flex; align-items: center; gap: 10px; padding: 0 20px; height: 56px;
+      border-bottom: 1px solid #e8e5df; flex-shrink: 0; }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; letter-spacing: -.02em; }
+    .mark { border: 1.5px solid #1c1b19; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; }
+    .iconbtn { width: 36px; height: 36px; border: 1px solid #d5d1c9; display: grid; place-items: center; background: #fff; flex-shrink: 0; }
+
+    .sec { padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+    .sectitle { display: flex; align-items: center; gap: 8px; }
+    .sectitle h2 { font-size: 15px; font-weight: 600; letter-spacing: -.02em; }
+    .sectitle .n { font-size: 12px; color: #9b968d; margin-left: auto; }
+    .divider { height: 9px; background: #f2efe9; border-top: 1px solid #e8e5df; border-bottom: 1px solid #e8e5df; flex-shrink: 0; }
+    .rule { border: 0; border-top: 1px solid #ece9e3; margin: 0; }
+
+    .card { border: 1px solid #d5d1c9; background: #fff; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .card.muted { background: #faf9f6; border-color: #e3dfd8; }
+    .card.dash { border-style: dashed; border-color: #c6c2b9; }
+
+    .chip { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #b8b4ac; padding: 3px 9px;
+      font-size: 11px; line-height: 1.6; color: #3d3b37; white-space: nowrap; flex-shrink: 0; }
+    .chip.on { background: #1c1b19; color: #fff; border-color: #1c1b19; }
+    .chip.dash { border-style: dashed; color: #8c8880; }
+    .chip.off { border-color: #e3dfd8; color: #a8a49b; }
+    .chip.hv { border-width: 2px; font-weight: 600; }
+
+    .ph { background: #e2ded6; height: 10px; display: block; }
+    .ph.d { background: #efece5; }
+    .slot { color: #8c8880; font-size: 13px; line-height: 1.6; }
+    .slot.big { font-size: 14.5px; color: #3d3b37; line-height: 1.55; }
+    .meta { font-size: 11.5px; color: #9b968d; line-height: 1.65; }
+    .imgph { border: 1px dashed #b8b4ac; color: #a8a49b; font-size: 11px; display: grid; place-items: center; flex-shrink: 0;
+      background: repeating-linear-gradient(45deg, #f7f5f1, #f7f5f1 5px, #efece5 5px, #efece5 10px); }
+
+    .btn { height: 48px; border: 1.5px solid #1c1b19; background: #1c1b19; color: #fff; display: grid; place-items: center;
+      font-size: 15px; font-weight: 500; letter-spacing: -.01em; }
+    .btn.sec { background: #fff; color: #1c1b19; }
+    .btn.sm { height: 42px; font-size: 13.5px; font-weight: 400; }
+    .field { height: 52px; border: 1.5px solid #1c1b19; display: flex; align-items: center; padding: 0 15px; gap: 10px;
+      color: #a8a49b; font-size: 14px; }
+
+    .track { height: 6px; background: #e8e5df; }
+    .track i { display: block; height: 100%; background: #1c1b19; }
+    .steps { display: flex; gap: 5px; }
+    .steps span { flex: 1; height: 4px; background: #e8e5df; }
+    .steps span.on { background: #1c1b19; }
+    .steps span.now { background: #8c8880; }
+
+    .notes { width: 300px; display: flex; flex-direction: column; gap: 11px; padding-top: 36px; flex-shrink: 0; }
+    .nn { display: flex; gap: 9px; align-items: flex-start; }
+    .nn i, .m { border: 1px solid #b5793c; border-radius: 50%; display: grid; place-items: center; font-style: normal;
+      color: #8a5a12; flex-shrink: 0; font-family: 'IBM Plex Sans KR', sans-serif; background: #fdf6e8; }
+    .nn i { width: 20px; height: 20px; font-size: 11px; margin-top: 2px; }
+    .m { width: 18px; height: 18px; font-size: 10.5px; display: inline-grid; }
+    .nn p { font-family: 'Gaegu', cursive; font-size: 16px; line-height: 1.4; color: #6b5636; }
+    .nn p b { color: #8a5a12; font-weight: 700; }
+    .ref { font-family: 'IBM Plex Sans KR', sans-serif; font-size: 10px; color: #b09a76; letter-spacing: .02em; display: block; margin-top: 2px; }
+    .legend { border: 1px solid #e8d6b0; background: #fdf6e8; padding: 12px 13px; display: flex; flex-direction: column; gap: 7px; }
+    .legend p { font-family: 'Gaegu', cursive; font-size: 15px; color: #6b5636; line-height: 1.35; }
+  </style>
+</helmet>
+<div class="board" style="width: 716px;">
+  <div class="col">
+    <p class="cap">S-01 · 홈 / URL 입력 <em>— 모바일 390</em></p>
+    <div class="screen" style="width: 390px; height: 844px;">
+
+      <div class="appbar">
+        <div class="brand"><span class="mark" style="width: 24px; height: 24px;"></span>Conan AI</div>
+        <div style="margin-left: auto; display: flex; align-items: center; gap: 7px;">
+          <div class="iconbtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c1b19" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="M8 11l4 4 4-4"/><path d="M4 17v3h16v-3"/></svg>
+          </div>
+          <i class="m">1</i>
+        </div>
+      </div>
+
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 24px 60px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 34px;">
+          <span class="mark" style="width: 60px; height: 60px; border-width: 2px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1c1b19" stroke-width="1.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>
+          </span>
+          <h1 style="font-size: 27px; font-weight: 600; letter-spacing: -.03em;">Conan AI</h1>
+          <p class="slot" style="text-align: center;">영상의 조작 가능성과 주장의 사실성을<br>따로 확인합니다</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="field">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#a8a49b" stroke-width="1.6" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+            <span style="flex: 1;">YouTube Shorts 링크 붙여넣기</span>
+            <i class="m">2</i>
+          </div>
+          <div class="btn">분석하기</div>
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 16px;">
+          <p class="meta" style="flex: 1; text-align: center;">공개 상태이고 주 사용 언어가 한국어인<br>YouTube Shorts만 분석합니다. 최대 3분.</p>
+          <i class="m" style="margin-top: 2px;">3</i>
+        </div>
+      </div>
+
+      <div style="padding: 0 24px 22px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <p class="meta" style="text-decoration: underline; text-underline-offset: 3px;">피드백 · 잘못된 결과 신고</p>
+        <i class="m">5</i>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="legend">
+      <p><b style="color: #8a5a12;">읽는 법</b></p>
+      <p>실선 = 확정된 UI · 점선 = 자리표시자</p>
+      <p>회색 바 = 서버가 채우는 텍스트</p>
+      <p>오커색 = 주석. 화면에 없는 요소</p>
+      <p>본문 문구는 필드 이름을 적었다.<br>실제 카피는 시안 단계에서 확정</p>
+    </div>
+    <div class="nn"><i>1</i><p>PWA 설치 진입점. <b>설치 가능한 환경에만</b> 노출. Chromium은 설치창 호출, iOS는 안내 시트(S-09). 이미 설치됐거나 미지원이면 감춘다<span class="ref">PRD 제공 형태 · M-05</span></p></div>
+    <div class="nn"><i>2</i><p>한 번에 URL 한 건. 여러 영상 일괄 분석 없음<span class="ref">R-07</span></p></div>
+    <div class="nn"><i>3</i><p>지원 조건을 입력 전에 보여 실패를 줄인다. 조건에 맞지 않는 입력은 <b>분석을 시작하지 않고</b> 인라인 안내(S-08)<span class="ref">R-01 · result-ui 실패표</span></p></div>
+    <div class="nn"><i>4</i><p>로그인 없음. 진행 중인 분석이 있으면 새 분석을 막고 진행 화면으로 보낸다 — <b>브라우저 세션당 1건</b><span class="ref">analysis-runtime 동시 처리</span></p></div>
+    <div class="nn"><i>5</i><p>피드백과 오분석 신고는 Google Form 한 곳. 결과 화면의 분석 ID를 첨부하도록 안내<span class="ref">M-06 · R-08</span></p></div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

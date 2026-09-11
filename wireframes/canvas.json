@@ -1,0 +1,152 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "page": "page-1",
+      "x": 0,
+      "y": 0,
+      "w": 768,
+      "h": 960
+    },
+    {
+      "file": "MobilePreparing.dc.html",
+      "page": "page-1",
+      "x": 868,
+      "y": 0,
+      "w": 768,
+      "h": 960
+    },
+    {
+      "file": "MobileProgress.dc.html",
+      "page": "page-1",
+      "x": 1736,
+      "y": 0,
+      "w": 768,
+      "h": 1400
+    },
+    {
+      "file": "MobileComplete.dc.html",
+      "page": "page-1",
+      "x": 2604,
+      "y": 0,
+      "w": 768,
+      "h": 1830
+    },
+    {
+      "file": "DesktopHome.dc.html",
+      "page": "page-2",
+      "x": 0,
+      "y": 0,
+      "w": 1870,
+      "h": 1000
+    },
+    {
+      "file": "DesktopPreparing.dc.html",
+      "page": "page-2",
+      "x": 1970,
+      "y": 0,
+      "w": 1870,
+      "h": 1030
+    },
+    {
+      "file": "DesktopProgress.dc.html",
+      "page": "page-2",
+      "x": 3940,
+      "y": 0,
+      "w": 1870,
+      "h": 1190
+    },
+    {
+      "file": "DesktopComplete.dc.html",
+      "page": "page-2",
+      "x": 5910,
+      "y": 0,
+      "w": 1870,
+      "h": 1340
+    },
+    {
+      "file": "ClaimCardStates.dc.html",
+      "page": "page-3",
+      "x": 0,
+      "y": 0,
+      "w": 1198,
+      "h": 1490
+    },
+    {
+      "file": "MediaPanelStates.dc.html",
+      "page": "page-3",
+      "x": 1298,
+      "y": 0,
+      "w": 1198,
+      "h": 1010
+    },
+    {
+      "file": "InputStates.dc.html",
+      "page": "page-3",
+      "x": 0,
+      "y": 1620,
+      "w": 1694,
+      "h": 1040
+    },
+    {
+      "file": "ResultStates.dc.html",
+      "page": "page-3",
+      "x": 1794,
+      "y": 1620,
+      "w": 1694,
+      "h": 1130
+    }
+  ],
+  "annotations": [
+    {
+      "id": "intro",
+      "page": "page-1",
+      "x": 0,
+      "y": -300,
+      "w": 760,
+      "text": "Conan AI 와이어프레임 가이드\n\n회색조는 UI, 오커색은 전부 주석이다. 화면에 오커색 요소는 없다.\n본문에 적힌 문장은 실제 카피가 아니라 그 자리에 무엇이 들어가는지를 적은 것이다.\n\n붉은 점선은 첫 화면 경계다. 그 아래는 스크롤해야 보인다.\n모바일 390 기준. 데스크톱과 상태 사전은 상단 페이지 메뉴에서 넘긴다."
+    },
+    {
+      "id": "flow-note",
+      "page": "page-1",
+      "x": 1736,
+      "y": -300,
+      "w": 760,
+      "text": "이 세 화면은 같은 URL, 같은 화면이 폴링으로 변해 가는 모습이다.\n페이지 이동이 아니다. 주장 수가 확정되는 순간(S-02 → S-03)이 유일하게 구조가 바뀌는 지점이고,\n그 뒤로는 카드 내용만 채워진다."
+    },
+    {
+      "id": "desktop-note",
+      "page": "page-2",
+      "x": 0,
+      "y": -240,
+      "w": 900,
+      "text": "데스크톱은 블록 구성을 그대로 두고 배치만 2열로 바꾼다.\n좌: 진행 헤더 + 주장 카드 · 우: 영상 정보 → 요약 → 미디어 조작\n사이드바 세 블록의 순서는 세 화면에서 바뀌지 않는다. 요약은 진행 중에도 자리를 잡아 둔다.\n전환 폭 1024px 제안. 홈은 두 폭 모두 단일 열."
+    },
+    {
+      "id": "sheet-note",
+      "page": "page-3",
+      "x": 0,
+      "y": -240,
+      "w": 900,
+      "text": "구현 중 가장 자주 틀리는 부분을 상태별로 모았다.\n처리 상태와 검증 판정은 서로 다른 축이고, 근거 부족과 검증할 주장 없음은 실패가 아니며,\n미디어 결과에 조작이 없다고 단정하는 표현은 쓰지 않는다."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-1"
+  },
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "모바일 흐름"
+    },
+    {
+      "id": "page-2",
+      "name": "데스크톱 흐름"
+    },
+    {
+      "id": "page-3",
+      "name": "상태 사전"
+    }
+  ]
+}
