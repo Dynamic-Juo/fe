@@ -6,11 +6,11 @@ export const chip = style({
   display: 'inline-flex',
   alignItems: 'center',
   gap: vars.space.xxs,
-  padding: `2px ${vars.space.xs}`,
+  padding: `3px ${vars.space.xs}`,
   border: `${vars.borderWidth.thin} solid ${vars.color.border.default}`,
   borderRadius: vars.radius.sm,
   fontSize: vars.font.size.xs,
-  lineHeight: vars.font.lineHeight.tight,
+  lineHeight: vars.font.lineHeight.relaxed,
   whiteSpace: 'nowrap',
   color: vars.color.text.secondary,
 })
@@ -29,7 +29,7 @@ export const emphasis = styleVariants({
   },
   muted: {
     borderColor: vars.color.border.subtle,
-    color: vars.color.text.tertiary,
+    color: vars.color.text.disabled,
   },
   dashed: {
     borderStyle: 'dashed',

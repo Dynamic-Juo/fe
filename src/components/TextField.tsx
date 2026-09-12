@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import type { InputHTMLAttributes, ReactNode, Ref } from 'react'
 import { useId } from 'react'
 
 import * as styles from './TextField.css'
@@ -11,6 +11,7 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> & {
   icon?: ReactNode
   invalid?: boolean
   describedBy?: string
+  ref?: Ref<HTMLInputElement>
 }
 
 export function TextField({
@@ -19,6 +20,7 @@ export function TextField({
   icon,
   invalid = false,
   describedBy,
+  ref,
   ...rest
 }: Props) {
   const id = useId()
@@ -31,6 +33,7 @@ export function TextField({
       <div className={`${styles.wrapper} ${invalid ? styles.invalid : ''}`.trim()}>
         {icon ? <span className={styles.icon}>{icon}</span> : null}
         <input
+          ref={ref}
           id={id}
           className={styles.input}
           aria-invalid={invalid || undefined}

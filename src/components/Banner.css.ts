@@ -8,7 +8,7 @@ export const banner = style({
   flexWrap: 'wrap',
   alignItems: 'flex-start',
   gap: vars.space.xs,
-  padding: vars.space.sm,
+  padding: `${vars.space.sm} ${vars.space.sm}`,
   border: `${vars.borderWidth.thin} solid ${vars.color.border.default}`,
   borderRadius: vars.radius.sm,
   backgroundColor: vars.color.surface.sunken,
@@ -32,13 +32,16 @@ export const icon = style({
 export const body = style({ flex: 1, minWidth: 0 })
 
 export const title = style({
+  fontSize: vars.font.size.md,
   fontWeight: vars.font.weight.medium,
   color: vars.color.text.primary,
 })
 
 export const description = style({
   marginTop: vars.space.xxs,
-  color: vars.color.text.secondary,
+  fontSize: vars.font.size.sm,
+  lineHeight: vars.font.lineHeight.relaxed,
+  color: vars.color.text.tertiary,
 })
 
 /**
