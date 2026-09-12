@@ -112,19 +112,15 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 8px;">
-          <p class="meta">주장 검증 분석 불가 <span style="color: #c0bcb4;">— completed_with_limitations</span></p>
+          <p class="meta">음성 인식 불가 <span style="color: #c0bcb4;">— completed_with_limitations</span></p>
           <div class="screen" style="width: 100%; padding: 20px; gap: 12px; display: flex; flex-direction: column;">
             <div style="border: 1px solid #d5d1c9; background: #faf9f6; padding: 11px 12px;">
               <p style="font-size: 12.5px; font-weight: 500;">일부 분석만 완료되었습니다</p>
             </div>
             <div class="sectitle"><h2 style="font-size: 14px;">주장 사실성 검증</h2></div>
-            <div class="card muted" style="align-items: center; padding: 18px 14px; gap: 9px;">
+            <div class="card muted" style="align-items: center; padding: 22px 14px; gap: 7px;">
               <span class="chip off">분석 불가</span>
               <p class="slot" style="text-align: center; font-size: 12.5px;">발언을 텍스트로 옮기지 못해 주장을 검증할 수 없습니다.</p>
-              <div style="display: flex; align-items: center; gap: 7px; width: 100%;">
-                <hr class="rule" style="flex: 1;"><span class="meta" style="font-size: 10.5px;">또는</span><hr class="rule" style="flex: 1;">
-              </div>
-              <p class="slot" style="text-align: center; font-size: 12.5px;">한국어 영상만 분석할 수 있습니다.</p>
             </div>
             <hr class="rule">
             <div class="sectitle"><h2 style="font-size: 14px;">미디어 조작 가능성</h2></div>
@@ -197,6 +193,30 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 8px;">
+          <p class="meta">주 사용 언어가 한국어가 아님 <span style="color: #c0bcb4;">— completed</span></p>
+          <div class="screen" style="width: 100%; padding: 20px; gap: 12px; display: flex; flex-direction: column;">
+            <div style="border: 1px solid #d5d1c9; background: #faf9f6; padding: 11px 12px; display: flex; gap: 8px; align-items: flex-start;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6f6c66" stroke-width="1.6" stroke-linecap="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg>
+              <p class="slot" style="font-size: 12px; flex: 1;">한국어 영상이 아니어서 판정 신뢰도가 떨어질 수 있습니다.</p>
+            </div>
+            <div class="card" style="gap: 9px;">
+              <p class="meta">주장 판정 <span style="color: #6f6c66;">전체 4개</span></p>
+              <div style="display: flex; gap: 5px;">
+                <span class="chip" style="flex: 1; justify-content: center; font-size: 10.5px;">일치 1</span>
+                <span class="chip" style="flex: 1; justify-content: center; font-size: 10.5px;">불일치 0</span>
+                <span class="chip" style="flex: 1; justify-content: center; font-size: 10.5px;">근거 부족 3</span>
+              </div>
+              <hr class="rule">
+              <p class="meta">완료 4 · 미완료 0 · 시간 초과 0</p>
+            </div>
+            <div class="card" style="flex-direction: row; align-items: center; padding: 11px 12px;">
+              <span style="flex: 1; font-size: 12.5px;">얼굴 합성 · 변형</span><span class="chip" style="font-size: 10px;">뚜렷한 조작 징후 없음</span>
+            </div>
+            <p class="meta" style="text-align: center;">분석을 중단하지 않는다 · 실패가 아니다</p>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
           <p class="meta">상태 구분 요약</p>
           <div class="screen" style="width: 100%; padding: 20px; gap: 10px; display: flex; flex-direction: column;">
             <div style="display: flex; gap: 9px; align-items: flex-start;"><span class="chip dash" style="width: 130px; justify-content: center;">partially_completed</span><p class="slot" style="flex: 1; font-size: 12px;">일부 결과가 도착했고 <b style="color: #3d3b37;">아직 진행 중</b></p></div>
@@ -219,7 +239,7 @@
     <div class="nn"><i>!</i><p>가장 헷갈리는 한 쌍. <b>partially_completed는 진행 중</b>, <b>completed_with_limitations는 끝남</b>이다. 화면에서 다시 분석 버튼의 유무가 갈린다<span class="ref">U-05 · analysis-runtime 작업 상태</span></p></div>
     <div class="nn"><i>!</i><p>검증할 주장 없음과 근거 부족은 <b>실패가 아니다.</b> 실패 아이콘이나 경고 배너를 붙이지 않는다<span class="ref">U-05</span></p></div>
     <div class="nn"><i>!</i><p>시간 초과는 <b>분석 시작 시점부터</b> 10분이다. 대기열에서 기다린 시간은 세지 않는다<span class="ref">analysis-runtime 처리 시간</span></p></div>
-    <div class="nn"><i>!</i><p>한국어가 아닌 영상은 <b>분석 시작 전에 거를 수 없다.</b> 음성 인식까지 가야 알기 때문이다. 미디어 결과는 그대로 두고 주장 검증만 분석 불가로 끝낸다<span class="ref">result-ui 실패와 부분 결과</span></p></div>
+    <div class="nn"><i>!</i><p>한국어가 아닌 영상은 <b>분석 시작 전에 거를 수 없다.</b> 음성 인식까지 가야 알기 때문이다. 이미 다운로드와 인식을 마친 뒤라 <b>결과를 버리지 않고</b> 분석을 계속하며, 신뢰도가 떨어질 수 있다는 안내만 붙인다. 실패나 분석 불가가 아니다<span class="ref">result-ui 실패와 부분 결과</span></p></div>
     <div class="nn"><i>!</i><p>어떤 종료 상태든 <b>이미 완료된 결과는 지우지 않는다.</b> 화면을 비우고 오류만 남기는 처리는 금지<span class="ref">R-10 · result-ui</span></p></div>
     <div class="legend">
       <p><b style="color: #8a5a12;">폴링 설계 메모</b></p>

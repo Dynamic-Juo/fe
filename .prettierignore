@@ -1,0 +1,4 @@
+# Claude Design 아트보드와 캔버스 매니페스트.
+# 도구가 생성하고 수정하는 파일이므로 포맷하지 않는다.
+wireframes/*.dc.html
+wireframes/canvas.json
