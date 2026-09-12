@@ -74,7 +74,7 @@ export function ComponentsScreen() {
         </p>
       </Section>
 
-      <Section title="버튼" note="최소 높이는 토큰의 minTouchTarget을 따른다.">
+      <Section title="버튼" note="높이는 토큰의 controlHeight를 따라 입력과 같다.">
         <div className={styles.row}>
           <Button>분석하기</Button>
           <Button variant="outline">다시 분석</Button>

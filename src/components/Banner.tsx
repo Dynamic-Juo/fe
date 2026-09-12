@@ -30,8 +30,8 @@ export function Banner({
       <div className={styles.body}>
         <p className={styles.title}>{title}</p>
         {description ? <p className={styles.description}>{description}</p> : null}
-        {action}
       </div>
+      {action ? <div className={styles.action}>{action}</div> : null}
     </div>
   )
 }

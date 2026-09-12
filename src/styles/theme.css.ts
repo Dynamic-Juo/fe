@@ -126,5 +126,6 @@ createGlobalTheme(':root', vars, {
     contentMax: '45rem',
     sidebarWidth: '22.5rem',
     minTouchTarget: '2.75rem',
+    controlHeight: '3.25rem',
   },
 })

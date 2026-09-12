@@ -74,6 +74,9 @@ export const HOME = {
   optimizedNotice: '한국어 영상에 최적화되어 있습니다.',
   feedback: '피드백 · 잘못된 결과 신고',
   install: '앱으로 설치',
+  submitting: '접수하는 중',
+  viewRunning: '진행 중인 분석 보기',
+  checkingVideo: '영상을 확인하는 중',
 } as const
 
 export const PROGRESS = {

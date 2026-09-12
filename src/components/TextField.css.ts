@@ -6,7 +6,7 @@ export const wrapper = style({
   display: 'flex',
   alignItems: 'center',
   gap: vars.space.xs,
-  minHeight: '3.25rem',
+  minHeight: vars.layout.controlHeight,
   padding: `0 ${vars.space.md}`,
   border: `${vars.borderWidth.thick} solid ${vars.color.border.strong}`,
   borderRadius: vars.radius.sm,
