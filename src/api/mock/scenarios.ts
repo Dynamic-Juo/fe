@@ -105,6 +105,27 @@ const NEWS_EVIDENCE = (
   cite_reason: reason,
 })
 
+/** 1차 자료다. 유형 라벨이 달라 배치가 어떻게 바뀌는지 같이 본다. */
+const OFFICIAL_EVIDENCE = (
+  title: string,
+  publisher: string,
+  published: string,
+  reason: string,
+): EvidenceResult => ({
+  title,
+  url: 'https://example.go.kr/mock-notice',
+  source: 'gov_notice',
+  publisher,
+  published_at: published,
+  content_scope: 'search_excerpt',
+  provenance_verified: false,
+  source_type: 'government',
+  source_type_label: '정부 · 공공기관',
+  is_primary: true,
+  cited: true,
+  cite_reason: reason,
+})
+
 const REFERENCE_EVIDENCE: EvidenceResult = {
   title: '같은 주제를 다루지만 주장을 직접 확인하지 못한 자료',
   url: 'https://example.com/mock-reference',
@@ -187,6 +208,12 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           reason: '인상 시점 두 건을 다룬 보도에서 같은 내용을 확인했다.',
           quote: '주택용 요금은 1월과 7월 두 차례 조정됐다.',
           evidence: [
+            OFFICIAL_EVIDENCE(
+              '전기요금 조정 내역 공고',
+              '예시에너지공단',
+              '2026-07-01',
+              '조정 시점과 폭을 고시한 1차 자료다.',
+            ),
             NEWS_EVIDENCE(
               '주택용 전기요금 두 차례 조정',
               '예시일보',
@@ -206,6 +233,18 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           verdict: 'refuted',
           reason: '같은 기준으로 비교한 자료의 증가 폭과 맞지 않는다.',
           evidence: [
+            OFFICIAL_EVIDENCE(
+              '가구원 수별 월 평균 사용량과 요금',
+              '예시에너지공단',
+              '2026-07-03',
+              '같은 사용량 기준의 월 요금을 표로 제시한다.',
+            ),
+            NEWS_EVIDENCE(
+              '요금 인상 체감과 실제 차이',
+              '예시일보',
+              '2026-07-12',
+              '세 배라는 표현이 어디서 나왔는지 짚고 있다.',
+            ),
             NEWS_EVIDENCE(
               '4인 가구 월 부담 변화 정리',
               '예시경제',
@@ -259,7 +298,15 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           reason: '비교 기준이 제각각이라 같은 조건으로 맞춰 보지 못했다.',
           insufficientReason: 'not_direct',
           insufficientLabel: '자료가 같은 주제만 다루고 주장을 직접 확인하지 못했습니다',
-          evidence: [REFERENCE_EVIDENCE],
+          evidence: [
+            NEWS_EVIDENCE(
+              '국가별 전기요금 비교 보도',
+              '예시경제',
+              '2026-06-30',
+              '비교 기준이 서로 달라 같은 조건으로 맞추지 못했다.',
+            ),
+            REFERENCE_EVIDENCE,
+          ],
         },
       },
       {
