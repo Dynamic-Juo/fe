@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
@@ -28,7 +28,11 @@ export function HomeScreen() {
   const submit = useSubmitAnalysis()
 
   const videoId = parseVideoId(input)
-  const malformed = touched && input.trim() !== '' && videoId === null
+  const settled = useSettledInput(input)
+
+  // 형식 오류는 입력 즉시 판정되므로 타이핑 중에는 띄우지 않는다. 한 글자마다
+  // 안내가 깜빡인다. 입력이 멎었거나 포커스를 뗀 뒤에 보여준다.
+  const malformed = videoId === null && input.trim() !== '' && (touched || settled)
 
   const preview = useQuery({
     queryKey: ['videoPreview', videoId],
@@ -97,7 +101,6 @@ export function HomeScreen() {
               title={ERROR.unsupportedUrl}
               description={ERROR.unsupportedUrlDetail}
               tone="notice"
-              assertive
             />
           ) : null}
 
@@ -137,6 +140,30 @@ export function HomeScreen() {
       </div>
     </main>
   )
+}
+
+/** 입력이 멎었다고 볼 때까지 기다리는 시간. */
+const SETTLE_DELAY_MS = 500
+
+/**
+ * 마지막 입력 뒤 일정 시간이 지났는지. 안내를 띄울 시점을 정하는 데 쓴다.
+ *
+ * 값이 바뀔 때 상태를 되돌리지 않고 마지막으로 멎은 값을 들고 비교한다.
+ * 효과 안에서 곧바로 상태를 바꾸면 렌더가 한 번 더 돈다.
+ */
+function useSettledInput(value: string): boolean {
+  const [settledValue, setSettledValue] = useState<string | null>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSettledValue(value)
+    }, SETTLE_DELAY_MS)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [value])
+
+  return value.trim() !== '' && settledValue === value
 }
 
 /**
