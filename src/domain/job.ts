@@ -66,3 +66,17 @@ export function claimProgress(
 export function processingStage(status: JobStatus): string | null {
   return status.startsWith('processing:') ? status.slice('processing:'.length) : null
 }
+
+/**
+ * 다시 분석을 권할지. 재실행으로 풀릴 수 있는 실패에만 준다. 같은 결과가
+ * 뻔한 것을 다시 누르게 하지 않는다.
+ *
+ * 지원하지 않는 입력과 접근할 수 없는 영상은 접수 단계에서 걸러지므로 여기
+ * 오지 않는다. 검증할 주장이 없는 것은 실패가 아니라 정상 결과다.
+ */
+export function canRetry(job: JobResponse): boolean {
+  if (!isTerminalStatus(job.status)) return false
+  if (job.status === 'failed') return job.error?.retryable ?? true
+  // 검증할 주장이 없는 것은 다시 돌려도 같은 결과다.
+  return job.result?.claim_verification?.status !== 'no_claims'
+}
