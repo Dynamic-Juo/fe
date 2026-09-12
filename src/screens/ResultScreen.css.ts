@@ -75,6 +75,16 @@ export const section = style({
   },
 })
 
+/** 넓은 화면에만 두는 자리. 감싼 상자째 빼야 여백이 남지 않는다. */
+export const desktopOnly = style({
+  display: 'none',
+  '@media': {
+    [media.desktop]: {
+      display: 'block',
+    },
+  },
+})
+
 /** 좁은 화면의 순서다. 넓은 화면에서도 각 열 안의 순서로 그대로 쓰인다. */
 export const orderVideo = style({ order: 1 })
 export const orderHeadline = style({ order: 2 })

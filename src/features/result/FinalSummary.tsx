@@ -1,13 +1,8 @@
-import type { JobResponse, TerminalJobStatus } from '../../api/types'
+import type { JobResponse, ManipulationResult, TerminalJobStatus } from '../../api/types'
 import { Card, Chip } from '../../components'
-import {
-  DETECTION_LABEL,
-  JOB_STATE_LABEL,
-  MANIPULATION_LABEL,
-  SECTION,
-  SUMMARY,
-} from '../../copy/strings'
+import { DETECTION_LABEL, JOB_STATE_LABEL, SECTION, SUMMARY } from '../../copy/strings'
 import { timestamp } from '../../domain/format'
+import { ManipulationChip } from './ManipulationChip'
 import * as styles from './FinalSummary.css'
 
 /**
@@ -33,19 +28,8 @@ export function FinalSummary({ job, status }: { job: JobResponse; status: Termin
       <Card>
         <div className={styles.group}>
           <p className={styles.groupTitle}>{SECTION.mediaManipulation}</p>
-          <DetectionRow
-            name={DETECTION_LABEL.face}
-            value={
-              result?.face_manipulation?.status_label ?? label(result?.face_manipulation?.status)
-            }
-          />
-          <DetectionRow
-            name={DETECTION_LABEL.wholeVideo}
-            value={
-              result?.whole_video_generation?.status_label ??
-              label(result?.whole_video_generation?.status)
-            }
-          />
+          <DetectionRow name={DETECTION_LABEL.face} result={result?.face_manipulation} />
+          <DetectionRow name={DETECTION_LABEL.wholeVideo} result={result?.whole_video_generation} />
         </div>
 
         <hr className={styles.rule} />
@@ -90,18 +74,18 @@ export function FinalSummary({ job, status }: { job: JobResponse; status: Termin
   )
 }
 
-function label(status: string | undefined): string {
-  return status !== undefined && status in MANIPULATION_LABEL
-    ? MANIPULATION_LABEL[status as keyof typeof MANIPULATION_LABEL]
-    : MANIPULATION_LABEL.unavailable
-}
-
-/** 조작 의심만 굵게 둔다. 나머지를 같은 무게로 두어야 단정처럼 읽히지 않는다. */
-function DetectionRow({ name, value }: { name: string; value: string }) {
+function DetectionRow({
+  name,
+  result,
+}: {
+  name: string
+  result: ManipulationResult | null | undefined
+}) {
   return (
     <div className={styles.row}>
       <span className={styles.rowName}>{name}</span>
-      <Chip emphasis={value === MANIPULATION_LABEL.suspected ? 'strong' : 'normal'}>{value}</Chip>
+      {/* 요약은 끝난 뒤에만 만들어지므로 비어 있으면 수행하지 못한 것이다. */}
+      <ManipulationChip result={result} finished />
     </div>
   )
 }

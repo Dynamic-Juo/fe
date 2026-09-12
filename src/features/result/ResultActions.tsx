@@ -1,12 +1,9 @@
-import { useNavigate } from 'react-router-dom'
-
-import { useSubmitAnalysis } from '../../api/queries'
 import type { JobResponse } from '../../api/types'
-import { readSession, writeSession } from '../../app/session'
 import { Button } from '../../components'
 import { HOME, RESULT, SUMMARY } from '../../copy/strings'
 import { timestamp } from '../../domain/format'
 import { canRetry } from '../../domain/job'
+import { useRetryAnalysis } from './useRetryAnalysis'
 import * as styles from './ResultActions.css'
 
 /** 피드백 창구 주소. 정해지기 전에는 링크를 만들지 않는다. */
@@ -31,27 +28,13 @@ export function ResultActions({
   /** 요약 카드가 없을 때만 여기서 분석 ID를 보여준다. 두 곳에 두지 않는다. */
   showId: boolean
 }) {
-  const navigate = useNavigate()
-  const submit = useSubmitAnalysis()
-
-  const retry = () => {
-    const session = readSession()
-    submit.mutate(
-      { url: job.url, session_id: session.sessionId },
-      {
-        onSuccess: (response) => {
-          writeSession({ sessionId: response.session_id, lastJobId: response.job_id })
-          void navigate(`/r/${response.job_id}`)
-        },
-      },
-    )
-  }
+  const { retry, pending } = useRetryAnalysis(job)
 
   return (
     <div className={styles.actions}>
       {finished && canRetry(job) ? (
-        <Button variant="outline" fullWidth disabled={submit.isPending} onClick={retry}>
-          {submit.isPending ? RESULT.retrying : RESULT.retry}
+        <Button variant="outline" size="sm" fullWidth disabled={pending} onClick={retry}>
+          {pending ? RESULT.retrying : RESULT.retry}
         </Button>
       ) : null}
 

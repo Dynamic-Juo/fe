@@ -1,9 +1,9 @@
 import type { ClaimVerificationResult } from '../../api/types'
-import { Card } from '../../components'
-import { ClockIcon } from '../../components/icons'
+import { ClockIcon, ErrorIcon, InfoIcon } from '../../components/icons'
 import { PROGRESS, RESULT, SECTION } from '../../copy/strings'
 import { claimKey, claimProgress } from '../../domain/job'
 import { ClaimCard } from './ClaimCard'
+import { EmptyState } from './EmptyState'
 import * as styles from './ClaimSection.css'
 
 /**
@@ -41,26 +41,17 @@ export function ClaimSection({
       {/* 검증할 주장이 없는 것과 검증하지 못한 것은 다르다. 둘 다 실패가 아니다. */}
       {verification === null || verification === undefined ? (
         finished ? (
-          <Card tone="muted">
-            <p className={styles.notice}>{RESULT.claimNotRun}</p>
-          </Card>
+          <EmptyState icon={<ErrorIcon size={26} />}>{RESULT.claimNotRun}</EmptyState>
         ) : (
-          <Card tone="dashed">
-            {/* 주장 수가 확정되기 전이라 카드도 만들지 않는다. 안내 문구 한 줄만 둔다. */}
-            <div className={styles.waiting}>
-              <ClockIcon size={26} />
-              <p className={styles.waitingText}>{PROGRESS.preparing}</p>
-            </div>
-          </Card>
+          // 주장 수가 확정되기 전이라 카드도 만들지 않는다. 안내 문구 한 줄만 둔다.
+          <EmptyState icon={<ClockIcon size={26} />}>{PROGRESS.preparing}</EmptyState>
         )
       ) : verification.status === 'no_claims' ? (
-        <Card tone="muted">
-          <p className={styles.notice}>{RESULT.noClaims}</p>
-        </Card>
+        <EmptyState icon={<InfoIcon size={26} />}>{RESULT.noClaims}</EmptyState>
       ) : verification.status === 'unavailable' ? (
-        <Card tone="muted">
-          <p className={styles.notice}>{verification.detail ?? RESULT.claimUnavailable}</p>
-        </Card>
+        <EmptyState icon={<ErrorIcon size={26} />}>
+          {verification.detail ?? RESULT.claimUnavailable}
+        </EmptyState>
       ) : (
         <div className={styles.list}>
           {claims.map((claim, index) => (

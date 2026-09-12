@@ -32,26 +32,3 @@ export const list = style({
   flexDirection: 'column',
   gap: vars.space.xs,
 })
-
-export const notice = style({
-  color: vars.color.text.tertiary,
-  fontSize: vars.font.size.md,
-  lineHeight: vars.font.lineHeight.relaxed,
-})
-
-/** 주장 수가 확정되기 전의 자리다. 카드 모양을 흉내 내지 않고 한 줄만 둔다. */
-export const waiting = style({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: vars.space.xs,
-  padding: `${vars.space.xxl} ${vars.space.sm}`,
-  color: vars.color.text.disabled,
-})
-
-export const waitingText = style({
-  color: vars.color.text.tertiary,
-  fontSize: vars.font.size.md,
-  lineHeight: vars.font.lineHeight.relaxed,
-  textAlign: 'center',
-})

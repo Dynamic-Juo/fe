@@ -9,11 +9,12 @@ import { JobOutcome } from '../features/result/JobOutcome'
 import { outcomeOf } from '../features/result/outcome'
 import { MediaPanel } from '../features/result/MediaPanel'
 import { ProgressHeader } from '../features/result/ProgressHeader'
+import { RetryButton } from '../features/result/RetryButton'
 import { ResultActions } from '../features/result/ResultActions'
 import { SummarySlot } from '../features/result/SummarySlot'
 import { VideoStrip } from '../features/result/VideoStrip'
 import { clock } from '../domain/format'
-import { isTerminalStatus } from '../domain/job'
+import { canRetry, isTerminalStatus } from '../domain/job'
 import { parseVideoId } from '../domain/youtube'
 import { dividerTop } from '../styles/divider.css'
 import * as styles from './ResultScreen.css'
@@ -52,9 +53,11 @@ export function ResultScreen() {
         back
         title={terminalStatus === null ? JOB_STATE_LABEL.running : JOB_STATE_LABEL[terminalStatus]}
       >
-        {data === undefined || terminalStatus !== null ? null : (
+        {data === undefined ? null : terminalStatus === null ? (
           <Chip emphasis="dashed">{PROGRESS.elapsed(clock(data.elapsed_sec))}</Chip>
-        )}
+        ) : canRetry(data) ? (
+          <RetryButton job={data} />
+        ) : null}
       </AppBar>
 
       {data === undefined ? (
@@ -82,12 +85,14 @@ export function ResultScreen() {
                 <JobOutcome outcome={outcome} />
               </div>
             ) : null}
-            <div className={`${styles.orderClaims} ${styles.section} ${dividerTop}`}>
-              <ClaimSection
-                verification={result?.claim_verification}
-                transcriptSource={result?.media?.transcript_source}
-                finished={terminalStatus !== null}
-              />
+            <div className={`${styles.orderClaims} ${dividerTop}`}>
+              <div className={styles.section}>
+                <ClaimSection
+                  verification={result?.claim_verification}
+                  transcriptSource={result?.media?.transcript_source}
+                  finished={terminalStatus !== null}
+                />
+              </div>
             </div>
           </div>
 
@@ -104,16 +109,18 @@ export function ResultScreen() {
                 <FinalSummary job={data} status={summaryStatus} />
               </div>
             ) : terminalStatus === null ? (
-              <div className={`${styles.orderSummary} ${styles.section}`}>
+              <div className={`${styles.orderSummary} ${styles.section} ${styles.desktopOnly}`}>
                 <SummarySlot />
               </div>
             ) : null}
-            <div className={`${styles.orderMedia} ${styles.section} ${dividerTop}`}>
-              <MediaPanel
-                face={result?.face_manipulation}
-                wholeVideo={result?.whole_video_generation}
-                finished={terminalStatus !== null}
-              />
+            <div className={`${styles.orderMedia} ${dividerTop}`}>
+              <div className={styles.section}>
+                <MediaPanel
+                  face={result?.face_manipulation}
+                  wholeVideo={result?.whole_video_generation}
+                  finished={terminalStatus !== null}
+                />
+              </div>
             </div>
           </aside>
         </div>

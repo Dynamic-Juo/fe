@@ -1,6 +1,7 @@
 import type { ManipulationResult } from '../../api/types'
-import { Card, Chip } from '../../components'
-import { CLAIM, DETECTION_LABEL, MANIPULATION_LABEL, SECTION } from '../../copy/strings'
+import { Card } from '../../components'
+import { DETECTION_LABEL, SECTION } from '../../copy/strings'
+import { ManipulationChip } from './ManipulationChip'
 import * as styles from './MediaPanel.css'
 
 /**
@@ -59,15 +60,7 @@ function Detection({
     <Card tone={pending ? 'muted' : 'default'}>
       <div className={styles.head}>
         <span className={styles.name}>{name}</span>
-        {pending ? (
-          <Chip emphasis="dashed">{CLAIM.analyzing}</Chip>
-        ) : (
-          <Chip emphasis="strong">
-            {missing
-              ? MANIPULATION_LABEL.unavailable
-              : (result.status_label ?? MANIPULATION_LABEL[result.status])}
-          </Chip>
-        )}
+        <ManipulationChip result={result} finished={finished} />
       </div>
       {/* 징후 없음에는 분석 범위를 반드시 붙인다. 범위 없는 없음은 안전하다는 뜻으로 읽힌다. */}
       {detail === null || detail === undefined ? null : <p className={styles.detail}>{detail}</p>}
