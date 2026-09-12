@@ -43,7 +43,8 @@ export function HomeScreen() {
   })
 
   const unavailable = preview.error instanceof VideoUnavailableError
-  const blocked = videoId === null || unavailable || submit.isPending
+  // 세션에 이미 작업이 있으면 다시 눌러도 같은 거절이 돌아온다.
+  const blocked = videoId === null || unavailable || isSessionBusy(submit.error) || submit.isPending
 
   /**
    * 입력이 바뀌면 직전 접수 실패는 더 이상 이 입력에 대한 것이 아니다.
@@ -151,6 +152,11 @@ export function HomeScreen() {
   )
 }
 
+/** 세션당 활성 작업은 하나다. 이 상태에서는 새 접수를 막는다. */
+function isSessionBusy(error: Error | null): boolean {
+  return error instanceof ApiError && error.code === 'session_busy'
+}
+
 /** 입력이 멎었다고 볼 때까지 기다리는 시간. */
 const SETTLE_DELAY_MS = 500
 
@@ -183,7 +189,7 @@ function SubmitFailure({ error }: { error: Error | null }) {
   const navigate = useNavigate()
   if (error === null) return null
 
-  if (error instanceof ApiError && error.code === 'session_busy') {
+  if (isSessionBusy(error)) {
     const lastJobId = readSession().lastJobId
     return (
       <Banner
