@@ -7,7 +7,7 @@ export const button = style({
   alignItems: 'center',
   justifyContent: 'center',
   gap: vars.space.xs,
-  minHeight: vars.layout.minTouchTarget,
+  minHeight: vars.layout.controlHeight,
   padding: `0 ${vars.space.md}`,
   border: `${vars.borderWidth.thick} solid ${vars.color.action.solid}`,
   borderRadius: vars.radius.sm,

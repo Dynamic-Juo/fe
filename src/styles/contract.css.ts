@@ -129,5 +129,7 @@ export const vars = createThemeContract({
     contentMax: null,
     sidebarWidth: null,
     minTouchTarget: null,
+    /** 입력과 버튼이 나란히 설 때 맞추는 높이. 접근성 최소 크기보다 크다. */
+    controlHeight: null,
   },
 })
