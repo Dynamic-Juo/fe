@@ -13,6 +13,11 @@ export function watchUrl(videoId: string): string {
   return `https://www.youtube.com/watch?v=${videoId}`
 }
 
+/** 영상의 특정 시각을 여는 주소. 초 단위로 붙인다. */
+export function watchUrlAt(videoId: string, seconds: number): string {
+  return `${watchUrl(videoId)}&t=${Math.max(0, Math.floor(seconds))}s`
+}
+
 /**
  * 지원하는 형태에서 11자 영상 ID를 뽑는다. 형태가 맞지 않으면 `null`이다.
  * 재생목록, 다른 플랫폼, 내부 주소는 받지 않는다.

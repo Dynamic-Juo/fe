@@ -6,7 +6,7 @@ import * as styles from './TextField.css'
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> & {
   /** 자리 표시자를 설명 대신 쓰지 않는다. 입력을 시작하면 사라진다. */
   label: string
-  /** 화면에 라벨을 감춰야 할 때만 쓴다. 낭독기에는 남는다. */
+  /** 화면에서만 감춘다. 낭독기는 그대로 읽는다. */
   hideLabel?: boolean
   icon?: ReactNode
   invalid?: boolean
@@ -27,7 +27,7 @@ export function TextField({
 
   return (
     <div>
-      <label htmlFor={id} hidden={hideLabel}>
+      <label htmlFor={id} className={hideLabel ? styles.hiddenLabel : undefined}>
         {label}
       </label>
       <div className={`${styles.wrapper} ${invalid ? styles.invalid : ''}`.trim()}>

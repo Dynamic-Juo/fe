@@ -33,13 +33,41 @@ export const CLAIM_STATUS_LABEL = {
   timed_out: '시간 초과',
 } as const
 
-/** 진행 단계. 서버의 `job.stage`를 사용자 문구로 옮긴다. */
-export const STAGE_LABEL = {
-  queued: '대기 중',
-  collecting: '영상 처리 중',
-  transcribing: '발언 추출 중',
-  extracting_claims: '검증 결과 준비 중',
-  verifying: '주장 검증 중',
+/**
+ * 주장 수가 정해지기 전까지 거치는 네 단계다. 순서가 곧 진행 표시의 칸
+ * 순서이며, 서버의 `job.stage`를 사용자 문구로 옮긴 것이다.
+ *
+ * `headline`은 지금 하고 있는 일, `done`은 그 단계를 마쳤다는 표기다.
+ */
+export const STEPS = [
+  { key: 'queued', name: '대기 중', headline: '분석을 기다리고 있습니다' },
+  {
+    key: 'collecting',
+    name: '영상 처리 중',
+    headline: '영상을 처리하고 있습니다',
+    done: '영상 처리 완료',
+  },
+  {
+    key: 'transcribing',
+    name: '발언 추출 중',
+    headline: '발언을 추출하고 있습니다',
+    done: '발언 추출 완료',
+  },
+  {
+    key: 'extracting_claims',
+    name: '검증 준비 중',
+    headline: '검증 결과를 준비하고 있습니다',
+    done: '검증 준비 완료',
+  },
+] as const
+
+/** 작업 전체의 상태를 한마디로 적는다. 처리 상태·판정과 또 다른 축이다. */
+export const JOB_STATE_LABEL = {
+  running: '분석 중',
+  completed: '분석 완료',
+  completed_with_limitations: '일부 분석만 완료',
+  timed_out: '분석 시간 초과',
+  failed: '분석 실패',
 } as const
 
 /** 근거가 부족한 이유. 서버가 `insufficient_label`을 주면 그쪽을 우선한다. */
@@ -87,16 +115,71 @@ export const PROGRESS = {
   claimsFound: (total: number) => `검증할 주장 ${total}개를 찾았습니다`,
   completedOf: (done: number, total: number) => `${done}/${total}개 완료`,
   longRunning: '분석이 예상보다 오래 걸리고 있습니다. 완료된 결과부터 확인할 수 있습니다.',
+  /** 대기열에서 기다린 시간과 분석 시간을 나눠서 적는다. 둘은 다른 시간이다. */
+  waited: (value: string) => `대기 ${value}`,
+  analyzing: (value: string) => `분석 ${value}`,
+  elapsed: (value: string) => `경과 ${value}`,
+  /** 요약 자리를 미리 잡아 둔다. 나중에 요약이 들어와도 위아래 블록이 밀리지 않는다. */
+  summarySlot: '분석이 끝나면 이 자리에 최종 요약이 나타납니다.',
+} as const
+
+export const SUMMARY = {
+  heading: '분석 결과 요약',
+  verdicts: '주장 판정',
+  total: (count: number) => `전체 ${count}개`,
+  supported: (count: number) => `일치 ${count}`,
+  refuted: (count: number) => `불일치 ${count}`,
+  unverified: (count: number) => `근거 부족 ${count}`,
+  /** 사용자에게는 완료 항목 수와 전체 항목 수만 보인다. 내부 등급은 화면에 없다. */
+  counts: (done: number, unfinished: number, timedOut: number) =>
+    `완료 ${done} · 미완료 ${unfinished} · 시간 초과 ${timedOut}`,
+  analysisId: '분석 ID',
+} as const
+
+export const CLAIM = {
+  analyzing: '분석 중',
+  /** 서버가 인용 검증을 통과시킨 발췌다. 주장 요약이 아니라 실제로 한 말이다. */
+  quote: '영상에서 한 말',
+  /** 주장만 떼어 놓으면 뜻이 달라지는 경우가 있어 앞뒤를 함께 둔다. */
+  context: '앞뒤 문맥',
+  evidenceCount: (count: number) => `근거 ${count}건`,
+  referenceCount: (count: number) => `참고 자료 ${count}건 · 판정에는 사용하지 않음`,
+  sourceLink: '원문 링크',
+  failed: '이 주장의 근거를 확인하지 못했습니다.',
+  timedOut: '시간 안에 검증을 끝내지 못했습니다.',
+} as const
+
+export const OUTCOME = {
+  partial: {
+    title: '일부 분석만 완료되었습니다',
+    description: '분석하지 못한 영역과 이유를 해당 자리에 표시합니다.',
+  },
+  timedOut: {
+    title: '분석 시간이 초과되었습니다',
+    description: '완료된 결과는 그대로 확인할 수 있습니다.',
+  },
+  failed: {
+    title: '분석 결과를 만들지 못했습니다',
+    description: '어느 단계에서 멈췄는지는 아래 설명을 확인해주세요.',
+  },
+  /** 한국어가 아닌 영상은 분석 전에 거를 수 없다. 실패나 분석 불가가 아니다. */
+  nonKorean: {
+    title: '한국어 영상이 아닙니다',
+    description: '판정 신뢰도가 떨어질 수 있습니다. 분석은 그대로 진행했습니다.',
+  },
 } as const
 
 export const RESULT = {
   noClaims: '영상에서 외부 근거로 확인할 수 있는 주장을 찾지 못했습니다.',
   claimUnavailable: '발언을 텍스트로 옮기지 못해 주장을 검증할 수 없습니다.',
+  /** 이유를 모를 때 쓴다. 서버가 이유를 주면 그쪽을 먼저 쓴다. */
+  claimNotRun: '주장 검증을 수행하지 못했습니다.',
   nonKoreanNotice: '한국어 영상이 아니어서 판정 신뢰도가 떨어질 수 있습니다.',
   partial: '일부 분석만 완료되었습니다.',
   timedOut: '분석 시간이 초과되었습니다. 완료된 결과는 그대로 확인할 수 있습니다.',
   failed: '분석 결과를 만들지 못했습니다.',
   retry: '다시 분석',
+  retrying: '접수하는 중',
   newAnalysis: '새 영상 분석',
   evidenceReason: '판정 근거',
   insufficientReason: '판정하지 못한 이유',

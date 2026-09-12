@@ -18,6 +18,12 @@ globalStyle('body', {
   fontSize: vars.font.size.md,
   lineHeight: vars.font.lineHeight.normal,
   WebkitFontSmoothing: 'antialiased',
+  /**
+   * 한국어는 단어 단위로 끊는다. 기본값은 글자 단위라 `못했습니 / 다.`처럼
+   * 낱말이 잘린다. 긴 주소처럼 한 낱말이 줄을 넘치면 그때만 안에서 끊는다.
+   */
+  wordBreak: 'keep-all',
+  overflowWrap: 'break-word',
 })
 
 globalStyle('h1, h2, h3, h4, p, figure', {

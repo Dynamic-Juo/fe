@@ -5,9 +5,10 @@ import { vars } from '../styles/contract.css'
 export const chip = style({
   display: 'inline-flex',
   alignItems: 'center',
+  justifyContent: 'center',
   gap: vars.space.xxs,
   padding: `3px ${vars.space.xs}`,
-  border: `${vars.borderWidth.thin} solid ${vars.color.border.default}`,
+  border: `${vars.borderWidth.thin} solid ${vars.color.border.medium}`,
   borderRadius: vars.radius.sm,
   fontSize: vars.font.size.xs,
   lineHeight: vars.font.lineHeight.relaxed,
@@ -28,7 +29,7 @@ export const emphasis = styleVariants({
     color: vars.color.text.primary,
   },
   muted: {
-    borderColor: vars.color.border.subtle,
+    borderColor: vars.color.border.muted,
     color: vars.color.text.disabled,
   },
   dashed: {
@@ -39,5 +40,14 @@ export const emphasis = styleVariants({
     backgroundColor: vars.color.action.solid,
     borderColor: vars.color.action.solid,
     color: vars.color.action.solidText,
+  },
+})
+
+export const size = styleVariants({
+  md: {},
+  /** 근거 카드 안처럼 본문에 딸려 붙는 자리. */
+  sm: {
+    padding: '2px 7px',
+    fontSize: vars.font.size.xxs,
   },
 })

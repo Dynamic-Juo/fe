@@ -8,7 +8,7 @@ const pulse = keyframes({
 })
 
 export const skeleton = style({
-  backgroundColor: vars.color.border.subtle,
+  backgroundColor: vars.color.skeleton,
   borderRadius: vars.radius.sm,
   animation: `${pulse} 1.6s ${vars.motion.easing.standard} infinite`,
   '@media': {
