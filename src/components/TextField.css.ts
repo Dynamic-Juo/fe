@@ -30,6 +30,13 @@ export const input = style({
     '&::placeholder': {
       color: vars.color.text.disabled,
     },
+    /**
+     * 전역 초점 표시를 여기서만 끈다. 테두리 안쪽에 선이 한 겹 더 생겨
+     * 두 겹으로 보인다. 글자 입력 칸은 커서가 깜빡여 초점이 어디인지 보인다.
+     */
+    '&:focus-visible': {
+      outline: 'none',
+    },
   },
 })
 
