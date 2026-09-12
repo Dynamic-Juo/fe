@@ -67,7 +67,9 @@ export const DETECTION_LABEL = {
 
 export const HOME = {
   title: 'Conan AI',
-  tagline: '영상의 조작 가능성과 주장의 사실성을 따로 확인합니다',
+  /** 좁은 화면에서 두 줄로 끊는다. 넓은 화면에서는 이어 붙인다. */
+  taglineHead: '영상의 조작 가능성과 주장의 사실성을 ',
+  taglineTail: '따로 확인합니다',
   inputPlaceholder: 'YouTube Shorts 링크 붙여넣기',
   submit: '분석하기',
   supportNotice: '공개 상태인 YouTube Shorts를 분석합니다. 최대 3분.',

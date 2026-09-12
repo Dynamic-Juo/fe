@@ -8,6 +8,7 @@ import {
 import { isTerminalStatus } from '../domain/job'
 import { getJob, submitAnalysis } from './client'
 import { ApiError, isJobGone } from './errors'
+import { fetchVideoPreview, type VideoPreview } from './preview'
 import type { AnalyzeRequest, AnalyzeResponse, JobResponse } from './types'
 
 /**
@@ -53,5 +54,19 @@ export function useJob(jobId: string | undefined): UseQueryResult<JobResponse, E
       if (error instanceof ApiError && !error.retryable) return false
       return failureCount < MAX_POLL_RETRY
     },
+  })
+}
+
+/**
+ * 접수 전에 보여줄 영상 정보다. 분석 도중에 바뀌지 않아 한 번 받아두고
+ * 다시 부르지 않는다. 결과 화면도 같은 키로 이 값을 그대로 쓴다.
+ */
+export function useVideoPreview(videoId: string | null): UseQueryResult<VideoPreview, Error> {
+  return useQuery({
+    queryKey: ['videoPreview', videoId],
+    queryFn: ({ signal }) => fetchVideoPreview(videoId ?? '', signal),
+    enabled: videoId !== null,
+    staleTime: 5 * 60 * 1000,
+    retry: 0,
   })
 }

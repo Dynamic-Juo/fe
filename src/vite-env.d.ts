@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string
   /** mock 사용 여부. Production 배포에서는 항상 false다. */
   readonly VITE_USE_MOCK: string
+  /** 피드백과 오분석 신고 창구 주소. 정해지기 전에는 비워 둔다. */
+  readonly VITE_FEEDBACK_URL?: string
   /** Vercel 배포 환경. vite.config.ts에서 주입한다. */
   readonly VITE_VERCEL_ENV: 'production' | 'preview' | 'development'
 }
