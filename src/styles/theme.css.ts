@@ -13,23 +13,25 @@ createGlobalTheme(':root', vars, {
     surface: {
       base: gray[0],
       raised: gray[0],
-      sunken: gray[100],
+      sunken: gray[25],
     },
     text: {
       primary: gray[900],
-      secondary: gray[600],
-      tertiary: gray[500],
+      secondary: gray[800],
+      tertiary: gray[650],
+      faint: gray[600],
+      disabled: gray[550],
       inverse: gray[0],
     },
     border: {
       subtle: gray[200],
-      default: gray[300],
+      default: gray[400],
       strong: gray[900],
     },
     action: {
       solid: gray[900],
       solidText: gray[0],
-      disabled: gray[400],
+      disabled: gray[550],
     },
     focus: gray[900],
 
@@ -61,12 +63,14 @@ createGlobalTheme(':root', vars, {
       mono: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace",
     },
     size: {
-      xs: '0.6875rem',
-      sm: '0.75rem',
-      md: '0.875rem',
-      lg: '1rem',
-      xl: '1.1875rem',
-      xxl: '1.5rem',
+      xs: '0.71875rem',
+      sm: '0.78125rem',
+      md: '0.8125rem',
+      lg: '0.875rem',
+      xl: '0.9375rem',
+      xxl: '1.1875rem',
+      hero: '1.6875rem',
+      heroLg: '2.375rem',
     },
     weight: {
       regular: '400',
@@ -76,9 +80,11 @@ createGlobalTheme(':root', vars, {
     lineHeight: {
       tight: '1.3',
       normal: '1.55',
-      relaxed: '1.7',
+      relaxed: '1.65',
     },
     letterSpacing: {
+      tightest: '-0.04em',
+      tighter: '-0.03em',
       tight: '-0.02em',
       normal: '0',
     },
@@ -91,19 +97,22 @@ createGlobalTheme(':root', vars, {
     sm: '0.75rem',
     md: '1rem',
     lg: '1.25rem',
-    xl: '2rem',
-    xxl: '3rem',
+    xl: '1.5rem',
+    xxl: '2rem',
+    xxxl: '3rem',
   },
 
+  /** 시안에 둥근 모서리가 없다. 이름은 남기고 값만 0으로 둔다. */
   radius: {
     none: '0',
-    sm: '2px',
-    md: '4px',
+    sm: '0',
+    md: '0',
     full: '9999px',
   },
 
   borderWidth: {
     thin: '1px',
+    medium: '1.5px',
     thick: '2px',
   },
 
@@ -124,6 +133,7 @@ createGlobalTheme(':root', vars, {
 
   layout: {
     contentMax: '45rem',
+    formMax: '42.5rem',
     sidebarWidth: '22.5rem',
     minTouchTarget: '2.75rem',
     controlHeight: '3.25rem',
