@@ -113,11 +113,23 @@ export const toggleLabel = style({
   flex: 1,
 })
 
+/**
+ * 근거 목록이다. 넓은 화면에서는 한 줄에 둘씩 놓고, 홀수로 남은 마지막
+ * 하나는 줄을 다 쓴다. 개수를 세지 않아도 빈 칸이 생기지 않는다.
+ */
+export const evidenceList = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: vars.space.xs,
+  marginTop: vars.space.xxs,
+})
+
 export const evidence = style({
+  flex: '1 1 15rem',
+  minWidth: 0,
   display: 'flex',
   flexDirection: 'column',
   gap: vars.space.xxs,
-  marginTop: vars.space.xxs,
   padding: `${vars.space.xs} ${vars.space.sm}`,
   border: `${vars.borderWidth.thin} solid ${vars.color.border.muted}`,
   backgroundColor: vars.color.surface.sunken,

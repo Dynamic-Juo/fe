@@ -111,15 +111,21 @@ export function ClaimCard({
                   <p className={styles.blockBody}>{claim.reason}</p>
                 </>
               )}
-              {cited.map((item, index) => (
-                <EvidenceItem key={evidenceKey(item, index)} evidence={item} />
-              ))}
+              {cited.length === 0 ? null : (
+                <div className={styles.evidenceList}>
+                  {cited.map((item, index) => (
+                    <EvidenceItem key={evidenceKey(item, index)} evidence={item} />
+                  ))}
+                </div>
+              )}
               {references.length === 0 ? null : (
                 <>
                   <p className={styles.blockTitle}>{RESULT.referenceOnly}</p>
-                  {references.map((item, index) => (
-                    <EvidenceItem key={evidenceKey(item, index)} evidence={item} />
-                  ))}
+                  <div className={styles.evidenceList}>
+                    {references.map((item, index) => (
+                      <EvidenceItem key={evidenceKey(item, index)} evidence={item} />
+                    ))}
+                  </div>
                 </>
               )}
             </div>
