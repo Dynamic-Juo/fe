@@ -4,13 +4,17 @@ import { HomeScreen } from '../screens/HomeScreen'
 import { NotFoundScreen } from '../screens/NotFoundScreen'
 import { ResultScreen } from '../screens/ResultScreen'
 import { ComponentsScreen } from '../screens/dev/ComponentsScreen'
+import { MockScreen } from '../screens/dev/MockScreen'
 
 /**
- * 공통 컴포넌트 목록은 개발 모드에서만 등록한다. 빌드에서는 조건이 거짓이
- * 되어 경로도 화면도 번들에서 빠진다. 배포본에서는 없는 주소가 된다.
+ * 확인용 화면은 개발 모드에서만 등록한다. 빌드에서는 조건이 거짓이 되어
+ * 경로도 화면도 번들에서 빠진다. 배포본에서는 없는 주소가 된다.
  */
 const devRoutes: RouteObject[] = import.meta.env.DEV
-  ? [{ path: '/_components', element: <ComponentsScreen /> }]
+  ? [
+      { path: '/_components', element: <ComponentsScreen /> },
+      { path: '/_mock', element: <MockScreen /> },
+    ]
   : []
 
 export const router = createBrowserRouter([
