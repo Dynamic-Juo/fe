@@ -42,3 +42,12 @@ export const emphasis = styleVariants({
     color: vars.color.action.solidText,
   },
 })
+
+export const size = styleVariants({
+  md: {},
+  /** 근거 카드 안처럼 본문에 딸려 붙는 자리. */
+  sm: {
+    padding: '2px 7px',
+    fontSize: vars.font.size.xxs,
+  },
+})

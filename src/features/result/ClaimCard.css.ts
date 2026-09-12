@@ -118,9 +118,28 @@ export const evidence = style({
   flexDirection: 'column',
   gap: vars.space.xxs,
   marginTop: vars.space.xxs,
-  padding: vars.space.sm,
-  border: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,
+  padding: `${vars.space.xs} ${vars.space.sm}`,
+  border: `${vars.borderWidth.thin} solid ${vars.color.border.muted}`,
   backgroundColor: vars.color.surface.sunken,
+})
+
+/** 출처 유형은 왼쪽, 그 자료의 시점은 오른쪽 끝이다. */
+export const evidenceHead = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: vars.space.xs,
+})
+
+export const evidenceDate = style({
+  color: vars.color.text.faint,
+  fontSize: vars.font.size.xs,
+})
+
+export const evidenceReason = style({
+  color: vars.color.text.tertiary,
+  fontSize: vars.font.size.sm,
+  lineHeight: vars.font.lineHeight.relaxed,
 })
 
 export const evidenceTitle = style({

@@ -83,6 +83,8 @@ export const vars = createThemeContract({
       mono: null,
     },
     size: {
+      /** 본문에 딸려 붙는 아주 작은 글자. */
+      xxs: null,
       xs: null,
       sm: null,
       md: null,

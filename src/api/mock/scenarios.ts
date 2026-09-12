@@ -84,7 +84,12 @@ const NO_WHOLE_VIDEO_MODEL: ManipulationResult = {
   evidence: [],
 }
 
-const NEWS_EVIDENCE = (title: string, publisher: string, published: string): EvidenceResult => ({
+const NEWS_EVIDENCE = (
+  title: string,
+  publisher: string,
+  published: string,
+  reason: string,
+): EvidenceResult => ({
   title,
   url: 'https://example.com/mock-article',
   source: 'naver_news',
@@ -97,6 +102,7 @@ const NEWS_EVIDENCE = (title: string, publisher: string, published: string): Evi
   source_type_label: '뉴스',
   is_primary: false,
   cited: true,
+  cite_reason: reason,
 })
 
 const REFERENCE_EVIDENCE: EvidenceResult = {
@@ -180,7 +186,14 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           verdict: 'supported',
           reason: '인상 시점 두 건을 다룬 보도에서 같은 내용을 확인했다.',
           quote: '주택용 요금은 1월과 7월 두 차례 조정됐다.',
-          evidence: [NEWS_EVIDENCE('주택용 전기요금 두 차례 조정', '예시일보', '2026-07-02')],
+          evidence: [
+            NEWS_EVIDENCE(
+              '주택용 전기요금 두 차례 조정',
+              '예시일보',
+              '2026-07-02',
+              '조정 시점 두 건을 날짜와 함께 적고 있다.',
+            ),
+          ],
         },
       },
       {
@@ -192,7 +205,14 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           status: 'done',
           verdict: 'refuted',
           reason: '같은 기준으로 비교한 자료의 증가 폭과 맞지 않는다.',
-          evidence: [NEWS_EVIDENCE('4인 가구 월 부담 변화 정리', '예시경제', '2026-07-10')],
+          evidence: [
+            NEWS_EVIDENCE(
+              '4인 가구 월 부담 변화 정리',
+              '예시경제',
+              '2026-07-10',
+              '같은 기준으로 비교한 증가 폭을 제시한다.',
+            ),
+          ],
         },
       },
       {
@@ -218,7 +238,14 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           status: 'done',
           verdict: 'supported',
           reason: '조정 대상에서 산업용을 제외했다는 설명을 확인했다.',
-          evidence: [NEWS_EVIDENCE('이번 조정 대상과 제외 대상', '예시일보', '2026-06-28')],
+          evidence: [
+            NEWS_EVIDENCE(
+              '이번 조정 대상과 제외 대상',
+              '예시일보',
+              '2026-06-28',
+              '산업용이 조정 대상에서 빠졌다고 밝히고 있다.',
+            ),
+          ],
         },
       },
       {
@@ -244,7 +271,14 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           status: 'done',
           verdict: 'supported',
           reason: '반영 시점을 밝힌 안내를 확인했다.',
-          evidence: [NEWS_EVIDENCE('조정분 반영 시점 안내', '예시경제', '2026-07-05')],
+          evidence: [
+            NEWS_EVIDENCE(
+              '조정분 반영 시점 안내',
+              '예시경제',
+              '2026-07-05',
+              '고지서에 반영되는 시점을 안내하고 있다.',
+            ),
+          ],
         },
       },
       {
@@ -256,7 +290,14 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           status: 'done',
           verdict: 'refuted',
           reason: '지난해 조정 폭은 이번과 다르다.',
-          evidence: [NEWS_EVIDENCE('연도별 조정 폭 비교', '예시일보', '2026-07-08')],
+          evidence: [
+            NEWS_EVIDENCE(
+              '연도별 조정 폭 비교',
+              '예시일보',
+              '2026-07-08',
+              '지난해 조정 폭이 이번과 다르다는 것을 보여준다.',
+            ),
+          ],
         },
       },
       {
@@ -394,7 +435,14 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           status: 'done',
           verdict: 'supported',
           reason: '분기 실적 자료에서 같은 수치를 확인했다.',
-          evidence: [NEWS_EVIDENCE('분기 가입자 실적 발표', '예시경제', '2026-08-01')],
+          evidence: [
+            NEWS_EVIDENCE(
+              '분기 가입자 실적 발표',
+              '예시경제',
+              '2026-08-01',
+              '해당 분기 신규 가입자 수를 밝히고 있다.',
+            ),
+          ],
         },
       },
       {
@@ -458,7 +506,14 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           status: 'done',
           verdict: 'supported',
           reason: '시행 시점을 밝힌 자료를 확인했다.',
-          evidence: [NEWS_EVIDENCE('시행 시점 안내', '예시일보', '2026-08-20')],
+          evidence: [
+            NEWS_EVIDENCE(
+              '시행 시점 안내',
+              '예시일보',
+              '2026-08-20',
+              '제도의 시행 시점을 밝히고 있다.',
+            ),
+          ],
         },
       },
       {
@@ -470,7 +525,14 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
           status: 'done',
           verdict: 'refuted',
           reason: '공지된 기한과 다르다.',
-          evidence: [NEWS_EVIDENCE('신청 기한 공지', '예시일보', '2026-08-18')],
+          evidence: [
+            NEWS_EVIDENCE(
+              '신청 기한 공지',
+              '예시일보',
+              '2026-08-18',
+              '공지된 신청 기한이 아직 남아 있음을 보여준다.',
+            ),
+          ],
         },
       },
       { text: '대상자는 전체 인구의 절반이다.', start: 18, end: 23, settleAt: 90 },

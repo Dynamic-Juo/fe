@@ -70,6 +70,7 @@ createGlobalTheme(':root', vars, {
       mono: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace",
     },
     size: {
+      xxs: '0.625rem',
       xs: '0.71875rem',
       sm: '0.78125rem',
       md: '0.8125rem',

@@ -153,27 +153,39 @@ function spokenLine(claim: ClaimResult, transcriptSource: string | null | undefi
 }
 
 /**
- * 출처 하나다. 제목, 발행 기관, 발행일, 유형, 뒷받침하는 이유, 원문 링크를
- * 채운다. 없는 값은 지어내지 않고 그 줄을 비운다.
+ * 출처 하나다. 여섯 항목을 채운다. 출처 유형과 발행일이 맨 위에 나란히 서고,
+ * 그 아래 제목과 발행 기관, 뒷받침하는 이유, 원문 링크가 온다. 유형과 시점을
+ * 먼저 보여야 그 자료를 얼마나 믿을지 정하고 읽는다.
+ *
+ * 없는 값은 지어내지 않고 그 줄을 비운다.
  *
  * 주소는 HTTP(S)만 링크로 만든다. 서버가 주는 값이라도 그대로 href에 넣지
  * 않는다.
  */
 function EvidenceItem({ evidence }: { evidence: EvidenceResult }) {
-  const meta = [evidence.source_type_label, evidence.publisher, evidence.published_at].filter(
-    (value): value is string => typeof value === 'string' && value !== '',
-  )
-
   return (
     <div className={styles.evidence}>
+      <div className={styles.evidenceHead}>
+        {evidence.source_type_label === null || evidence.source_type_label === undefined ? (
+          <span />
+        ) : (
+          <Chip size="sm">{evidence.source_type_label}</Chip>
+        )}
+        {evidence.published_at === null || evidence.published_at === undefined ? null : (
+          <span className={styles.evidenceDate}>{evidence.published_at}</span>
+        )}
+      </div>
+
       <p className={styles.evidenceTitle}>{evidence.title}</p>
-      {meta.length === 0 ? null : <p className={styles.evidenceMeta}>{meta.join(' · ')}</p>}
+
+      {evidence.publisher === null || evidence.publisher === undefined ? null : (
+        <p className={styles.evidenceMeta}>{evidence.publisher}</p>
+      )}
+
       {evidence.cite_reason === null || evidence.cite_reason === undefined ? null : (
-        <p className={styles.blockBody}>{evidence.cite_reason}</p>
+        <p className={styles.evidenceReason}>{evidence.cite_reason}</p>
       )}
-      {evidence.snippet === null || evidence.snippet === undefined ? null : (
-        <p className={styles.evidenceMeta}>{evidence.snippet}</p>
-      )}
+
       {isHttpUrl(evidence.url) ? (
         <a className={styles.link} href={evidence.url} target="_blank" rel="noreferrer noopener">
           {CLAIM.sourceLink}
