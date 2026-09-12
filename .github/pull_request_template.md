@@ -1,5 +1,5 @@
 <!-- 제목: <type>(<scope>): <요약>
-     type과 scope 목록은 docs/conventions/commit-convention.md 를 따른다.
+     type과 scope 목록은 docs/conventions/git.md 를 따른다.
      scope는 PR 전체의 주목적을 기준으로 고른다. 포함된 커밋의 scope가 모두 같을 필요는 없다.
      예: feat(ui): 주장 카드 목록과 진행률 표시 추가 -->
 

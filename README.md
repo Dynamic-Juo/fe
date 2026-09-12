@@ -60,7 +60,7 @@ src/
 | --- | --- |
 | [코드 기준](docs/conventions/code-style.md) | 프레임워크와 제품에 관계없이 적용하는 기준 |
 | [제품 코드 기준](docs/conventions/product-rules.md) | 이 제품에서만 성립하는 규칙 |
-| [커밋과 브랜치](docs/conventions/commit-convention.md) | 커밋 제목 형식과 브랜치 이름 |
+| [커밋과 브랜치](docs/conventions/git.md) | 커밋 제목 형식과 브랜치 이름 |
 
 화면을 바꾸는 작업에서는 제품 코드 기준의 '검토할 때 보는 것'을 함께 확인한다. 처리 상태와 판정을 섞지 않기, 조작이 없다고 단정하는 표현 쓰지 않기, 숫자 점수를 화면에 내보내지 않기가 거기 있다.
 
