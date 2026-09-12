@@ -45,6 +45,15 @@ export function HomeScreen() {
   const unavailable = preview.error instanceof VideoUnavailableError
   const blocked = videoId === null || unavailable || submit.isPending
 
+  /**
+   * 입력이 바뀌면 직전 접수 실패는 더 이상 이 입력에 대한 것이 아니다.
+   * 지우지 않으면 다른 링크를 넣어도 앞선 안내가 남는다.
+   */
+  const changeUrl = (value: string) => {
+    setInput(value)
+    if (submit.error !== null) submit.reset()
+  }
+
   const start = (event: FormEvent) => {
     event.preventDefault()
     setTouched(true)
@@ -84,7 +93,7 @@ export function HomeScreen() {
                 value={input}
                 invalid={malformed || unavailable}
                 onChange={(event) => {
-                  setInput(event.target.value)
+                  changeUrl(event.target.value)
                 }}
                 onBlur={() => {
                   setTouched(true)
@@ -132,7 +141,7 @@ export function HomeScreen() {
         {USE_MOCK ? (
           <MockScenarioPicker
             onPick={(url) => {
-              setInput(url)
+              changeUrl(url)
               setTouched(false)
             }}
           />
