@@ -3,14 +3,18 @@ import type { ReactElement, ReactNode } from 'react'
 import { Banner, Button, Card, Chip, ProgressBar, Skeleton, TextField } from '../../components'
 import * as Icons from '../../components/icons'
 import { ClockIcon, InfoIcon, LinkIcon, type IconProps } from '../../components/icons'
-import {
-  CLAIM_STATUS_LABEL,
-  DETECTION_LABEL,
-  MANIPULATION_LABEL,
-  VERDICT_LABEL,
-} from '../../copy/strings'
+import { CLAIM_STATUS_LABEL, DETECTION_LABEL, VERDICT_LABEL } from '../../copy/strings'
 import { vars } from '../../styles/contract.css'
+import { ManipulationChip } from '../../features/result/ManipulationChip'
 import * as styles from './ComponentsScreen.css'
+
+/** 실제 화면과 같은 순서로 네 단계를 늘어놓는다. */
+const MANIPULATION_STATUSES = [
+  'suspected',
+  'no_clear_signs',
+  'inconclusive',
+  'unavailable',
+] as const
 
 /** 공통 껍데기인 Icon은 children을 요구하므로 목록에서 뺀다. */
 type NamedIcon = (props: IconProps) => ReactElement
@@ -64,10 +68,10 @@ export function ComponentsScreen() {
 
       <Section title="미디어 조작" note="U-04. 네 단계 라벨을 줄이지 않는다.">
         <div className={styles.row}>
-          <Chip emphasis="strong">{MANIPULATION_LABEL.suspected}</Chip>
-          <Chip>{MANIPULATION_LABEL.no_clear_signs}</Chip>
-          <Chip emphasis="dashed">{MANIPULATION_LABEL.inconclusive}</Chip>
-          <Chip emphasis="muted">{MANIPULATION_LABEL.unavailable}</Chip>
+          {MANIPULATION_STATUSES.map((status) => (
+            <ManipulationChip key={status} result={{ status }} finished />
+          ))}
+          <ManipulationChip result={null} finished={false} />
         </div>
         <p className={styles.caption}>
           {DETECTION_LABEL.face} · {DETECTION_LABEL.wholeVideo}
