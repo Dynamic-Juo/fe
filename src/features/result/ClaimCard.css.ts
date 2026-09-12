@@ -28,26 +28,26 @@ export const textPending = style([
   },
 ])
 
+/** 발언 위치와 같은 주장의 다른 위치를 한 줄에 늘어놓는다. */
 export const spoken = style({
   display: 'flex',
+  flexWrap: 'wrap',
   alignItems: 'center',
-  gap: vars.space.xxs,
+  gap: `0 ${vars.space.xxs}`,
   color: vars.color.text.faint,
   fontSize: vars.font.size.xs,
   lineHeight: vars.font.lineHeight.relaxed,
 })
 
-/** 누를 수 있는 발언 위치. 눌러 영상의 그 지점을 연다. */
-export const spokenLink = style([
-  spoken,
-  {
-    alignSelf: 'flex-start',
-    minHeight: vars.layout.minTouchTarget,
-    color: vars.color.text.faint,
-    textDecoration: 'underline',
-    textUnderlineOffset: '3px',
-  },
-])
+export const timeLink = style({
+  color: vars.color.text.faint,
+  textDecoration: 'underline',
+  textUnderlineOffset: '3px',
+})
+
+export const divider = style({
+  color: vars.color.border.medium,
+})
 
 const slide = keyframes({
   '0%': { transform: 'translateX(-100%)' },
@@ -77,22 +77,55 @@ export const working = style({
   },
 })
 
+/** 실제로 한 말이다. 주장 요약과 구분되게 인용 부호를 둔다. */
+export const quote = style({
+  paddingLeft: vars.space.xs,
+  borderLeft: `${vars.borderWidth.thick} solid ${vars.color.border.default}`,
+  color: vars.color.text.secondary,
+  fontSize: vars.font.size.md,
+  lineHeight: vars.font.lineHeight.relaxed,
+})
+
+/** 문맥은 길이 제한이 없다. 세 줄까지만 두고 나머지는 자른다. */
+export const context = style({
+  color: vars.color.text.muted,
+  fontSize: vars.font.size.sm,
+  lineHeight: vars.font.lineHeight.relaxed,
+  overflow: 'hidden',
+  display: '-webkit-box',
+  WebkitBoxOrient: 'vertical',
+  WebkitLineClamp: 3,
+})
+
 export const rule = style({
   margin: 0,
   border: 0,
   borderTop: `${vars.borderWidth.thin} solid ${vars.color.border.faint}`,
 })
 
+/** 펼친 영역. 덩어리끼리는 넉넉히 벌린다. */
 export const block = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: vars.space.xxs,
+  gap: vars.space.sm,
 })
 
-export const blockTitle = style({
-  fontSize: vars.font.size.xs,
-  fontWeight: vars.font.weight.medium,
-  color: vars.color.text.tertiary,
+/** 이름과 내용 한 덩어리. 둘은 바짝 붙인다. */
+export const field = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '2px',
+})
+
+/**
+ * 항목 이름이다. 내용보다 굵고 진하게 둔다. 여기서 이름은 부가 정보가
+ * 아니라 무엇을 읽고 있는지 알려주는 유일한 단서다. 작게 두면 제 역할을
+ * 못 한다.
+ */
+export const fieldLabel = style({
+  fontSize: vars.font.size.md,
+  fontWeight: vars.font.weight.bold,
+  color: vars.color.text.primary,
 })
 
 export const blockBody = style({

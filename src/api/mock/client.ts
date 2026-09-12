@@ -272,6 +272,8 @@ function toClaimResult(
     video_title: scenario.media.title ?? null,
   }
   if (claim.context !== undefined) base.context = claim.context
+  if (claim.quote !== undefined) base.quote = claim.quote
+  if (claim.mentions !== undefined) base.mentions = claim.mentions
 
   if (!settled || outcome === undefined) return base
 
@@ -285,7 +287,6 @@ function toClaimResult(
     reason: outcome.reason,
     evidence: outcome.evidence,
   }
-  if ('quote' in outcome && outcome.quote !== undefined) result.quote = outcome.quote
   if ('insufficientReason' in outcome) {
     result.insufficient_reason = outcome.insufficientReason
     result.insufficient_label = outcome.insufficientLabel

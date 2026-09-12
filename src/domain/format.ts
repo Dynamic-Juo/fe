@@ -36,3 +36,26 @@ export function timestamp(epochSeconds: number): string {
   const pad = (value: number) => String(value).padStart(2, '0')
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
+
+/**
+ * 같은 주장이 영상에서 여러 번 나온 위치다. 계약이 항목마다 같은 키가
+ * 있다고 가정하지 말라고 밝히고 있어, 시각을 읽을 수 있는 것만 고른다.
+ * 없는 위치를 만들어 내지 않는다.
+ */
+export function mentionPositions(
+  mentions: Record<string, unknown>[] | null | undefined,
+): SpokenAt[] {
+  return (mentions ?? []).flatMap((mention) => {
+    const start = mention['start']
+    if (typeof start !== 'number') return []
+    const end = mention['end']
+    const precision = mention['time_precision']
+    return [
+      {
+        start,
+        end: typeof end === 'number' ? end : null,
+        precision: precision === 'exact' || precision === 'approx' ? precision : null,
+      },
+    ]
+  })
+}

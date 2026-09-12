@@ -23,7 +23,11 @@ export interface MockClaim {
   text: string
   start: number | null
   end: number | null
+  /** 서버가 인용 검증을 통과시킨 발췌. 주장 요약이 아니라 실제로 한 말이다. */
+  quote?: string
   context?: string
+  /** 같은 주장이 반복해서 나온 위치. 구조가 고정이 아닌 것을 흉내 낸다. */
+  mentions?: Record<string, unknown>[]
   /** 접수 후 몇 초에 이 카드의 검증이 끝나는지. 작업 종료보다 늦으면 시간 초과로 끝난다. */
   settleAt: number
   /** 생략하면 작업이 끝날 때까지 검증 중으로 남는다. */
@@ -202,11 +206,18 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         start: 4,
         end: 9,
         settleAt: 19,
+        quote: '올해 들어서만 전기요금이 두 번 올랐거든요.',
+        context: '앞부분에서 최근 공공요금 흐름을 설명하다가 전기요금을 예로 들며 나온 말이다.',
+        mentions: [
+          { start: 4, end: 9, time_precision: 'exact' },
+          { start: 33, time_precision: 'approx' },
+          // 시각을 모르는 언급. 계약이 항목마다 같은 키가 있다고 가정하지 말라고 한다.
+          { context: '마무리에서 다시 언급' },
+        ],
         outcome: {
           status: 'done',
           verdict: 'supported',
           reason: '인상 시점 두 건을 다룬 보도에서 같은 내용을 확인했다.',
-          quote: '주택용 요금은 1월과 7월 두 차례 조정됐다.',
           evidence: [
             OFFICIAL_EVIDENCE(
               '전기요금 조정 내역 공고',
@@ -228,6 +239,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         start: 11,
         end: 16,
         settleAt: 21,
+        quote: '4인 가구면 체감상 세 배는 나오는 것 같아요.',
         outcome: {
           status: 'done',
           verdict: 'refuted',
@@ -352,6 +364,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         start: 47,
         end: 52,
         settleAt: 33,
+        quote: '따로 신청 안 해도 자동으로 적용된다고 하더라고요.',
         outcome: {
           status: 'failed',
           reason: '근거 조회 중 오류가 나 판정하지 못했다.',

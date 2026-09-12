@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 
 import type { ClaimResult, EvidenceResult } from '../../api/types'
 import { Card, Chip } from '../../components'
 import { ChevronDownIcon, ChevronUpIcon, PlayIcon } from '../../components/icons'
 import { A11Y, CLAIM, CLAIM_STATUS_LABEL, RESULT, VERDICT_LABEL } from '../../copy/strings'
-import { spokenAt } from '../../domain/format'
+import { mentionPositions, spokenAt, type SpokenAt } from '../../domain/format'
 import { finalVerdict } from '../../domain/job'
 import { isHttpUrl } from '../../domain/link'
 import { watchUrlAt } from '../../domain/youtube'
@@ -50,7 +50,8 @@ export function ClaimCard({
     verdict === 'unverified' ? (claim.insufficient_label ?? claim.reason ?? null) : null
   const cited = (claim.evidence ?? []).filter((item) => item.cited !== false)
   const references = (claim.evidence ?? []).filter((item) => item.cited === false)
-  const toggleLabel = footerLabel(cited.length, references.length)
+  const hasDetail = claim.quote !== null && claim.quote !== undefined && claim.quote !== ''
+  const toggleLabel = footerLabel(cited.length, references.length, hasDetail)
 
   return (
     <Card tone={settled ? 'default' : 'muted'}>
@@ -67,23 +68,8 @@ export function ClaimCard({
       <p className={claim.status === 'pending' ? styles.textPending : styles.text}>{claim.text}</p>
 
       {/* 아직 처리되지 않은 카드에는 발언 위치도 없다. 서버가 아직 주지 않았다. */}
-      {claim.status === 'pending' ? null : videoId !== null &&
-        claim.start !== null &&
-        claim.start !== undefined ? (
-        <a
-          className={styles.spokenLink}
-          href={watchUrlAt(videoId, claim.start)}
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          <PlayIcon size={13} />
-          {spokenLine(claim, transcriptSource)}
-        </a>
-      ) : (
-        <p className={styles.spoken}>
-          <PlayIcon size={13} />
-          {spokenLine(claim, transcriptSource)}
-        </p>
+      {claim.status === 'pending' ? null : (
+        <SpokenLine claim={claim} transcriptSource={transcriptSource} videoId={videoId} />
       )}
 
       {claim.status === 'verifying' ? <div className={styles.working} /> : null}
@@ -91,10 +77,9 @@ export function ClaimCard({
       {insufficient === null ? null : (
         <>
           <hr className={styles.rule} />
-          <div className={styles.block}>
-            <p className={styles.blockTitle}>{RESULT.insufficientReason}</p>
+          <Field label={RESULT.insufficientReason}>
             <p className={styles.blockBody}>{insufficient}</p>
-          </div>
+          </Field>
         </>
       )}
 
@@ -118,14 +103,23 @@ export function ClaimCard({
 
           {expanded ? (
             <div className={styles.block}>
+              {claim.quote === null || claim.quote === undefined ? null : (
+                <Field label={CLAIM.quote}>
+                  <p className={styles.quote}>{claim.quote}</p>
+                </Field>
+              )}
+              {claim.context === null || claim.context === undefined ? null : (
+                <Field label={CLAIM.context}>
+                  <p className={styles.context}>{claim.context}</p>
+                </Field>
+              )}
               {/* 근거 부족의 이유는 위에 이미 있다. 같은 문장을 두 번 쓰지 않는다. */}
               {insufficient !== null ||
               claim.reason === null ||
               claim.reason === undefined ? null : (
-                <>
-                  <p className={styles.blockTitle}>{RESULT.evidenceReason}</p>
+                <Field label={RESULT.evidenceReason}>
                   <p className={styles.blockBody}>{claim.reason}</p>
-                </>
+                </Field>
               )}
               {cited.length === 0 ? null : (
                 <div className={styles.evidenceList}>
@@ -136,7 +130,7 @@ export function ClaimCard({
               )}
               {references.length === 0 ? null : (
                 <>
-                  <p className={styles.blockTitle}>{RESULT.referenceOnly}</p>
+                  <p className={styles.fieldLabel}>{RESULT.referenceOnly}</p>
                   <div className={styles.evidenceList}>
                     {references.map((item, index) => (
                       <EvidenceItem key={evidenceKey(item, index)} evidence={item} />
@@ -152,6 +146,94 @@ export function ClaimCard({
   )
 }
 
+/**
+ * 중복 병합된 주장은 하나로 합쳐 보여주고 나머지 언급 위치는 여기에 둔다.
+ * 대표 위치와 같은 시각은 빼서 같은 곳을 두 번 적지 않는다.
+ */
+/**
+ * 발언 위치다. 중복 병합된 주장은 언급 위치를 모두 늘어놓는다. 대표 위치도
+ * 그중 하나일 뿐이라 따로 떼어 세지 않는다.
+ *
+ * 인식 출처는 항상 끝에 붙인다. 음성 인식으로 뽑은 시각이라는 것이 시각
+ * 자체만큼 중요하다.
+ */
+function SpokenLine({
+  claim,
+  transcriptSource,
+  videoId,
+}: {
+  claim: ClaimResult
+  transcriptSource: string | null | undefined
+  videoId: string | null
+}) {
+  const positions = spokenPositions(claim)
+  const source = transcriptSource === 'caption' ? RESULT.captionSource : RESULT.transcriptSource
+
+  return (
+    <p className={styles.spoken}>
+      <PlayIcon size={13} />
+      {positions.length === 0 ? (
+        <span>{RESULT.spokenUnknown}</span>
+      ) : (
+        positions.map((at) => {
+          const label = spokenAt(at)
+          if (label === null || at.start === null || at.start === undefined) return null
+          return videoId === null ? (
+            <span key={label}>{label}</span>
+          ) : (
+            <a
+              key={label}
+              className={styles.timeLink}
+              href={watchUrlAt(videoId, at.start)}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              {label}
+            </a>
+          )
+        })
+      )}
+      <span className={styles.divider}>·</span>
+      <span>{source}</span>
+    </p>
+  )
+}
+
+/**
+ * 대표 위치와 반복 언급 위치를 합쳐 시각 순으로 늘어놓는다. 같은 시각이
+ * 두 번 들어오면 하나만 남긴다.
+ */
+function spokenPositions(claim: ClaimResult): SpokenAt[] {
+  const all: SpokenAt[] = [
+    ...(claim.start === null || claim.start === undefined
+      ? []
+      : [{ start: claim.start, end: claim.end, precision: claim.time_precision }]),
+    ...mentionPositions(claim.mentions),
+  ]
+
+  const seen = new Set<number>()
+  return all
+    .filter((at) => {
+      if (at.start === null || at.start === undefined || seen.has(at.start)) return false
+      seen.add(at.start)
+      return true
+    })
+    .sort((a, b) => (a.start ?? 0) - (b.start ?? 0))
+}
+
+/**
+ * 이름이 붙은 한 덩어리다. 이름과 내용을 바짝 붙이고 덩어리 사이를 벌려야
+ * 어디까지가 한 항목인지 보인다. 줄 간격이 모두 같으면 한 줄글로 읽힌다.
+ */
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className={styles.field}>
+      <p className={styles.fieldLabel}>{label}</p>
+      {children}
+    </div>
+  )
+}
+
 /** 자료에도 고유 ID가 없다. 주소와 제목으로 키를 만든다. */
 function evidenceKey(evidence: EvidenceResult, index: number): string {
   return `${index}:${evidence.url}:${evidence.title}`
@@ -161,17 +243,15 @@ function evidenceKey(evidence: EvidenceResult, index: number): string {
  * 접힌 상태의 한 줄이다. 보여줄 것이 없으면 펼치기 자체를 만들지 않는다.
  * 빈 칸을 펼치게 하면 누를 때마다 헛걸음이 된다.
  */
-function footerLabel(citedCount: number, referenceCount: number): string | null {
+function footerLabel(
+  citedCount: number,
+  referenceCount: number,
+  hasDetail: boolean,
+): string | null {
   if (citedCount > 0) return CLAIM.evidenceCount(citedCount)
   if (referenceCount > 0) return CLAIM.referenceCount(referenceCount)
-  return null
-}
-
-/** 발언 위치는 처리된 카드에 모두 있다. 못 잡았으면 못 잡았다고 적는다. */
-function spokenLine(claim: ClaimResult, transcriptSource: string | null | undefined): string {
-  const at = spokenAt({ start: claim.start, end: claim.end, precision: claim.time_precision })
-  const source = transcriptSource === 'caption' ? RESULT.captionSource : RESULT.transcriptSource
-  return at === null ? `${RESULT.spokenUnknown} · ${source}` : `${at} · ${source}`
+  // 근거가 없어도 영상에서 한 말이 있으면 펼칠 것이 있다.
+  return hasDetail ? CLAIM.quote : null
 }
 
 /**

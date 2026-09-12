@@ -138,6 +138,10 @@ export const SUMMARY = {
 
 export const CLAIM = {
   analyzing: '분석 중',
+  /** 서버가 인용 검증을 통과시킨 발췌다. 주장 요약이 아니라 실제로 한 말이다. */
+  quote: '영상에서 한 말',
+  /** 주장만 떼어 놓으면 뜻이 달라지는 경우가 있어 앞뒤를 함께 둔다. */
+  context: '앞뒤 문맥',
   evidenceCount: (count: number) => `근거 ${count}건`,
   referenceCount: (count: number) => `참고 자료 ${count}건 · 판정에는 사용하지 않음`,
   sourceLink: '원문 링크',
