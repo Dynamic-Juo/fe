@@ -8,6 +8,7 @@ import { VideoUnavailableError } from '../api/preview'
 import { useSubmitAnalysis, useVideoPreview } from '../api/queries'
 import { readSession, writeSession } from '../app/session'
 import { AppBar, Banner, Button, Card, Logo, Skeleton, TextField } from '../components'
+import { InstallEntry } from '../features/install/InstallEntry'
 import { LinkIcon } from '../components/icons'
 import { ERROR, HOME } from '../copy/strings'
 import { parseVideoId, watchUrl } from '../domain/youtube'
@@ -79,7 +80,9 @@ export function HomeScreen() {
 
   return (
     <div className={styles.page}>
-      <AppBar />
+      <AppBar>
+        <InstallEntry />
+      </AppBar>
 
       <main className={styles.body}>
         <div className={styles.brand}>
