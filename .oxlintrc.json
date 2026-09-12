@@ -25,7 +25,13 @@
         "allow": ["warn", "error"]
       }
     ],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "import/no-unassigned-import": [
+      "error",
+      {
+        "allow": ["**/*.css", "**/*.css.ts"]
+      }
+    ]
   },
   "ignorePatterns": ["dist", "wireframes"]
 }

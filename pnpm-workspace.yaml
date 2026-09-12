@@ -1,0 +1,4 @@
+# Vite가 의존하는 esbuild는 설치 시 플랫폼 바이너리를 내려받는다.
+# 승인하지 않으면 새 환경에서 빌드가 깨진다.
+allowBuilds:
+  esbuild: true
