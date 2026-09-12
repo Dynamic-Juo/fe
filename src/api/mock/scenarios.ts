@@ -62,6 +62,13 @@ export interface MockMarks {
 
 export interface MockScenario {
   id: string
+  /**
+   * 화면에 적는 시간을 이 배수로 부풀린다. 실제로 기다리는 시간은 그대로다.
+   *
+   * 오래 걸리는 분석의 화면을 보려고 열 분을 기다리게 할 수는 없다. mock은
+   * 화면을 보려고 만든 것이지 서버를 흉내 내려고 만든 것이 아니다.
+   */
+  reportScale?: number
   /** 이 ID가 들어간 링크를 넣으면 이 시나리오가 재생된다. */
   videoId: string
   label: string
@@ -623,6 +630,115 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       retryable: true,
       stage: 'download',
     },
+  },
+  {
+    id: 'long_running',
+    videoId: 'mock-slow-7',
+    label: '오래 걸림',
+    note: '화면에 적히는 시간만 스무 배로 늘린다. 5분을 넘기면 오래 걸린다는 안내가 붙는다.',
+    media: {
+      title: '[예시] 주장이 많은 3분짜리 영상',
+      uploader: '예시 채널',
+      duration: 178,
+      video_id: 'mock-slow-7',
+      language: 'ko',
+      transcript_source: 'stt',
+      stt_coverage_pct: 88.2,
+    },
+    /** 실제로는 36초에 끝나고 화면에는 열두 분으로 적힌다. */
+    reportScale: 20,
+    marks: { collecting: 2, transcribing: 5, extractingClaims: 9, verifying: 13, end: 36 },
+    faceManipulation: {
+      status: 'no_clear_signs',
+      status_label: '뚜렷한 조작 징후 없음',
+      detail: '검사한 프레임에서 얼굴 합성 신호를 찾지 못했다. 조작이 없다는 뜻은 아니다.',
+      evidence: ['검사한 프레임 8장'],
+    },
+    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    transcript: { ...KOREAN_TRANSCRIPT, coverage_pct: 88.2 },
+    stages: OK_STAGES,
+    finalStatus: 'completed',
+    claims: [
+      {
+        text: '이 제도는 다음 달부터 시행된다.',
+        start: 8,
+        end: 14,
+        settleAt: 16,
+        quote: '다음 달부터 바로 시행된다고 합니다.',
+        outcome: {
+          status: 'done',
+          verdict: 'supported',
+          reason: '시행 시점을 밝힌 자료를 확인했다.',
+          evidence: [
+            OFFICIAL_EVIDENCE(
+              '제도 시행 일정 공고',
+              '예시부처',
+              '2026-08-19',
+              '시행일을 고시한 1차 자료다.',
+            ),
+          ],
+        },
+      },
+      {
+        text: '신청 기한은 이미 지났다.',
+        start: 22,
+        end: 28,
+        settleAt: 20,
+        outcome: {
+          status: 'done',
+          verdict: 'refuted',
+          reason: '공지된 기한과 다르다.',
+          evidence: [
+            NEWS_EVIDENCE(
+              '신청 기한 안내',
+              '예시일보',
+              '2026-08-18',
+              '기한이 아직 남아 있음을 보여준다.',
+            ),
+          ],
+        },
+      },
+      {
+        text: '대상자는 전체 인구의 절반이다.',
+        start: 41,
+        end: 48,
+        settleAt: 25,
+        outcome: {
+          status: 'done',
+          verdict: 'unverified',
+          reason: '적용 범위를 밝힌 자료를 찾지 못했다.',
+          insufficientReason: 'no_source',
+          insufficientLabel: '검색했지만 관련 자료를 찾지 못했습니다',
+          evidence: [REFERENCE_EVIDENCE],
+        },
+      },
+      {
+        text: '예산은 전액 국비로 충당한다.',
+        start: 63,
+        end: 70,
+        settleAt: 30,
+        outcome: {
+          status: 'done',
+          verdict: 'supported',
+          reason: '재원 구성을 밝힌 자료를 확인했다.',
+          evidence: [
+            OFFICIAL_EVIDENCE(
+              '사업 재원 구성 자료',
+              '예시부처',
+              '2026-08-20',
+              '전액 국비로 편성했다고 적고 있다.',
+            ),
+          ],
+        },
+      },
+      {
+        text: '지난해 시범 사업에서 만족도가 가장 높았다.',
+        start: 92,
+        end: 100,
+        settleAt: 34,
+        outcome: { status: 'failed', reason: '근거 조회 제공자에서 오류가 반환됐다.' },
+      },
+    ],
   },
   {
     id: 'non_korean',

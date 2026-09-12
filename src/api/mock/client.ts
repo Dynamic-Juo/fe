@@ -177,6 +177,8 @@ function buildSnapshot(scenario: MockScenario, record: MockJobRecord, now: numbe
   const progress = progressAt(scenario, phase, summary)
 
   const updatedAt = now
+  // 화면에 적는 시간만 부풀린다. 실제로 기다리는 시간과 단계 전환은 그대로다.
+  const scale = scenario.reportScale ?? 1
 
   return {
     id: record.jobId,
@@ -194,9 +196,11 @@ function buildSnapshot(scenario: MockScenario, record: MockJobRecord, now: numbe
     display_id: displayId(record.jobId),
     created_at_iso: new Date(record.createdAt).toISOString().slice(0, 19),
     updated_at_iso: new Date(updatedAt).toISOString().slice(0, 19),
-    elapsed_sec: Number(elapsed.toFixed(1)),
-    queue_wait_sec: scenario.marks.collecting,
-    processing_elapsed_sec: Number(Math.max(0, elapsed - scenario.marks.collecting).toFixed(1)),
+    elapsed_sec: Number((elapsed * scale).toFixed(1)),
+    queue_wait_sec: scenario.marks.collecting * scale,
+    processing_elapsed_sec: Number(
+      (Math.max(0, elapsed - scenario.marks.collecting) * scale).toFixed(1),
+    ),
   }
 }
 
