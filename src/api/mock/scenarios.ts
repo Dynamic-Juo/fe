@@ -64,9 +64,7 @@ export interface MockScenario {
   id: string
   /**
    * 화면에 적는 시간을 이 배수로 부풀린다. 실제로 기다리는 시간은 그대로다.
-   *
-   * 오래 걸리는 분석의 화면을 보려고 열 분을 기다리게 할 수는 없다. mock은
-   * 화면을 보려고 만든 것이지 서버를 흉내 내려고 만든 것이 아니다.
+   * mock으로 화면을 확인하는 데 시간을 오래 쓸 이유가 없다.
    */
   reportScale?: number
   /** 이 ID가 들어간 링크를 넣으면 이 시나리오가 재생된다. */
@@ -174,11 +172,11 @@ const OK_STAGES: Record<string, StageResult> = {
 }
 
 const NORMAL_MARKS: MockMarks = {
-  collecting: 2,
-  transcribing: 7,
-  extractingClaims: 12,
-  verifying: 16,
-  end: 34,
+  collecting: 1,
+  transcribing: 4,
+  extractingClaims: 6,
+  verifying: 8,
+  end: 18,
 }
 
 export const MOCK_SCENARIOS: readonly MockScenario[] = [
@@ -212,7 +210,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '올해 주택용 전기요금이 두 차례 올랐다.',
         start: 4,
         end: 9,
-        settleAt: 19,
+        settleAt: 10,
         quote: '올해 들어서만 전기요금이 두 번 올랐거든요.',
         context: '앞부분에서 최근 공공요금 흐름을 설명하다가 전기요금을 예로 들며 나온 말이다.',
         mentions: [
@@ -245,7 +243,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '4인 가구 기준 월 부담이 세 배로 늘었다.',
         start: 11,
         end: 16,
-        settleAt: 21,
+        settleAt: 11,
         quote: '4인 가구면 체감상 세 배는 나오는 것 같아요.',
         outcome: {
           status: 'done',
@@ -277,7 +275,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '이 조정으로 전체 가구의 90%가 영향을 받는다.',
         start: 18,
         end: 23,
-        settleAt: 23,
+        settleAt: 12,
         outcome: {
           status: 'done',
           verdict: 'unverified',
@@ -291,7 +289,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '산업용 요금은 이번에 바뀌지 않았다.',
         start: 25,
         end: 29,
-        settleAt: 25,
+        settleAt: 13,
         outcome: {
           status: 'done',
           verdict: 'supported',
@@ -310,7 +308,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '인접 국가 대비 요금 수준이 가장 낮다.',
         start: 31,
         end: 36,
-        settleAt: 27,
+        settleAt: 14,
         outcome: {
           status: 'done',
           verdict: 'unverified',
@@ -332,7 +330,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '요금 고지서에 인상분이 다음 달부터 반영된다.',
         start: null,
         end: null,
-        settleAt: 29,
+        settleAt: 15,
         outcome: {
           status: 'done',
           verdict: 'supported',
@@ -351,7 +349,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '지난해 같은 기간에도 동일한 폭으로 올랐다.',
         start: 40,
         end: 45,
-        settleAt: 31,
+        settleAt: 8,
         outcome: {
           status: 'done',
           verdict: 'refuted',
@@ -370,7 +368,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '요금 할인 대상 가구는 신청 없이 자동 적용된다.',
         start: 47,
         end: 52,
-        settleAt: 33,
+        settleAt: 9,
         quote: '따로 신청 안 해도 자동으로 적용된다고 하더라고요.',
         outcome: {
           status: 'failed',
@@ -393,7 +391,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       transcript_source: 'stt',
       stt_coverage_pct: 41.2,
     },
-    marks: { collecting: 2, transcribing: 6, extractingClaims: 10, verifying: 13, end: 16 },
+    marks: { collecting: 1, transcribing: 3, extractingClaims: 5, verifying: 7, end: 9 },
     faceManipulation: {
       status: 'inconclusive',
       status_label: '판단 보류',
@@ -424,7 +422,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       video_id: 'mock-noTx-3',
       transcript_source: 'none',
     },
-    marks: { collecting: 2, transcribing: 7, extractingClaims: 11, verifying: 13, end: 17 },
+    marks: { collecting: 1, transcribing: 4, extractingClaims: 6, verifying: 7, end: 9 },
     faceManipulation: {
       status: 'suspected',
       status_label: '조작 의심',
@@ -466,7 +464,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       stt_coverage_pct: 100,
       transcript_coverage_basis: 'caption_last_timestamp',
     },
-    marks: { collecting: 2, transcribing: 7, extractingClaims: 11, verifying: 15, end: 26 },
+    marks: { collecting: 1, transcribing: 4, extractingClaims: 6, verifying: 8, end: 14 },
     faceManipulation: {
       status: 'unavailable',
       status_label: '분석 불가',
@@ -497,7 +495,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '지난 분기 신규 가입자가 20만 명을 넘었다.',
         start: 6,
         end: 11,
-        settleAt: 18,
+        settleAt: 9,
         outcome: {
           status: 'done',
           verdict: 'supported',
@@ -516,7 +514,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '해지율은 업계 최저 수준이다.',
         start: 13,
         end: 18,
-        settleAt: 21,
+        settleAt: 11,
         outcome: {
           status: 'done',
           verdict: 'unverified',
@@ -530,7 +528,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '요금제 개편은 모든 가입자에게 유리하다.',
         start: 20,
         end: 26,
-        settleAt: 24,
+        settleAt: 12,
         outcome: { status: 'failed', reason: '근거 조회 제공자에서 오류가 반환됐다.' },
       },
     ],
@@ -549,7 +547,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       transcript_source: 'stt',
       stt_coverage_pct: 76.3,
     },
-    marks: { collecting: 3, transcribing: 9, extractingClaims: 14, verifying: 18, end: 27 },
+    marks: { collecting: 2, transcribing: 5, extractingClaims: 7, verifying: 9, end: 14 },
     faceManipulation: {
       status: 'no_clear_signs',
       status_label: '뚜렷한 조작 징후 없음',
@@ -568,7 +566,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '이 제도는 다음 달부터 시행된다.',
         start: 5,
         end: 10,
-        settleAt: 21,
+        settleAt: 11,
         outcome: {
           status: 'done',
           verdict: 'supported',
@@ -587,7 +585,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '신청 기한은 이미 지났다.',
         start: 12,
         end: 16,
-        settleAt: 24,
+        settleAt: 12,
         outcome: {
           status: 'done',
           verdict: 'refuted',
@@ -613,7 +611,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
     label: '전체 실패',
     note: '영상을 받지 못해 분석을 시작하지 못했다. 조회 HTTP는 그대로 200이다.',
     media: {},
-    marks: { collecting: 2, transcribing: 99, extractingClaims: 99, verifying: 99, end: 7 },
+    marks: { collecting: 1, transcribing: 99, extractingClaims: 99, verifying: 99, end: 4 },
     faceManipulation: { status: 'unavailable', status_label: '분석 불가' },
     wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
     stages: {
@@ -646,8 +644,8 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       stt_coverage_pct: 88.2,
     },
     /** 실제로는 36초에 끝나고 화면에는 열두 분으로 적힌다. */
-    reportScale: 20,
-    marks: { collecting: 2, transcribing: 5, extractingClaims: 9, verifying: 13, end: 36 },
+    reportScale: 40,
+    marks: { collecting: 1, transcribing: 3, extractingClaims: 5, verifying: 7, end: 18 },
     faceManipulation: {
       status: 'no_clear_signs',
       status_label: '뚜렷한 조작 징후 없음',
@@ -663,7 +661,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '이 제도는 다음 달부터 시행된다.',
         start: 8,
         end: 14,
-        settleAt: 16,
+        settleAt: 8,
         quote: '다음 달부터 바로 시행된다고 합니다.',
         outcome: {
           status: 'done',
@@ -683,7 +681,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '신청 기한은 이미 지났다.',
         start: 22,
         end: 28,
-        settleAt: 20,
+        settleAt: 10,
         outcome: {
           status: 'done',
           verdict: 'refuted',
@@ -702,7 +700,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '대상자는 전체 인구의 절반이다.',
         start: 41,
         end: 48,
-        settleAt: 25,
+        settleAt: 13,
         outcome: {
           status: 'done',
           verdict: 'unverified',
@@ -716,7 +714,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '예산은 전액 국비로 충당한다.',
         start: 63,
         end: 70,
-        settleAt: 30,
+        settleAt: 15,
         outcome: {
           status: 'done',
           verdict: 'supported',
@@ -735,7 +733,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '지난해 시범 사업에서 만족도가 가장 높았다.',
         start: 92,
         end: 100,
-        settleAt: 34,
+        settleAt: 9,
         outcome: { status: 'failed', reason: '근거 조회 제공자에서 오류가 반환됐다.' },
       },
     ],
@@ -754,7 +752,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       transcript_source: 'stt',
       stt_coverage_pct: 81.5,
     },
-    marks: { collecting: 2, transcribing: 7, extractingClaims: 11, verifying: 14, end: 24 },
+    marks: { collecting: 1, transcribing: 4, extractingClaims: 6, verifying: 7, end: 12 },
     faceManipulation: {
       status: 'no_clear_signs',
       status_label: '뚜렷한 조작 징후 없음',
@@ -770,7 +768,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '이 정책은 올해 안에 시행된다.',
         start: 6,
         end: 12,
-        settleAt: 17,
+        settleAt: 9,
         outcome: {
           status: 'done',
           verdict: 'supported',
@@ -789,7 +787,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
         text: '관련 예산이 지난해보다 두 배로 늘었다.',
         start: 20,
         end: 27,
-        settleAt: 21,
+        settleAt: 11,
         outcome: {
           status: 'done',
           verdict: 'unverified',
