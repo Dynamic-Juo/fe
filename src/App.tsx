@@ -1,3 +1,7 @@
+import { RouterProvider } from 'react-router-dom'
+
+import { router } from './app/routes'
+
 export function App() {
-  return <h1>Conan AI</h1>
+  return <RouterProvider router={router} />
 }
