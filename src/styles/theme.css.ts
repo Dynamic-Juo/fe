@@ -14,18 +14,24 @@ createGlobalTheme(':root', vars, {
       base: gray[0],
       raised: gray[0],
       sunken: gray[25],
+      band: gray[100],
     },
     text: {
       primary: gray[900],
       secondary: gray[800],
+      muted: gray[700],
       tertiary: gray[650],
       faint: gray[600],
       disabled: gray[550],
       inverse: gray[0],
     },
     border: {
+      faint: gray[350],
       subtle: gray[200],
+      muted: gray[250],
       default: gray[400],
+      medium: gray[500],
+      dashed: gray[450],
       strong: gray[900],
     },
     action: {
@@ -34,6 +40,7 @@ createGlobalTheme(':root', vars, {
       disabled: gray[550],
     },
     focus: gray[900],
+    skeleton: gray[300],
 
     verdict: {
       supported: gray[700],

@@ -12,11 +12,16 @@ export const vars = createThemeContract({
     surface: {
       base: null,
       raised: null,
+      /** 카드를 한 단계 눌러 놓을 때. 아직 결과가 아닌 자리다. */
       sunken: null,
+      /** 영역과 영역 사이를 끊는 띠. */
+      band: null,
     },
     text: {
       primary: null,
       secondary: null,
+      /** 진행 중이라 아직 확정이 아닌 본문. */
+      muted: null,
       /** 설명문. 본문보다 한 단계 물러난 글. */
       tertiary: null,
       /** 부가 정보. 조건 안내나 집계 같은 것. */
@@ -26,8 +31,16 @@ export const vars = createThemeContract({
       inverse: null,
     },
     border: {
+      /** 카드 안을 나누는 선. */
+      faint: null,
       subtle: null,
+      /** 눌러 놓은 카드의 테두리. */
+      muted: null,
       default: null,
+      /** 칩처럼 작은 요소의 테두리. */
+      medium: null,
+      /** 점선으로 쓰는 테두리. */
+      dashed: null,
       strong: null,
     },
     action: {
@@ -36,6 +49,8 @@ export const vars = createThemeContract({
       disabled: null,
     },
     focus: null,
+    /** 값이 아직 오지 않은 자리. */
+    skeleton: null,
 
     /** 검증 판정. 색은 U-03에서 정한다. */
     verdict: {
