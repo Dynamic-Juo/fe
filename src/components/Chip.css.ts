@@ -5,6 +5,7 @@ import { vars } from '../styles/contract.css'
 export const chip = style({
   display: 'inline-flex',
   alignItems: 'center',
+  justifyContent: 'center',
   gap: vars.space.xxs,
   padding: `3px ${vars.space.xs}`,
   border: `${vars.borderWidth.thin} solid ${vars.color.border.medium}`,

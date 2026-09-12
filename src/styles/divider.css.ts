@@ -10,17 +10,17 @@ import { vars } from './contract.css'
  * 요소를 만들지 않고 클래스만 얹는다. 띠는 내용이 아니라 표시라서 DOM에
  * 자리를 차지하면 안 된다. 낭독기도 읽을 것이 없다.
  *
- * 붙일 대상의 위 여백을 이 클래스가 가져간다. 화면 끝까지 붙도록 좌우로
- * 밀어내므로 좌우 여백이 `space.lg`인 자리에 쓴다.
+ * 띠는 띠일 뿐이라 여백을 갖지 않는다. 붙일 자리의 위 여백만큼 끌어올려
+ * 앞 영역에 맞붙이고, 아래 간격은 그 자리의 패딩이 그대로 맡는다. 좌우로는
+ * 화면 끝까지 밀어낸다. 여백이 `space.md`/`space.lg`인 자리에 쓴다.
  */
 export const dividerTop = style({
-  paddingTop: 0,
   '::before': {
     content: '',
     display: 'block',
     height: '9px',
+    marginTop: `calc(-1 * ${vars.space.md})`,
     marginInline: `calc(-1 * ${vars.space.lg})`,
-    marginBottom: vars.space.md,
     backgroundColor: vars.color.surface.band,
     borderTop: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,
     borderBottom: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,

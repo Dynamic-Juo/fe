@@ -14,14 +14,12 @@ export const sectionTitle = style({
   gap: vars.space.xs,
 })
 
+/** 화면 제목이다. 섹션 제목보다 한 단계 위다. */
 export const heading = style({
-  fontSize: vars.font.size.xl,
+  flex: 1,
+  fontSize: vars.font.size.xxl,
   fontWeight: vars.font.weight.bold,
-  letterSpacing: vars.font.letterSpacing.tight,
-})
-
-export const state = style({
-  marginLeft: 'auto',
+  letterSpacing: vars.font.letterSpacing.tighter,
 })
 
 export const group = style({

@@ -6,6 +6,7 @@ import { ERROR, JOB_STATE_LABEL, PROGRESS } from '../copy/strings'
 import { ClaimSection } from '../features/result/ClaimSection'
 import { FinalSummary } from '../features/result/FinalSummary'
 import { JobOutcome } from '../features/result/JobOutcome'
+import { outcomeOf } from '../features/result/outcome'
 import { MediaPanel } from '../features/result/MediaPanel'
 import { ProgressHeader } from '../features/result/ProgressHeader'
 import { ResultActions } from '../features/result/ResultActions'
@@ -34,6 +35,9 @@ export function ResultScreen() {
   const terminalStatus = data !== undefined && isTerminalStatus(data.status) ? data.status : null
   // 실패로 끝난 작업에는 요약을 만들지 않는다. 집계할 결과가 하나도 없다.
   const summaryStatus = terminalStatus === 'failed' ? null : terminalStatus
+  // 알릴 것이 없으면 자리도 만들지 않는다. 빈 상자가 여백만 남긴다.
+  const outcome =
+    data === undefined || terminalStatus === null ? null : outcomeOf(data, terminalStatus)
 
   /**
    * 서버가 media를 채우기 전에도 영상 정보를 보여준다. URL을 받는 즉시
@@ -69,13 +73,15 @@ export function ResultScreen() {
       ) : (
         <div className={styles.layout}>
           <div className={styles.main}>
-            <div className={`${styles.orderHeadline} ${styles.section}`}>
-              {terminalStatus === null ? (
+            {terminalStatus === null ? (
+              <div className={`${styles.orderHeadline} ${styles.section}`}>
                 <ProgressHeader job={data} />
-              ) : (
-                <JobOutcome job={data} status={terminalStatus} />
-              )}
-            </div>
+              </div>
+            ) : outcome !== null ? (
+              <div className={`${styles.orderHeadline} ${styles.section}`}>
+                <JobOutcome outcome={outcome} />
+              </div>
+            ) : null}
             <div className={`${styles.orderClaims} ${styles.section} ${dividerTop}`}>
               <ClaimSection
                 verification={result?.claim_verification}

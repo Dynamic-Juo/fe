@@ -27,9 +27,7 @@ export function FinalSummary({ job, status }: { job: JobResponse; status: Termin
     <section className={styles.section}>
       <div className={styles.sectionTitle}>
         <h2 className={styles.heading}>{SUMMARY.heading}</h2>
-        <span className={styles.state}>
-          <Chip>{JOB_STATE_LABEL[status]}</Chip>
-        </span>
+        <Chip>{JOB_STATE_LABEL[status]}</Chip>
       </div>
 
       <Card>
@@ -84,8 +82,7 @@ export function FinalSummary({ job, status }: { job: JobResponse; status: Termin
 
         {/* 신고할 때 첨부할 값이다. 조회 키가 아니다. */}
         <p className={styles.meta}>
-          {SUMMARY.analysisId} <span className={styles.strong}>{job.display_id}</span>
-          <br />
+          {SUMMARY.analysisId} <span className={styles.strong}>{job.display_id}</span> ·{' '}
           {timestamp(job.created_at)}
         </p>
       </Card>
