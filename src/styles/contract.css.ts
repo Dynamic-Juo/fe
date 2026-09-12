@@ -17,7 +17,12 @@ export const vars = createThemeContract({
     text: {
       primary: null,
       secondary: null,
+      /** 설명문. 본문보다 한 단계 물러난 글. */
       tertiary: null,
+      /** 부가 정보. 조건 안내나 집계 같은 것. */
+      faint: null,
+      /** 아직 값이 들어오지 않은 자리. */
+      disabled: null,
       inverse: null,
     },
     border: {
@@ -69,6 +74,9 @@ export const vars = createThemeContract({
       lg: null,
       xl: null,
       xxl: null,
+      /** 홈의 제품 이름. 좁은 화면 기준이다. */
+      hero: null,
+      heroLg: null,
     },
     weight: {
       regular: null,
@@ -81,6 +89,8 @@ export const vars = createThemeContract({
       relaxed: null,
     },
     letterSpacing: {
+      tightest: null,
+      tighter: null,
       tight: null,
       normal: null,
     },
@@ -95,6 +105,7 @@ export const vars = createThemeContract({
     lg: null,
     xl: null,
     xxl: null,
+    xxxl: null,
   },
 
   radius: {
@@ -107,6 +118,8 @@ export const vars = createThemeContract({
   /** 색을 지워도 읽히게 하려면 두께로도 구분할 수 있어야 한다. */
   borderWidth: {
     thin: null,
+    /** 입력과 버튼의 테두리. */
+    medium: null,
     thick: null,
   },
 
@@ -127,6 +140,8 @@ export const vars = createThemeContract({
 
   layout: {
     contentMax: null,
+    /** 홈 입력 줄의 최대 너비. */
+    formMax: null,
     sidebarWidth: null,
     minTouchTarget: null,
     /** 입력과 버튼이 나란히 설 때 맞추는 높이. 접근성 최소 크기보다 크다. */

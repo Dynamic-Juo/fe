@@ -10,14 +10,24 @@ import { MOCK_SCENARIOS } from './scenarios'
  * 새 스타일 파일을 두지 않는다. 이 모듈이 부수 효과 없이 떨어져 나가야
  * 프로덕션 번들에서 mock 코드가 전부 빠진다.
  */
-export function MockScenarioPicker({ onPick }: { onPick: (url: string) => void }) {
+export function MockScenarioPicker({
+  onPick,
+  className,
+}: {
+  onPick: (url: string) => void
+  className?: string
+}) {
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
+    <div
+      className={className}
+      style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}
+    >
       {MOCK_SCENARIOS.map((scenario) => (
         <Button
           key={scenario.id}
           type="button"
           variant="outline"
+          size="sm"
           title={scenario.note}
           onClick={() => {
             onPick(watchUrl(scenario.videoId))
@@ -29,6 +39,7 @@ export function MockScenarioPicker({ onPick }: { onPick: (url: string) => void }
       <Button
         type="button"
         variant="outline"
+        size="sm"
         title="비공개·삭제·연령 제한 영상처럼 접근할 수 없는 경우"
         onClick={() => {
           onPick(watchUrl(MOCK_UNAVAILABLE_VIDEO_ID))
@@ -39,6 +50,7 @@ export function MockScenarioPicker({ onPick }: { onPick: (url: string) => void }
       <Button
         type="button"
         variant="outline"
+        size="sm"
         title="YouTube 링크가 아니어서 접수 전에 걸린다"
         onClick={() => {
           onPick('https://example.com/not-youtube')

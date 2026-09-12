@@ -1,21 +1,23 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 
 import { USE_MOCK } from '../api/client'
 import { ApiError } from '../api/errors'
 import { MockScenarioPicker } from '../api/mock/ScenarioPicker'
-import { fetchVideoPreview, VideoUnavailableError } from '../api/preview'
-import { useSubmitAnalysis } from '../api/queries'
+import { VideoUnavailableError } from '../api/preview'
+import { useSubmitAnalysis, useVideoPreview } from '../api/queries'
 import { readSession, writeSession } from '../app/session'
-import { Banner, Button, Card, Skeleton, TextField } from '../components'
+import { AppBar, Banner, Button, Card, Logo, Skeleton, TextField } from '../components'
 import { LinkIcon } from '../components/icons'
 import { ERROR, HOME } from '../copy/strings'
 import { parseVideoId, watchUrl } from '../domain/youtube'
 import * as styles from './HomeScreen.css'
 
+/** 피드백 창구 주소. 정해지기 전에는 링크를 만들지 않는다. */
+const FEEDBACK_URL = import.meta.env.VITE_FEEDBACK_URL
+
 /**
- * S-01 · 홈. 로고와 입력과 버튼만 둔다.
+ * S-01 · 홈. 표식과 제품 이름, 입력, 버튼만 둔다.
  *
  * 링크 형식이 맞지 않거나 접근할 수 없는 영상은 접수하지 않는다. `jobId`가
  * 발급되지 않으므로 진행 화면으로 넘어갈 것도 없다. 공개 상태와 길이는
@@ -23,6 +25,7 @@ import * as styles from './HomeScreen.css'
  */
 export function HomeScreen() {
   const navigate = useNavigate()
+  const fieldRef = useRef<HTMLInputElement>(null)
   const [input, setInput] = useState('')
   const [touched, setTouched] = useState(false)
   const submit = useSubmitAnalysis()
@@ -34,17 +37,15 @@ export function HomeScreen() {
   // 안내가 깜빡인다. 입력이 멎었거나 포커스를 뗀 뒤에 보여준다.
   const malformed = videoId === null && input.trim() !== '' && (touched || settled)
 
-  const preview = useQuery({
-    queryKey: ['videoPreview', videoId],
-    queryFn: ({ signal }) => fetchVideoPreview(videoId ?? '', signal),
-    enabled: videoId !== null,
-    retry: 0,
-    staleTime: 5 * 60 * 1000,
-  })
-
+  const preview = useVideoPreview(videoId)
   const unavailable = preview.error instanceof VideoUnavailableError
-  // 세션에 이미 작업이 있으면 다시 눌러도 같은 거절이 돌아온다.
-  const blocked = videoId === null || unavailable || isSessionBusy(submit.error) || submit.isPending
+
+  /**
+   * 아직 아무것도 넣지 않은 상태에서는 버튼을 잠그지 않는다. 시작도 하기 전에
+   * 잠긴 버튼을 보여주면 무엇이 문제인지 알 수 없다. 잘못된 링크임을 알게 된
+   * 뒤에만 잠근다.
+   */
+  const blocked = malformed || unavailable || isSessionBusy(submit.error) || submit.isPending
 
   /**
    * 입력이 바뀌면 직전 접수 실패는 더 이상 이 입력에 대한 것이 아니다.
@@ -58,6 +59,10 @@ export function HomeScreen() {
   const start = (event: FormEvent) => {
     event.preventDefault()
     setTouched(true)
+    if (input.trim() === '') {
+      fieldRef.current?.focus()
+      return
+    }
     if (videoId === null || unavailable) return
 
     const session = readSession()
@@ -73,20 +78,28 @@ export function HomeScreen() {
   }
 
   return (
-    <main className={styles.page}>
-      <div className={styles.column}>
-        <header className={styles.brand}>
+    <div className={styles.page}>
+      <AppBar />
+
+      <main className={styles.body}>
+        <div className={styles.brand}>
+          <Logo size="md" />
           <h1 className={styles.title}>{HOME.title}</h1>
-          <p className={styles.tagline}>{HOME.tagline}</p>
-        </header>
+          <p className={styles.tagline}>
+            {HOME.taglineHead}
+            <br className={styles.breakMobile} />
+            {HOME.taglineTail}
+          </p>
+        </div>
 
         <form className={styles.form} onSubmit={start}>
           <div className={styles.formRow}>
             <div className={styles.field}>
               <TextField
+                ref={fieldRef}
                 label={HOME.inputPlaceholder}
                 hideLabel
-                icon={<LinkIcon />}
+                icon={<LinkIcon size={18} />}
                 type="url"
                 inputMode="url"
                 autoComplete="off"
@@ -101,26 +114,17 @@ export function HomeScreen() {
                 }}
               />
             </div>
-            <Button type="submit" disabled={blocked}>
+            <Button type="submit" className={styles.submit} disabled={blocked}>
               {submit.isPending ? HOME.submitting : HOME.submit}
             </Button>
           </div>
 
           {malformed ? (
-            <Banner
-              title={ERROR.unsupportedUrl}
-              description={ERROR.unsupportedUrlDetail}
-              tone="notice"
-            />
+            <Banner title={ERROR.unsupportedUrl} description={ERROR.unsupportedUrlDetail} />
           ) : null}
 
           {unavailable ? (
-            <Banner
-              title={ERROR.inaccessible}
-              description={ERROR.inaccessibleDetail}
-              tone="notice"
-              assertive
-            />
+            <Banner title={ERROR.inaccessible} description={ERROR.inaccessibleDetail} assertive />
           ) : null}
 
           <SubmitFailure error={submit.error} />
@@ -136,19 +140,34 @@ export function HomeScreen() {
         </form>
 
         <p className={styles.notice}>
-          {HOME.supportNotice} {HOME.optimizedNotice}
+          {HOME.supportNotice}
+          <br className={styles.breakMobile} /> {HOME.optimizedNotice}
         </p>
 
         {USE_MOCK ? (
           <MockScenarioPicker
+            className={styles.picker}
             onPick={(url) => {
               changeUrl(url)
               setTouched(false)
             }}
           />
         ) : null}
-      </div>
-    </main>
+      </main>
+
+      <footer className={styles.footer}>
+        {FEEDBACK_URL === undefined || FEEDBACK_URL === '' ? null : (
+          <a
+            className={styles.feedback}
+            href={FEEDBACK_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {HOME.feedback}
+          </a>
+        )}
+      </footer>
+    </div>
   )
 }
 
@@ -195,12 +214,12 @@ function SubmitFailure({ error }: { error: Error | null }) {
       <Banner
         title={ERROR.sessionBusy}
         description={ERROR.sessionBusyDetail}
-        tone="notice"
         assertive
         action={
           lastJobId === null ? undefined : (
             <Button
               variant="outline"
+              size="sm"
               onClick={() => {
                 void navigate(`/r/${lastJobId}`)
               }}
@@ -215,16 +234,11 @@ function SubmitFailure({ error }: { error: Error | null }) {
 
   if (error instanceof ApiError && error.code === 'unsupported_url') {
     return (
-      <Banner
-        title={ERROR.unsupportedUrl}
-        description={ERROR.unsupportedUrlDetail}
-        tone="notice"
-        assertive
-      />
+      <Banner title={ERROR.unsupportedUrl} description={ERROR.unsupportedUrlDetail} assertive />
     )
   }
 
-  return <Banner title={ERROR.unknown} description={error.message} tone="notice" assertive />
+  return <Banner title={ERROR.unknown} description={error.message} assertive />
 }
 
 function VideoPreviewCard({
@@ -242,15 +256,17 @@ function VideoPreviewCard({
     <Card>
       <div className={styles.preview}>
         {thumbnailUrl === null ? (
-          <div className={styles.thumbnail} />
+          <div className={styles.thumbnail}>
+            <Skeleton width="100%" height="100%" />
+          </div>
         ) : (
           <img className={styles.thumbnail} src={thumbnailUrl} alt="" />
         )}
         <div className={styles.previewBody}>
           {loading ? (
             <>
-              <Skeleton width="12rem" />
-              <Skeleton width="6rem" />
+              <Skeleton width="88%" />
+              <Skeleton width="50%" height="9px" />
             </>
           ) : (
             <>
