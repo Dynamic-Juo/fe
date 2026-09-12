@@ -16,10 +16,12 @@ import * as styles from './ClaimSection.css'
 export function ClaimSection({
   verification,
   transcriptSource,
+  videoId,
   finished,
 }: {
   verification: ClaimVerificationResult | null | undefined
   transcriptSource: string | null | undefined
+  videoId: string | null
   /** 작업이 끝났는지. 끝난 뒤에 비어 있으면 더 오지 않는다. */
   finished: boolean
 }) {
@@ -59,6 +61,7 @@ export function ClaimSection({
               key={claimKey(claim, index)}
               claim={claim}
               transcriptSource={transcriptSource}
+              videoId={videoId}
             />
           ))}
         </div>

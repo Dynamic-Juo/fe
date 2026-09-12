@@ -37,6 +37,18 @@ export const spoken = style({
   lineHeight: vars.font.lineHeight.relaxed,
 })
 
+/** 누를 수 있는 발언 위치. 눌러 영상의 그 지점을 연다. */
+export const spokenLink = style([
+  spoken,
+  {
+    alignSelf: 'flex-start',
+    minHeight: vars.layout.minTouchTarget,
+    color: vars.color.text.faint,
+    textDecoration: 'underline',
+    textUnderlineOffset: '3px',
+  },
+])
+
 const slide = keyframes({
   '0%': { transform: 'translateX(-100%)' },
   '100%': { transform: 'translateX(300%)' },

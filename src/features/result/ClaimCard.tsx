@@ -7,6 +7,7 @@ import { A11Y, CLAIM, CLAIM_STATUS_LABEL, RESULT, VERDICT_LABEL } from '../../co
 import { spokenAt } from '../../domain/format'
 import { finalVerdict } from '../../domain/job'
 import { isHttpUrl } from '../../domain/link'
+import { watchUrlAt } from '../../domain/youtube'
 import * as styles from './ClaimCard.css'
 
 /** 처리 상태마다 칩의 성격이 다르다. 완료만 결과이고 나머지는 진행이다. */
@@ -33,9 +34,12 @@ const STATUS_EMPHASIS = {
 export function ClaimCard({
   claim,
   transcriptSource,
+  videoId,
 }: {
   claim: ClaimResult
   transcriptSource: string | null | undefined
+  /** 발언 위치를 누르면 영상의 그 지점을 연다. 모르면 누를 수 없다. */
+  videoId: string | null
 }) {
   const [expanded, setExpanded] = useState(false)
 
@@ -63,7 +67,19 @@ export function ClaimCard({
       <p className={claim.status === 'pending' ? styles.textPending : styles.text}>{claim.text}</p>
 
       {/* 아직 처리되지 않은 카드에는 발언 위치도 없다. 서버가 아직 주지 않았다. */}
-      {claim.status === 'pending' ? null : (
+      {claim.status === 'pending' ? null : videoId !== null &&
+        claim.start !== null &&
+        claim.start !== undefined ? (
+        <a
+          className={styles.spokenLink}
+          href={watchUrlAt(videoId, claim.start)}
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          <PlayIcon size={13} />
+          {spokenLine(claim, transcriptSource)}
+        </a>
+      ) : (
         <p className={styles.spoken}>
           <PlayIcon size={13} />
           {spokenLine(claim, transcriptSource)}

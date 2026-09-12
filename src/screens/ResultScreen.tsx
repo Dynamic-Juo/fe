@@ -45,7 +45,8 @@ export function ResultScreen() {
    * oEmbed로 채운다는 결정이고, 홈에서 이미 받아둔 값이라 대개 곧바로 나온다.
    * 서버 값이 도착하면 정규화를 거친 그쪽을 쓴다.
    */
-  const preview = useVideoPreview(data === undefined ? null : parseVideoId(data.url))
+  const videoId = data === undefined ? null : parseVideoId(data.url)
+  const preview = useVideoPreview(videoId)
 
   return (
     <div className={styles.page}>
@@ -90,6 +91,7 @@ export function ResultScreen() {
                 <ClaimSection
                   verification={result?.claim_verification}
                   transcriptSource={result?.media?.transcript_source}
+                  videoId={videoId}
                   finished={terminalStatus !== null}
                 />
               </div>
