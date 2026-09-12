@@ -7,7 +7,7 @@ export const chip = style({
   alignItems: 'center',
   gap: vars.space.xxs,
   padding: `3px ${vars.space.xs}`,
-  border: `${vars.borderWidth.thin} solid ${vars.color.border.default}`,
+  border: `${vars.borderWidth.thin} solid ${vars.color.border.medium}`,
   borderRadius: vars.radius.sm,
   fontSize: vars.font.size.xs,
   lineHeight: vars.font.lineHeight.relaxed,
@@ -28,7 +28,7 @@ export const emphasis = styleVariants({
     color: vars.color.text.primary,
   },
   muted: {
-    borderColor: vars.color.border.subtle,
+    borderColor: vars.color.border.muted,
     color: vars.color.text.disabled,
   },
   dashed: {

@@ -4,8 +4,8 @@ import { vars } from '../styles/contract.css'
 
 export const track = style({
   height: '6px',
-  backgroundColor: vars.color.surface.sunken,
-  borderRadius: vars.radius.full,
+  backgroundColor: vars.color.border.subtle,
+  borderRadius: vars.radius.none,
   overflow: 'hidden',
 })
 

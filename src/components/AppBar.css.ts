@@ -36,3 +36,19 @@ export const actions = style({
   alignItems: 'center',
   gap: vars.space.xs,
 })
+
+/** 나가는 길. 아이콘만 두되 누를 자리는 충분히 잡는다. */
+export const back = style({
+  display: 'inline-grid',
+  placeItems: 'center',
+  width: vars.layout.minTouchTarget,
+  height: vars.layout.minTouchTarget,
+  marginLeft: `calc(-1 * ${vars.space.sm})`,
+  color: vars.color.text.primary,
+})
+
+export const title = style({
+  fontSize: vars.font.size.lg,
+  fontWeight: vars.font.weight.bold,
+  letterSpacing: vars.font.letterSpacing.tight,
+})
