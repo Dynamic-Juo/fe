@@ -17,6 +17,16 @@ export const vars = createThemeContract({
       /** 영역과 영역 사이를 끊는 띠. */
       band: null,
     },
+    brand: {
+      /** 참새 표식의 먹색. */
+      ink: null,
+      /** 아이콘 타일과 강조 면. */
+      cream: null,
+      /** 부리. 표식에서 유일한 유채색이다. */
+      beak: null,
+      /** 넓은 면에 쓰는 갈색. */
+      deep: null,
+    },
     text: {
       primary: null,
       secondary: null,
