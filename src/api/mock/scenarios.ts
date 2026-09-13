@@ -86,11 +86,28 @@ export interface MockScenario {
   jobError?: ApiErrorBody
 }
 
-const NO_WHOLE_VIDEO_MODEL: ManipulationResult = {
+/** 업로더가 AI 생성 표기를 하지 않은 경우. 서버는 `unavailable`을 준다. */
+const NO_DISCLOSURE: ManipulationResult = {
   status: 'unavailable',
   status_label: '분석 불가',
   detail: '영상 전체 AI 생성 탐지 모델을 선정하지 않았다.',
   evidence: [],
+}
+
+/**
+ * 업로더가 제목이나 설명에 자가표기를 한 경우. 서버는 `suspected`를 준다.
+ *
+ * `evidence`는 서버가 만드는 형식 그대로다. 원문 문장이 아니라 서버의 패턴
+ * 목록에서 걸린 키워드를 그대로 담는다.
+ */
+const DISCLOSED: ManipulationResult = {
+  status: 'suspected',
+  status_label: '조작 의심',
+  detail: '제목·설명에 AI 생성 표기가 있다. 영상 자체를 분석하는 모델은 아직 없다.',
+  evidence: [
+    '제목/설명에 자가표기 발견: "ai 생성"',
+    '제목/설명에 자가표기 발견: "합성 영상"',
+  ],
 }
 
 const NEWS_EVIDENCE = (
@@ -201,7 +218,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       detail: '검사한 프레임에서 얼굴 합성 신호를 찾지 못했다. 조작이 없다는 뜻은 아니다.',
       evidence: ['검사한 프레임 8장'],
     },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: DISCLOSED,
     transcript: KOREAN_TRANSCRIPT,
     stages: OK_STAGES,
     finalStatus: 'completed',
@@ -398,7 +415,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       detail: '얼굴이 충분히 검출되지 않아 판단하지 못했다.',
       evidence: [],
     },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: NO_DISCLOSURE,
     transcript: { ...KOREAN_TRANSCRIPT, word_count: 27, coverage_pct: 41.2, keywords: [] },
     stages: {
       ...OK_STAGES,
@@ -429,7 +446,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       detail: '일부 프레임에서 얼굴 경계가 어긋나는 신호를 찾았다.',
       evidence: ['프레임 3, 5에서 경계 불일치'],
     },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: NO_DISCLOSURE,
     stages: {
       ...OK_STAGES,
       transcript: {
@@ -471,7 +488,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       detail: '얼굴 기반 분석을 수행하지 못했다.',
       evidence: [],
     },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: NO_DISCLOSURE,
     transcript: {
       ...KOREAN_TRANSCRIPT,
       source: 'caption',
@@ -554,7 +571,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       detail: '검사한 프레임에서 얼굴 합성 신호를 찾지 못했다. 조작이 없다는 뜻은 아니다.',
       evidence: ['검사한 프레임 8장'],
     },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: NO_DISCLOSURE,
     transcript: { ...KOREAN_TRANSCRIPT, coverage_pct: 76.3 },
     stages: {
       ...OK_STAGES,
@@ -613,7 +630,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
     media: {},
     marks: { collecting: 1, transcribing: 99, extractingClaims: 99, verifying: 99, end: 4 },
     faceManipulation: { status: 'unavailable', status_label: '분석 불가' },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: NO_DISCLOSURE,
     stages: {
       download: {
         status: 'failed',
@@ -652,7 +669,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       detail: '검사한 프레임에서 얼굴 합성 신호를 찾지 못했다. 조작이 없다는 뜻은 아니다.',
       evidence: ['검사한 프레임 8장'],
     },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: NO_DISCLOSURE,
     transcript: { ...KOREAN_TRANSCRIPT, coverage_pct: 88.2 },
     stages: OK_STAGES,
     finalStatus: 'completed',
@@ -759,7 +776,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
       detail: '검사한 프레임에서 얼굴 합성 신호를 찾지 못했다. 조작이 없다는 뜻은 아니다.',
       evidence: ['검사한 프레임 8장'],
     },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: NO_DISCLOSURE,
     transcript: { ...KOREAN_TRANSCRIPT, language: 'en', keywords: [] },
     stages: OK_STAGES,
     finalStatus: 'completed',
@@ -807,7 +824,7 @@ export const MOCK_SCENARIOS: readonly MockScenario[] = [
     media: {},
     marks: NORMAL_MARKS,
     faceManipulation: { status: 'unavailable' },
-    wholeVideoGeneration: NO_WHOLE_VIDEO_MODEL,
+    wholeVideoGeneration: NO_DISCLOSURE,
     finalStatus: 'failed',
     rejectSubmit: {
       httpStatus: 429,
