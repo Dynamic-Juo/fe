@@ -6,24 +6,12 @@ export const mark = style({
   display: 'grid',
   placeItems: 'center',
   flexShrink: 0,
-  borderRadius: vars.radius.full,
   color: vars.color.text.primary,
 })
 
+/** 상자 크기는 `Sparrow`에 넘기는 픽셀과 맞춘다. 표식 자체가 형태라 테두리를 두르지 않는다. */
 export const size = styleVariants({
-  sm: {
-    width: '1.5rem',
-    height: '1.5rem',
-    border: `${vars.borderWidth.medium} solid ${vars.color.border.strong}`,
-  },
-  md: {
-    width: '3.75rem',
-    height: '3.75rem',
-    border: `${vars.borderWidth.thick} solid ${vars.color.border.strong}`,
-  },
-  lg: {
-    width: '4.75rem',
-    height: '4.75rem',
-    border: `${vars.borderWidth.thick} solid ${vars.color.border.strong}`,
-  },
+  sm: { width: '1.5rem', height: '1.5rem' },
+  md: { width: '4.75rem', height: '4.75rem' },
+  lg: { width: '6rem', height: '6rem' },
 })

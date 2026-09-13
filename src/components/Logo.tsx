@@ -1,4 +1,4 @@
-import { SearchIcon } from './icons'
+import { Sparrow } from './Sparrow'
 import * as styles from './Logo.css'
 
 /**
@@ -8,7 +8,7 @@ import * as styles from './Logo.css'
 export function Logo({ size = 'sm' }: { size?: keyof typeof styles.size }) {
   return (
     <span className={`${styles.mark} ${styles.size[size]}`} aria-hidden>
-      <SearchIcon size={size === 'sm' ? 13 : size === 'md' ? 26 : 32} />
+      <Sparrow size={size === 'sm' ? 24 : size === 'md' ? 76 : 96} />
     </span>
   )
 }
