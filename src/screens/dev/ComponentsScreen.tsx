@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react'
 import { Banner, Button, Card, Chip, ProgressBar, Skeleton, TextField } from '../../components'
 import * as Icons from '../../components/icons'
 import { ClockIcon, InfoIcon, LinkIcon, type IconProps } from '../../components/icons'
-import { CLAIM_STATUS_LABEL, DETECTION_LABEL, VERDICT_LABEL } from '../../copy/strings'
+import { CLAIM_STATUS_LABEL, DETECTION_LABEL, DISCLOSURE, VERDICT_LABEL } from '../../copy/strings'
 import { vars } from '../../styles/contract.css'
 import { ManipulationChip } from '../../features/result/ManipulationChip'
 import * as styles from './ComponentsScreen.css'
@@ -73,9 +73,11 @@ export function ComponentsScreen() {
           ))}
           <ManipulationChip result={null} finished={false} />
         </div>
-        <p className={styles.caption}>
-          {DETECTION_LABEL.face} · {DETECTION_LABEL.wholeVideo}
-        </p>
+        <p className={styles.caption}>{DETECTION_LABEL.face}</p>
+        <div className={styles.row}>
+          <Chip emphasis="strong">{DISCLOSURE.chip}</Chip>
+        </div>
+        <p className={styles.caption}>{DETECTION_LABEL.disclosure} · 표기가 있을 때만 그린다</p>
       </Section>
 
       <Section title="버튼" note="높이는 토큰의 controlHeight를 따라 입력과 같다.">

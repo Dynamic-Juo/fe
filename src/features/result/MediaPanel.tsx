@@ -1,25 +1,29 @@
 import type { ManipulationResult } from '../../api/types'
 import { Card } from '../../components'
-import { DETECTION_LABEL, SECTION } from '../../copy/strings'
+import { Chip } from '../../components'
+import { DETECTION_LABEL, DISCLOSURE, SECTION } from '../../copy/strings'
+import { isDisclosed } from './disclosure'
 import { ManipulationChip } from './ManipulationChip'
 import * as styles from './MediaPanel.css'
 
 /**
- * 미디어 조작 영역이다. 두 탐지를 항상 각각 표시한다. 하나로 합치거나 둘 중
- * 하나만 보여주지 않는다.
+ * 미디어 조작 영역이다. 지금은 얼굴 합성·변형 하나만 표시한다.
  *
- * 주장 검증과 완전히 분리된 영역이며 서로를 기다리지 않는다. 한쪽이 먼저
- * 끝나면 그쪽만 결과로 바뀐다.
+ * 주장 검증과 완전히 분리된 영역이며 서로를 기다리지 않는다.
  *
- * 음성 합성 탐지는 MVP에서 제외다. 자리도 만들지 않는다.
+ * 업로더 AI 생성 표기는 분석 결과가 아니라 업로더가 적어 둔 것을 읽은 값이다.
+ * 표기가 있을 때만 카드를 만든다. 없다고 적으면 AI로 만들지 않았다는 뜻으로
+ * 읽힌다.
+ *
+ * 영상 전체 AI 생성 탐지와 음성 합성은 MVP에서 제외다. 화면에 항목을 두지 않는다.
  */
 export function MediaPanel({
   face,
-  wholeVideo,
+  disclosure,
   finished,
 }: {
   face: ManipulationResult | null | undefined
-  wholeVideo: ManipulationResult | null | undefined
+  disclosure: ManipulationResult | null | undefined
   /** 작업이 끝났는지. 끝난 뒤에 비어 있는 축은 더 오지 않는다. */
   finished: boolean
 }) {
@@ -29,7 +33,7 @@ export function MediaPanel({
         <h2 className={styles.heading}>{SECTION.mediaManipulation}</h2>
       </div>
       <Detection name={DETECTION_LABEL.face} result={face} finished={finished} />
-      <Detection name={DETECTION_LABEL.wholeVideo} result={wholeVideo} finished={finished} />
+      {isDisclosed(disclosure) ? <Disclosure evidence={disclosure?.evidence ?? []} /> : null}
     </section>
   )
 }
@@ -64,6 +68,29 @@ function Detection({
       </div>
       {/* 징후 없음에는 분석 범위를 반드시 붙인다. 범위 없는 없음은 안전하다는 뜻으로 읽힌다. */}
       {detail === null || detail === undefined ? null : <p className={styles.detail}>{detail}</p>}
+      {evidence.length === 0 ? null : (
+        <ul className={styles.evidence}>
+          {evidence.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      )}
+    </Card>
+  )
+}
+
+/**
+ * 서버 문구를 그대로 쓰지 않는다. 서버 `detail`은 탐지 모델을 선정하지
+ * 않았다는 설명이라 이 카드의 제목과 맞지 않는다.
+ */
+function Disclosure({ evidence }: { evidence: readonly string[] }) {
+  return (
+    <Card>
+      <div className={styles.head}>
+        <span className={styles.name}>{DETECTION_LABEL.disclosure}</span>
+        <Chip emphasis="strong">{DISCLOSURE.chip}</Chip>
+      </div>
+      <p className={styles.detail}>{DISCLOSURE.detail}</p>
       {evidence.length === 0 ? null : (
         <ul className={styles.evidence}>
           {evidence.map((item) => (

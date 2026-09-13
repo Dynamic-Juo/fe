@@ -115,7 +115,7 @@ export function ResultScreen() {
               <div className={styles.section}>
                 <MediaPanel
                   face={result?.face_manipulation}
-                  wholeVideo={result?.whole_video_generation}
+                  disclosure={result?.whole_video_generation}
                   finished={terminalStatus !== null}
                 />
               </div>
