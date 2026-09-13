@@ -19,7 +19,7 @@ export default defineConfig({
       manifest: {
         name: 'Conan AI',
         short_name: 'Conan AI',
-        description: 'YouTube Shorts의 조작 가능성과 주장의 사실성을 따로 확인합니다.',
+        description: 'YouTube 영상의 조작 가능성과 주장의 사실성을 따로 확인합니다.',
         lang: 'ko',
         start_url: '/',
         scope: '/',

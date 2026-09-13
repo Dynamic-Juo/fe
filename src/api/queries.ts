@@ -7,7 +7,7 @@ import {
 
 import { isTerminalStatus } from '../domain/job'
 import { getJob, submitAnalysis } from './client'
-import { ApiError, isJobGone } from './errors'
+import { ApiError, isJobGone, needsAuth, retryAfterMs } from './errors'
 import { fetchVideoPreview, type VideoPreview } from './preview'
 import type { AnalyzeRequest, AnalyzeResponse, JobResponse } from './types'
 
@@ -42,16 +42,21 @@ export function useJob(jobId: string | undefined): UseQueryResult<JobResponse, E
     queryFn: ({ signal }) => getJob(jobId ?? '', signal),
     enabled: jobId !== undefined && jobId !== '',
     refetchInterval: (query) => {
-      if (isJobGone(query.state.error)) return false
+      const error = query.state.error
+      // 다시 보내도 같은 답이 오는 실패에서는 멈춘다.
+      if (isJobGone(error) || needsAuth(error)) return false
       const data = query.state.data
       if (data !== undefined && isTerminalStatus(data.status)) return false
-      return POLL_INTERVAL_MS
+      // 서버가 기다릴 시간을 말하면 그 간격을 따른다.
+      return retryAfterMs(error) ?? POLL_INTERVAL_MS
     },
     // 화면을 보고 있지 않을 때까지 서버를 부르지 않는다.
     refetchIntervalInBackground: false,
     retry: (failureCount, error) => {
       // 404와 요청 자체가 잘못된 오류는 다시 보내도 같은 답이 온다.
       if (error instanceof ApiError && !error.retryable) return false
+      // 인증·CORS 실패는 반복 재시도로 풀리지 않는다.
+      if (needsAuth(error)) return false
       return failureCount < MAX_POLL_RETRY
     },
   })

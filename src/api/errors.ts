@@ -50,3 +50,17 @@ export class ApiTransportError extends Error {
 export function isJobGone(error: unknown): boolean {
   return error instanceof ApiError && error.httpStatus === 404
 }
+
+/**
+ * 로그인이 필요한 상태다. 다시 보내도 같은 결과라 재시도로 풀지 않는다.
+ * 사용자가 API 주소에서 인증을 마쳐야 한다.
+ */
+export function needsAuth(error: unknown): boolean {
+  return error instanceof ApiTransportError && error.kind === 'auth'
+}
+
+/** 서버가 말한 재시도 간격. 없으면 `null`이다. */
+export function retryAfterMs(error: unknown): number | null {
+  if (!(error instanceof ApiError) || error.retryAfterSec === null) return null
+  return error.retryAfterSec * 1000
+}

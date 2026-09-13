@@ -67,6 +67,7 @@ src/
 
 | 문서 | 내용 |
 | --- | --- |
+| [지원하는 입력](docs/reference/supported-input.md) | 어떤 영상을 받는지, 각 조건을 어디서 언제 확인하는지 |
 | [서비스 워커](docs/reference/service-worker.md) | 무엇을 캐시하고 무엇을 캐시하지 않는지, 확인하는 곳 |
 
 ## 작업 기준

@@ -92,7 +92,7 @@ export function ComponentsScreen() {
 
       <Section title="입력" note="자리 표시자를 설명 대신 쓰지 않는다. 라벨이 필수다.">
         <TextField
-          label="YouTube Shorts 링크"
+          label="YouTube 영상 링크"
           placeholder="링크 붙여넣기"
           icon={<LinkIcon size={17} />}
           hideLabel
