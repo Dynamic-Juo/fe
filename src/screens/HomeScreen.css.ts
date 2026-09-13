@@ -30,7 +30,7 @@ export const brand = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: vars.space.sm,
+  gap: vars.space.xs,
   marginBottom: vars.space.xxl,
   textAlign: 'center',
 })
@@ -45,6 +45,14 @@ export const title = style({
       letterSpacing: vars.font.letterSpacing.tightest,
     },
   },
+})
+
+/** 이름과 설명 사이를 받는 줄. 이름보다 작고 설명보다 굵다. */
+export const subtitle = style({
+  fontSize: vars.font.size.xxl,
+  fontWeight: vars.font.weight.bold,
+  letterSpacing: vars.font.letterSpacing.tight,
+  marginTop: vars.space.xs,
 })
 
 export const tagline = style({

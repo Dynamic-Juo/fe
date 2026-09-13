@@ -115,10 +115,12 @@ export const DISCLOSURE = {
 } as const
 
 export const HOME = {
-  title: 'Conan AI',
-  /** 좁은 화면에서 두 줄로 끊는다. 넓은 화면에서는 이어 붙인다. */
-  taglineHead: '영상의 조작 가능성과 주장의 사실성을 ',
-  taglineTail: '따로 확인합니다',
+  title: '참새',
+  /** 이름만으로는 무엇을 하는지 모른다. 부제가 그 자리를 받는다. */
+  subtitle: '그 영상, 참이야?',
+  /** 두 문장이라 어느 폭에서나 줄을 끊는다. */
+  taglineHead: '오늘 본 영상, 그냥 넘기지 마세요.',
+  taglineTail: '참새가 대신 진짜 소식을 물어올게요!',
   inputPlaceholder: 'YouTube 영상 링크 붙여넣기',
   submit: '분석하기',
   supportNotice: '길이 3분 이하인 공개 YouTube 영상을 분석합니다.',

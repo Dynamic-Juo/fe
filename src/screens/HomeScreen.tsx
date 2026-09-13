@@ -9,7 +9,7 @@ import { useSubmitAnalysis, useVideoPreview } from '../api/queries'
 import { readSession, writeSession } from '../app/session'
 import { AppBar, Banner, Button, Card, Logo, Skeleton, TextField } from '../components'
 import { InstallEntry } from '../features/install/InstallEntry'
-import { LinkIcon } from '../components/icons'
+import { ArrowRightIcon, LinkIcon } from '../components/icons'
 import { ERROR, HOME } from '../copy/strings'
 import { parseVideoId, watchUrl } from '../domain/youtube'
 import * as styles from './HomeScreen.css'
@@ -88,9 +88,10 @@ export function HomeScreen() {
         <div className={styles.brand}>
           <Logo size="md" />
           <h1 className={styles.title}>{HOME.title}</h1>
+          <p className={styles.subtitle}>{HOME.subtitle}</p>
           <p className={styles.tagline}>
             {HOME.taglineHead}
-            <br className={styles.breakMobile} />
+            <br />
             {HOME.taglineTail}
           </p>
         </div>
@@ -119,6 +120,7 @@ export function HomeScreen() {
             </div>
             <Button type="submit" className={styles.submit} disabled={blocked}>
               {submit.isPending ? HOME.submitting : HOME.submit}
+              {submit.isPending ? null : <ArrowRightIcon size={16} />}
             </Button>
           </div>
 

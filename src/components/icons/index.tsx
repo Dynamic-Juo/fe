@@ -23,6 +23,15 @@ export function LinkIcon(props: IconProps) {
   )
 }
 
+export function ArrowRightIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M5 12h13" />
+      <path d="M13 6l6 6-6 6" />
+    </Icon>
+  )
+}
+
 export function BackIcon(props: IconProps) {
   return (
     <Icon {...props}>
