@@ -135,6 +135,24 @@ export const HOME = {
   checkingVideo: '영상을 확인하는 중',
 } as const
 
+/**
+ * 홈 아래쪽 기능 소개다. 넓은 화면에서만 그린다. 좁은 화면에서는 입력까지
+ * 닿는 길이 길어진다.
+ *
+ * 우리가 실제로 하는 일만 적는다. 영상 요약은 하지 않으므로 쓰지 않는다.
+ */
+export const FEATURES = [
+  { key: 'claims', name: '주장 추출', detail: '영상 속 주요 주장을 AI가 찾아냅니다.' },
+  { key: 'evidence', name: '근거 찾기', detail: '주장을 뒷받침하거나 반박하는 자료를 찾아 붙입니다.' },
+  { key: 'media', name: '조작 징후', detail: '얼굴 합성 같은 조작 징후를 함께 확인합니다.' },
+] as const
+
+export const FOOTER = {
+  name: '참새',
+  tagline: '참인지 새빨간 거짓인지, 작은 도움.',
+  github: '저장소',
+} as const
+
 export const PROGRESS = {
   /** 주장 수가 확정되기 전에는 개수를 표시하지 않는다. */
   preparing: '검증 결과를 준비하고 있습니다.',

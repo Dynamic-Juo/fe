@@ -32,6 +32,39 @@ export function ArrowRightIcon(props: IconProps) {
   )
 }
 
+export function DocumentIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M6 3h8l5 5v13H6z" />
+      <path d="M14 3v5h5" />
+      <path d="M9 13h6M9 17h6" />
+    </Icon>
+  )
+}
+
+/** 얼굴을 틀 안에서 살핀다는 뜻. 미디어 조작 축을 가리킨다. */
+export function ScanFaceIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 8V5h3M20 8V5h-3M4 16v3h3M20 16v3h-3" />
+      <circle cx="12" cy="11" r="2.2" />
+      <path d="M8.5 16c1-1.4 2.1-2 3.5-2s2.5.6 3.5 2" />
+    </Icon>
+  )
+}
+
+/** 저장소로 가는 자리. 조직 주소가 정해지면 링크를 붙인다. */
+export function GithubIcon(props: IconProps) {
+  return (
+    <Icon {...props} strokeWidth={0}>
+      <path
+        fill="currentColor"
+        d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48l-.01-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.86l-.01 2.75c0 .26.18.58.69.48A10 10 0 0 0 12 2z"
+      />
+    </Icon>
+  )
+}
+
 export function BackIcon(props: IconProps) {
   return (
     <Icon {...props}>

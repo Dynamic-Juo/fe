@@ -112,18 +112,108 @@ export const notice = style({
 
 export const footer = style({
   display: 'flex',
-  justifyContent: 'center',
-  padding: `0 ${vars.space.xl} ${vars.space.xl}`,
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: vars.space.md,
+  flexWrap: 'wrap',
+  flexShrink: 0,
+  padding: `${vars.space.md} ${vars.space.xl}`,
+  borderTop: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,
+  fontSize: vars.font.size.md,
+  color: vars.color.text.faint,
+  '@media': {
+    [media.desktop]: {
+      padding: `${vars.space.lg} ${vars.space.xxl}`,
+    },
+  },
+})
+
+export const footerBrand = style({
+  display: 'flex',
+  alignItems: 'baseline',
+  gap: vars.space.sm,
+  minWidth: 0,
+})
+
+export const footerName = style({
+  fontSize: vars.font.size.xxl,
+  fontWeight: vars.font.weight.bold,
+  letterSpacing: vars.font.letterSpacing.tight,
+  color: vars.color.text.primary,
+})
+
+export const footerLinks = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: vars.space.md,
 })
 
 export const feedback = style({
-  color: vars.color.text.faint,
-  fontSize: vars.font.size.xs,
-  textDecoration: 'underline',
-  textUnderlineOffset: '3px',
+  color: 'inherit',
+  textDecoration: 'none',
+  selectors: {
+    '&:hover': { textDecoration: 'underline' },
+  },
 })
 
-/** 접수 전 확인 카드. 입력 아래에 붙어 무엇을 분석하는지 보여준다. */
+/** 조직 주소가 정해지기 전이다. 눌러도 갈 곳이 없어 링크로 만들지 않는다. */
+export const repoPlaceholder = style({
+  display: 'inline-grid',
+  placeItems: 'center',
+  color: vars.color.text.disabled,
+})
+
+/**
+ * 기능 소개다. 넓은 화면에서만 그린다. 좁은 화면에서는 입력까지 닿는 길이
+ * 길어져서 첫 화면에 들어오지 않는다.
+ */
+export const features = style({
+  display: 'none',
+  '@media': {
+    [media.desktop]: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      width: '100%',
+      maxWidth: vars.layout.formMax,
+      marginTop: vars.space.xxxl,
+      paddingTop: vars.space.xl,
+      borderTop: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,
+    },
+  },
+})
+
+export const feature = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: vars.space.sm,
+  padding: `0 ${vars.space.md}`,
+  selectors: {
+    '& + &': {
+      borderLeft: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,
+    },
+  },
+})
+
+export const featureIcon = style({
+  flexShrink: 0,
+  color: vars.color.text.secondary,
+})
+
+export const featureName = style({
+  display: 'block',
+  fontSize: vars.font.size.xl,
+  fontWeight: vars.font.weight.bold,
+  letterSpacing: vars.font.letterSpacing.tight,
+})
+
+export const featureDetail = style({
+  display: 'block',
+  marginTop: vars.space.xxs,
+  fontSize: vars.font.size.md,
+  color: vars.color.text.tertiary,
+  lineHeight: vars.font.lineHeight.relaxed,
+})
+
 export const preview = style({
   display: 'flex',
   alignItems: 'center',
