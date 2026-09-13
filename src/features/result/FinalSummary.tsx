@@ -1,6 +1,7 @@
 import type { JobResponse, ManipulationResult, TerminalJobStatus } from '../../api/types'
 import { Card, Chip } from '../../components'
-import { DETECTION_LABEL, JOB_STATE_LABEL, SECTION, SUMMARY } from '../../copy/strings'
+import { DETECTION_LABEL, DISCLOSURE, JOB_STATE_LABEL, SECTION, SUMMARY } from '../../copy/strings'
+import { isDisclosed } from './disclosure'
 import { timestamp } from '../../domain/format'
 import { ManipulationChip } from './ManipulationChip'
 import * as styles from './FinalSummary.css'
@@ -29,7 +30,12 @@ export function FinalSummary({ job, status }: { job: JobResponse; status: Termin
         <div className={styles.group}>
           <p className={styles.groupTitle}>{SECTION.mediaManipulation}</p>
           <DetectionRow name={DETECTION_LABEL.face} result={result?.face_manipulation} />
-          <DetectionRow name={DETECTION_LABEL.wholeVideo} result={result?.whole_video_generation} />
+          {isDisclosed(result?.whole_video_generation) ? (
+            <div className={styles.row}>
+              <span className={styles.rowName}>{DETECTION_LABEL.disclosure}</span>
+              <Chip emphasis="strong">{DISCLOSURE.chip}</Chip>
+            </div>
+          ) : null}
         </div>
 
         <hr className={styles.rule} />
