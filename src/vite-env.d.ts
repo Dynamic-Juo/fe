@@ -11,6 +11,11 @@ interface ImportMetaEnv {
   readonly VITE_VERCEL_ENV: 'production' | 'preview' | 'development'
 }
 
+/** iOS Safari가 홈 화면 실행 여부를 여기에 둔다. 표준이 아니다. */
+interface Navigator {
+  readonly standalone?: boolean
+}
+
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }

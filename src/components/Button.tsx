@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes } from 'react'
+import type { ButtonHTMLAttributes, Ref } from 'react'
 
 import * as styles from './Button.css'
 
@@ -6,6 +6,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: keyof typeof styles.variant
   size?: keyof typeof styles.size
   fullWidth?: boolean
+  ref?: Ref<HTMLButtonElement>
 }
 
 export function Button({
@@ -14,6 +15,7 @@ export function Button({
   fullWidth = false,
   type = 'button',
   className,
+  ref,
   ...rest
 }: Props) {
   const classes = [
@@ -26,5 +28,5 @@ export function Button({
     .filter(Boolean)
     .join(' ')
 
-  return <button type={type} className={classes} {...rest} />
+  return <button ref={ref} type={type} className={classes} {...rest} />
 }
