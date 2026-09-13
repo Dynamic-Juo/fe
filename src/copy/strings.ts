@@ -98,9 +98,9 @@ export const HOME = {
   /** 좁은 화면에서 두 줄로 끊는다. 넓은 화면에서는 이어 붙인다. */
   taglineHead: '영상의 조작 가능성과 주장의 사실성을 ',
   taglineTail: '따로 확인합니다',
-  inputPlaceholder: 'YouTube Shorts 링크 붙여넣기',
+  inputPlaceholder: 'YouTube 영상 링크 붙여넣기',
   submit: '분석하기',
-  supportNotice: '공개 상태인 YouTube Shorts를 분석합니다. 최대 3분.',
+  supportNotice: '길이 3분 이하인 공개 YouTube 영상을 분석합니다.',
   optimizedNotice: '한국어 영상에 최적화되어 있습니다.',
   feedback: '피드백 · 잘못된 결과 신고',
   install: '앱으로 설치',
@@ -194,7 +194,7 @@ export const RESULT = {
 
 export const ERROR = {
   unsupportedUrl: '이 링크는 분석할 수 없습니다',
-  unsupportedUrlDetail: 'YouTube Shorts 링크만 분석합니다. 공개 상태인 영상, 최대 3분.',
+  unsupportedUrlDetail: 'YouTube 영상 링크만 분석합니다. 길이 3분 이하인 공개 영상.',
   videoNotFound: '영상을 찾을 수 없습니다',
   inaccessible: '접근할 수 없는 영상입니다',
   inaccessibleDetail: '비공개, 일부 공개, 연령 제한 영상은 분석할 수 없습니다.',
