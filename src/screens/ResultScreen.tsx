@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 
+import { isJobGone, needsAuth } from '../api/errors'
 import { useJob, useVideoPreview } from '../api/queries'
 import { AppBar, Banner, Chip } from '../components'
 import { ERROR, JOB_STATE_LABEL, PROGRESS } from '../copy/strings'
@@ -64,12 +65,7 @@ export function ResultScreen() {
       {data === undefined ? (
         <div className={styles.section}>
           {job.isError ? (
-            <Banner
-              title={ERROR.jobNotFound}
-              description={ERROR.jobNotFoundDetail}
-              tone="notice"
-              assertive
-            />
+            <LoadFailure error={job.error} />
           ) : (
             <VideoStrip title={null} author={null} thumbnailUrl={null} />
           )}
@@ -137,4 +133,18 @@ export function ResultScreen() {
       )}
     </div>
   )
+}
+
+/**
+ * 결과를 불러오지 못한 이유를 나눈다. 서버에 결과가 없는 것과 로그인이
+ * 필요한 것과 연결이 끊긴 것은 사용자가 할 일이 다르다.
+ */
+function LoadFailure({ error }: { error: Error | null }) {
+  if (needsAuth(error)) {
+    return <Banner title={ERROR.authRequired} description={ERROR.authRequiredDetail} assertive />
+  }
+  if (isJobGone(error)) {
+    return <Banner title={ERROR.jobNotFound} description={ERROR.jobNotFoundDetail} assertive />
+  }
+  return <Banner title={ERROR.network} description={error?.message ?? ERROR.unknown} assertive />
 }

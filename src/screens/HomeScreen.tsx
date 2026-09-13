@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { USE_MOCK } from '../api/client'
-import { ApiError } from '../api/errors'
+import { ApiError, needsAuth } from '../api/errors'
 import { MockScenarioPicker } from '../api/mock/ScenarioPicker'
 import { VideoUnavailableError } from '../api/preview'
 import { useSubmitAnalysis, useVideoPreview } from '../api/queries'
@@ -241,7 +241,12 @@ function SubmitFailure({ error }: { error: Error | null }) {
     )
   }
 
-  return <Banner title={ERROR.unknown} description={error.message} assertive />
+  // 로그인 절차는 이 화면에서 끝낼 수 없다. 무엇을 해야 하는지만 알린다.
+  if (needsAuth(error)) {
+    return <Banner title={ERROR.authRequired} description={ERROR.authRequiredDetail} assertive />
+  }
+
+  return <Banner title={ERROR.network} description={error.message} assertive />
 }
 
 function VideoPreviewCard({
