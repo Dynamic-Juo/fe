@@ -17,15 +17,15 @@ export default defineConfig({
       // 아무것도 미리 받아 두지 않는다. 탐색을 캐시로 돌리지도 않는다.
       workbox: { globPatterns: [], navigateFallback: null },
       manifest: {
-        name: 'Conan AI',
-        short_name: 'Conan AI',
-        description: 'YouTube 영상의 조작 가능성과 주장의 사실성을 따로 확인합니다.',
+        name: '참새 AI',
+        short_name: '참새 AI',
+        description: '오늘 본 영상, 그냥 넘기지 마세요. 참새가 대신 진짜 소식을 물어올게요.',
         lang: 'ko',
         start_url: '/',
         scope: '/',
         display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#ffffff',
+        background_color: '#faf9f6',
+        theme_color: '#f6e6cf',
         icons: [
           { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },
