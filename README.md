@@ -1,6 +1,6 @@
-# Conan AI 프런트엔드
+# 참새 AI 프런트엔드
 
-YouTube Shorts의 미디어 조작 가능성과 영상 속 주장의 사실성을 확인하는 서비스의 화면이다. 두 결과를 하나의 진위 판정으로 합치지 않고 따로 보여준다.
+길이 3분 이하 공개 YouTube 영상의 미디어 조작 가능성과 영상 속 주장의 사실성을 확인하는 서비스의 화면이다. 두 결과를 하나의 진위 판정으로 합치지 않고 따로 보여준다.
 
 기획과 설계 기준은 [Dynamic-Juo/docs](https://github.com/Dynamic-Juo/docs), 분석 API는 [Dynamic-Juo/be](https://github.com/Dynamic-Juo/be)에 있다.
 
