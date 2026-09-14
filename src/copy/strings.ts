@@ -236,6 +236,8 @@ export const OUTCOME = {
 } as const
 
 export const RESULT = {
+  /** 깨끗하게 끝났을 때의 머리말. 개수와 판정은 아래 목록과 요약이 말한다. */
+  done: '참새가 물어온 결과입니다',
   noClaims: '영상에서 외부 근거로 확인할 수 있는 주장을 찾지 못했습니다.',
   claimUnavailable: '발언을 텍스트로 옮기지 못해 주장을 검증할 수 없습니다.',
   /** 이유를 모를 때 쓴다. 서버가 이유를 주면 그쪽을 먼저 쓴다. */

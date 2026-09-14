@@ -90,8 +90,3 @@ export const back = style({
   color: vars.color.text.primary,
 })
 
-export const title = style({
-  fontSize: vars.font.size.lg,
-  fontWeight: vars.font.weight.bold,
-  letterSpacing: vars.font.letterSpacing.tight,
-})

@@ -18,12 +18,19 @@ export function ClaimSection({
   transcriptSource,
   videoId,
   finished,
+  asPageTitle,
 }: {
   verification: ClaimVerificationResult | null | undefined
   transcriptSource: string | null | undefined
   videoId: string | null
   /** 작업이 끝났는지. 끝난 뒤에 비어 있으면 더 오지 않는다. */
   finished: boolean
+  /**
+   * 이 절의 제목을 화면 제목으로 쓸지. 진행 중에는 진행 머리말이 화면 제목을
+   * 맡으므로 그때는 켜지 않는다. 화면에 제목 요소가 없으면 낭독기로 훑을 때
+   * 이 페이지가 무엇인지 알 수 없다.
+   */
+  asPageTitle: boolean
 }) {
   const claims = verification?.claims ?? []
   const progress = claimProgress(claims, verification?.summary)
@@ -32,7 +39,11 @@ export function ClaimSection({
   return (
     <section className={styles.section}>
       <div className={styles.sectionTitle}>
-        <h2 className={styles.heading}>{SECTION.claimVerification}</h2>
+        {asPageTitle ? (
+          <h1 className={styles.heading}>{SECTION.claimVerification}</h1>
+        ) : (
+          <h2 className={styles.heading}>{SECTION.claimVerification}</h2>
+        )}
         {counted ? (
           <span className={styles.count}>
             {progress.settled}/{progress.total}

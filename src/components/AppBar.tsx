@@ -18,14 +18,15 @@ import * as styles from './AppBar.css'
  * 돌아가는 길이 있는 화면에서는 표식을 가운데에 둔다. 양옆을 같은 비율로
  * 잡아 내용 길이와 상관없이 가운데가 흔들리지 않게 한다. 결과 화면을 공유하거나
  * 갈무리했을 때 어느 서비스인지 남아야 한다.
+ *
+ * 작업 상태는 여기에 적지 않는다. 진행 중에는 본문 제목이, 끝난 뒤에는 요약
+ * 카드의 칩이 같은 말을 하고 있다. 띠는 스크롤하면 사라져서 남겨 둘 값도 없다.
  */
 export function AppBar({
   back = false,
-  title,
   children,
 }: {
   back?: boolean
-  title?: string
   children?: ReactNode
 }) {
   return (
@@ -36,7 +37,6 @@ export function AppBar({
             <Link className={styles.back} to="/" aria-label={A11Y.goHome}>
               <BackIcon size={20} />
             </Link>
-            <span className={styles.title}>{title}</span>
           </div>
           <Link className={styles.centerBrand} to="/">
             <Logo />
