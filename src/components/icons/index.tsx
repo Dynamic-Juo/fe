@@ -65,6 +65,35 @@ export function GithubIcon(props: IconProps) {
   )
 }
 
+export function ShareIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M12 3v12" />
+      <path d="M8 7l4-4 4 4" />
+      <path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7" />
+    </Icon>
+  )
+}
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </Icon>
+  )
+}
+
+/** 실패를 알릴 때. 원 안 느낌표인 `InfoIcon`과 구별되게 삼각형으로 둔다. */
+export function AlertIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M12 4.5L21 19.5H3z" />
+      <path d="M12 10v4" />
+      <path d="M12 17v.01" />
+    </Icon>
+  )
+}
+
 export function BackIcon(props: IconProps) {
   return (
     <Icon {...props}>
