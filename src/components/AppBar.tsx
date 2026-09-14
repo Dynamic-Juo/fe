@@ -21,6 +21,9 @@ import * as styles from './AppBar.css'
  *
  * 작업 상태는 여기에 적지 않는다. 진행 중에는 본문 제목이, 끝난 뒤에는 요약
  * 카드의 칩이 같은 말을 하고 있다. 띠는 스크롤하면 사라져서 남겨 둘 값도 없다.
+ *
+ * 가운데 표식은 누르는 것이 아니다. 왼쪽에 돌아가는 길이 이미 있어서, 같은
+ * 곳으로 가는 길을 둘 두면 어느 쪽을 눌러야 하는지 헷갈린다.
  */
 export function AppBar({
   back = false,
@@ -38,10 +41,10 @@ export function AppBar({
               <BackIcon size={20} />
             </Link>
           </div>
-          <Link className={styles.centerBrand} to="/">
+          <span className={styles.centerBrand}>
             <Logo />
             {HOME.title}
-          </Link>
+          </span>
           <div className={`${styles.side} ${styles.sideEnd}`}>{children}</div>
         </>
       ) : (

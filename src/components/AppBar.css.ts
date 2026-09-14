@@ -19,16 +19,24 @@ export const bar = style({
   },
 })
 
-export const brand = style({
+/**
+ * 표식 옆 이름의 생김새다. 홈과 결과 화면이 같아야 해서 한 곳에서 정한다.
+ *
+ * 글자 크기는 값으로 박았다. 표식 크기에 맞춘 값이라 본문 크기 토큰 중에는
+ * 쓸 만한 것이 없다.
+ */
+const brandBase = style({
   display: 'inline-flex',
   alignItems: 'center',
-  gap: vars.space.xs,
-  fontSize: vars.font.size.xl,
+  gap: vars.space.xxs,
+  fontSize: '1.25rem',
+  lineHeight: 1.05,
   fontWeight: vars.font.weight.bold,
   letterSpacing: vars.font.letterSpacing.tight,
   color: vars.color.text.primary,
-  textDecoration: 'none',
 })
+
+export const brand = style([brandBase, { textDecoration: 'none' }])
 
 /** 이름 옆에 붙는 설명. 좁은 화면에서는 이름까지만 둔다. */
 export const brandTagline = style({
@@ -40,7 +48,7 @@ export const brandTagline = style({
   '@media': {
     [media.desktop]: {
       display: 'inline',
-      marginLeft: vars.space.xxs,
+      marginLeft: vars.space.xs,
     },
   },
 })
@@ -61,17 +69,7 @@ export const sideEnd = style({
   justifyContent: 'flex-end',
 })
 
-export const centerBrand = style({
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: vars.space.xs,
-  flexShrink: 0,
-  fontSize: vars.font.size.xl,
-  fontWeight: vars.font.weight.bold,
-  letterSpacing: vars.font.letterSpacing.tight,
-  color: vars.color.text.primary,
-  textDecoration: 'none',
-})
+export const centerBrand = style([brandBase, { flexShrink: 0 }])
 
 export const actions = style({
   marginLeft: 'auto',
@@ -89,4 +87,3 @@ export const back = style({
   marginLeft: `calc(-1 * ${vars.space.sm})`,
   color: vars.color.text.primary,
 })
-

@@ -39,6 +39,11 @@ export const title = style({
   fontSize: vars.font.size.hero,
   fontWeight: vars.font.weight.bold,
   letterSpacing: vars.font.letterSpacing.tighter,
+  /**
+   * 본문 줄 높이(1.55)를 물려받으면 46px 글자가 71px 상자를 차지한다. 위아래로
+   * 12px씩 비어 표식과 부제가 멀어진다. 제목은 한 줄이라 줄 사이를 벌릴 이유가 없다.
+   */
+  lineHeight: 1.05,
   '@media': {
     [media.desktop]: {
       fontSize: vars.font.size.heroLg,

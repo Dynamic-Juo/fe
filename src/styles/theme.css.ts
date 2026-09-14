@@ -83,8 +83,8 @@ createGlobalTheme(':root', vars, {
       lg: '0.875rem',
       xl: '0.9375rem',
       xxl: '1.1875rem',
-      hero: '1.9375rem',
-      heroLg: '2.875rem',
+      hero: '2.25rem',
+      heroLg: '3.5rem',
     },
     weight: {
       regular: '400',
