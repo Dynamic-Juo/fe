@@ -45,6 +45,34 @@ export const brandTagline = style({
   },
 })
 
+/**
+ * 가운데 표식을 진짜 가운데에 두려면 양옆이 같은 폭을 차지해야 한다. 내용
+ * 길이가 달라도 가운데가 밀리지 않는다.
+ */
+export const side = style({
+  flex: 1,
+  minWidth: 0,
+  display: 'flex',
+  alignItems: 'center',
+  gap: vars.space.xs,
+})
+
+export const sideEnd = style({
+  justifyContent: 'flex-end',
+})
+
+export const centerBrand = style({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: vars.space.xs,
+  flexShrink: 0,
+  fontSize: vars.font.size.xl,
+  fontWeight: vars.font.weight.bold,
+  letterSpacing: vars.font.letterSpacing.tight,
+  color: vars.color.text.primary,
+  textDecoration: 'none',
+})
+
 export const actions = style({
   marginLeft: 'auto',
   display: 'flex',

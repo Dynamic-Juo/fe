@@ -14,6 +14,10 @@ import * as styles from './AppBar.css'
  * 이어지지 않는다. 나갈 길이 화면 안에 있어야 한다.
  *
  * 오른쪽은 화면마다 다르다. 홈은 설치 진입점, 결과는 진행 상태다.
+ *
+ * 돌아가는 길이 있는 화면에서는 표식을 가운데에 둔다. 양옆을 같은 비율로
+ * 잡아 내용 길이와 상관없이 가운데가 흔들리지 않게 한다. 결과 화면을 공유하거나
+ * 갈무리했을 때 어느 서비스인지 남아야 한다.
  */
 export function AppBar({
   back = false,
@@ -27,20 +31,29 @@ export function AppBar({
   return (
     <header className={styles.bar}>
       {back ? (
-        <Link className={styles.back} to="/" aria-label={A11Y.goHome}>
-          <BackIcon size={20} />
-        </Link>
-      ) : null}
-      {back ? (
-        <span className={styles.title}>{title}</span>
+        <>
+          <div className={styles.side}>
+            <Link className={styles.back} to="/" aria-label={A11Y.goHome}>
+              <BackIcon size={20} />
+            </Link>
+            <span className={styles.title}>{title}</span>
+          </div>
+          <Link className={styles.centerBrand} to="/">
+            <Logo />
+            {HOME.title}
+          </Link>
+          <div className={`${styles.side} ${styles.sideEnd}`}>{children}</div>
+        </>
       ) : (
-        <Link className={styles.brand} to="/">
-          <Logo />
-          {HOME.title}
-          <span className={styles.brandTagline}>{HOME.headerTagline}</span>
-        </Link>
+        <>
+          <Link className={styles.brand} to="/">
+            <Logo />
+            {HOME.title}
+            <span className={styles.brandTagline}>{HOME.headerTagline}</span>
+          </Link>
+          {children === undefined ? null : <div className={styles.actions}>{children}</div>}
+        </>
       )}
-      {children === undefined ? null : <div className={styles.actions}>{children}</div>}
     </header>
   )
 }
