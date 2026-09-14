@@ -157,6 +157,18 @@ export const FEATURES = [
   { key: 'media', name: '조작 징후', detail: '얼굴 합성 같은 조작 징후를 함께 확인합니다.' },
 ] as const
 
+/**
+ * 공유 진입점 문구다. 기기 공유 창이 받는 제목과 설명, 복사했을 때의 알림을
+ * 함께 둔다.
+ */
+export const SHARE = {
+  label: '공유하기',
+  title: '참새 AI',
+  text: '그 영상, 참인지 새빨간 거짓인지 확인해 보세요.',
+  copied: '링크를 복사했어요',
+  failed: '복사하지 못했어요',
+} as const
+
 export const FOOTER = {
   name: '참새',
   tagline: '그 영상, 참인지 새빨간 거짓인지.',
