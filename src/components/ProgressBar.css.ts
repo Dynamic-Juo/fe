@@ -5,7 +5,7 @@ import { vars } from '../styles/contract.css'
 export const track = style({
   height: '6px',
   backgroundColor: vars.color.border.subtle,
-  borderRadius: vars.radius.none,
+  borderRadius: vars.radius.full,
   overflow: 'hidden',
 })
 

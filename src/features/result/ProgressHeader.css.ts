@@ -17,6 +17,7 @@ export const steps = style({
 })
 
 export const step = style({
+  borderRadius: vars.radius.full,
   flex: 1,
   height: vars.space.xxs,
   backgroundColor: vars.color.border.subtle,
