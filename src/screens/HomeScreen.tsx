@@ -88,10 +88,21 @@ export function HomeScreen() {
         <div className={styles.brand}>
           <Logo size="md" />
           <h1 className={styles.title}>{HOME.title}</h1>
-          <p className={styles.subtitle}>{HOME.subtitle}</p>
+          <p className={styles.subtitle}>
+            {HOME.subtitle.map((line, index) => (
+              <span key={line.mark}>
+                {index === 0 ? null : <br />}
+                {line.before}
+                <span className={styles.brush}>{line.mark}</span>
+                {line.after}
+              </span>
+            ))}
+          </p>
           <p className={styles.tagline}>
             {HOME.taglineHead}
             <br />
+            {HOME.taglineLead}
+            <span className={styles.taglineName}>{HOME.taglineName}</span>
             {HOME.taglineTail}
           </p>
         </div>

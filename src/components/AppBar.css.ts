@@ -30,6 +30,21 @@ export const brand = style({
   textDecoration: 'none',
 })
 
+/** 이름 옆에 붙는 설명. 좁은 화면에서는 이름까지만 둔다. */
+export const brandTagline = style({
+  display: 'none',
+  fontSize: vars.font.size.md,
+  fontWeight: vars.font.weight.regular,
+  letterSpacing: vars.font.letterSpacing.normal,
+  color: vars.color.text.faint,
+  '@media': {
+    [media.desktop]: {
+      display: 'inline',
+      marginLeft: vars.space.xxs,
+    },
+  },
+})
+
 export const actions = style({
   marginLeft: 'auto',
   display: 'flex',

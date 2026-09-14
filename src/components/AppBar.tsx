@@ -37,6 +37,7 @@ export function AppBar({
         <Link className={styles.brand} to="/">
           <Logo />
           {HOME.title}
+          <span className={styles.brandTagline}>{HOME.headerTagline}</span>
         </Link>
       )}
       {children === undefined ? null : <div className={styles.actions}>{children}</div>}

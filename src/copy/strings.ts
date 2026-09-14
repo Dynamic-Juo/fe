@@ -116,11 +116,21 @@ export const DISCLOSURE = {
 
 export const HOME = {
   title: '참새',
-  /** 이름만으로는 무엇을 하는지 모른다. 부제가 그 자리를 받는다. */
-  subtitle: '그 영상, 참이야?',
+  /** 상단바에서 이름 옆에 붙는다. 이름만 두면 무엇을 하는지 모른다. */
+  headerTagline: '진짜 소식을 물어와드려요!',
+  /**
+   * 부제 두 줄이다. `mark`에 들어가는 글자가 이름을 이룬다. 참새의 참과 새라서
+   * 그 두 글자에만 붓칠 강조를 얹는다.
+   */
+  subtitle: [
+    { before: '그 영상, ', mark: '참', after: '이야?' },
+    { before: '', mark: '새', after: '빨간 거짓이야?' },
+  ],
   /** 두 문장이라 어느 폭에서나 줄을 끊는다. */
-  taglineHead: '오늘 본 영상, 그냥 넘기지 마세요.',
-  taglineTail: '참새가 대신 진짜 소식을 물어올게요!',
+  taglineHead: '영상 속 주장과 사실을 AI가 꼼꼼히 확인합니다.',
+  taglineLead: '그냥 넘기지 말고, ',
+  taglineName: '참새',
+  taglineTail: '에게 물어보세요.',
   inputPlaceholder: 'YouTube 영상 링크 붙여넣기',
   submit: '분석하기',
   supportNotice: '길이 3분 이하인 공개 YouTube 영상을 분석합니다.',
@@ -149,7 +159,7 @@ export const FEATURES = [
 
 export const FOOTER = {
   name: '참새',
-  tagline: '참인지 새빨간 거짓인지, 작은 도움.',
+  tagline: '그 영상, 참인지 새빨간 거짓인지.',
   github: '저장소',
 } as const
 

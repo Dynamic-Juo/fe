@@ -30,7 +30,7 @@ export const brand = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: vars.space.xs,
+  gap: vars.space.xxs,
   marginBottom: vars.space.xxl,
   textAlign: 'center',
 })
@@ -52,10 +52,50 @@ export const subtitle = style({
   fontSize: vars.font.size.xxl,
   fontWeight: vars.font.weight.bold,
   letterSpacing: vars.font.letterSpacing.tight,
-  marginTop: vars.space.xs,
+  lineHeight: vars.font.lineHeight.tight,
+  marginTop: vars.space.xxs,
+  '@media': {
+    [media.desktop]: {
+      fontSize: vars.font.size.hero,
+    },
+  },
+})
+
+/**
+ * 붓으로 칠한 듯한 강조다. 참새의 두 글자에만 얹어 이름이 부제 안에서
+ * 드러나게 한다.
+ *
+ * 글자 뒤에 깔아야 해서 쌓임 맥락을 만들고 배경을 음수 z로 내린다.
+ */
+export const brush = style({
+  position: 'relative',
+  display: 'inline-block',
+  isolation: 'isolate',
+  selectors: {
+    '&::before': {
+      content: '',
+      position: 'absolute',
+      top: '0.16em',
+      right: '-0.14em',
+      bottom: '0.02em',
+      left: '-0.14em',
+      zIndex: -1,
+      backgroundColor: vars.color.brand.beak,
+      opacity: 0.45,
+      borderRadius: '48% 52% 44% 56% / 56% 44% 56% 44%',
+      transform: 'rotate(-2deg)',
+    },
+  },
+})
+
+/** 설명 안에서 이름을 한 번 더 부른다. 굵기만 올리고 색은 건드리지 않는다. */
+export const taglineName = style({
+  fontWeight: vars.font.weight.bold,
+  color: vars.color.text.secondary,
 })
 
 export const tagline = style({
+  marginTop: vars.space.sm,
   color: vars.color.text.tertiary,
   fontSize: vars.font.size.md,
   lineHeight: vars.font.lineHeight.relaxed,
