@@ -104,10 +104,7 @@ const DISCLOSED: ManipulationResult = {
   status: 'suspected',
   status_label: '조작 의심',
   detail: '제목·설명에 AI 생성 표기가 있다. 영상 자체를 분석하는 모델은 아직 없다.',
-  evidence: [
-    '제목/설명에 자가표기 발견: "ai 생성"',
-    '제목/설명에 자가표기 발견: "합성 영상"',
-  ],
+  evidence: ['제목/설명에 자가표기 발견: "ai 생성"', '제목/설명에 자가표기 발견: "합성 영상"'],
 }
 
 const NEWS_EVIDENCE = (

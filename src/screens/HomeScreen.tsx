@@ -10,7 +10,14 @@ import { readSession, writeSession } from '../app/session'
 import { AppBar, Banner, Button, Card, Logo, Skeleton, TextField } from '../components'
 import { InstallEntry } from '../features/install/InstallEntry'
 import { ShareButton } from '../features/share/ShareButton'
-import { ArrowRightIcon, DocumentIcon, GithubIcon, LinkIcon, ScanFaceIcon, SearchIcon } from '../components/icons'
+import {
+  ArrowRightIcon,
+  DocumentIcon,
+  GithubIcon,
+  LinkIcon,
+  ScanFaceIcon,
+  SearchIcon,
+} from '../components/icons'
 import { ERROR, FEATURES, FOOTER, HOME } from '../copy/strings'
 import { parseVideoId, watchUrl } from '../domain/youtube'
 import * as styles from './HomeScreen.css'

@@ -153,7 +153,11 @@ export const HOME = {
  */
 export const FEATURES = [
   { key: 'claims', name: '주장 추출', detail: '영상 속 주요 주장을 AI가 찾아냅니다.' },
-  { key: 'evidence', name: '근거 찾기', detail: '주장을 뒷받침하거나 반박하는 자료를 찾아 붙입니다.' },
+  {
+    key: 'evidence',
+    name: '근거 찾기',
+    detail: '주장을 뒷받침하거나 반박하는 자료를 찾아 붙입니다.',
+  },
   { key: 'media', name: '조작 징후', detail: '얼굴 합성 같은 조작 징후를 함께 확인합니다.' },
 ] as const
 

@@ -25,13 +25,7 @@ import * as styles from './AppBar.css'
  * 가운데 표식은 누르는 것이 아니다. 왼쪽에 돌아가는 길이 이미 있어서, 같은
  * 곳으로 가는 길을 둘 두면 어느 쪽을 눌러야 하는지 헷갈린다.
  */
-export function AppBar({
-  back = false,
-  children,
-}: {
-  back?: boolean
-  children?: ReactNode
-}) {
+export function AppBar({ back = false, children }: { back?: boolean; children?: ReactNode }) {
   return (
     <header className={styles.bar}>
       {back ? (
