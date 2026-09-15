@@ -96,8 +96,8 @@ export function HomeScreen() {
   return (
     <div className={styles.page}>
       <AppBar>
-        <ShareButton />
         <InstallEntry />
+        <ShareButton />
       </AppBar>
 
       <main className={styles.body}>
