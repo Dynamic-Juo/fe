@@ -17,7 +17,7 @@ export const sectionTitle = style({
 /** 화면 제목이다. 섹션 제목보다 한 단계 위다. */
 export const heading = style({
   flex: 1,
-  fontSize: vars.font.size.xxl,
+  fontSize: vars.font.size.xxxl,
   fontWeight: vars.font.weight.bold,
   letterSpacing: vars.font.letterSpacing.tighter,
 })

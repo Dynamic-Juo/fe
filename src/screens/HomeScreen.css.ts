@@ -54,7 +54,7 @@ export const title = style({
 
 /** 이름과 설명 사이를 받는 줄. 이름보다 작고 설명보다 굵다. */
 export const subtitle = style({
-  fontSize: vars.font.size.xxl,
+  fontSize: vars.font.size.xxxl,
   fontWeight: vars.font.weight.bold,
   letterSpacing: vars.font.letterSpacing.tight,
   lineHeight: vars.font.lineHeight.tight,
@@ -181,7 +181,7 @@ export const footerBrand = style({
 })
 
 export const footerName = style({
-  fontSize: vars.font.size.xxl,
+  fontSize: vars.font.size.xxxl,
   fontWeight: vars.font.weight.bold,
   letterSpacing: vars.font.letterSpacing.tight,
   color: vars.color.text.primary,

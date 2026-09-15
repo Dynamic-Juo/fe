@@ -130,8 +130,7 @@ export const dismiss = style({
 })
 
 export const title = style({
-  // 타이포 계약에 15px과 19px 사이 단계가 없다. 이 크기로 확정되면 계약에 더한다.
-  fontSize: '1rem',
+  fontSize: vars.font.size.xxl,
   fontWeight: vars.font.weight.medium,
   color: vars.color.text.primary,
 })

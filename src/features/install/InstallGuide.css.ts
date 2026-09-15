@@ -35,7 +35,7 @@ export const sheet = style({
 })
 
 export const title = style({
-  fontSize: vars.font.size.xxl,
+  fontSize: vars.font.size.xxxl,
   fontWeight: vars.font.weight.bold,
   letterSpacing: vars.font.letterSpacing.tighter,
 })
