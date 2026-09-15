@@ -54,6 +54,15 @@ const STATUS_ICON = {
   timed_out: <ClockIcon size={13} />,
 } as const
 
+/**
+ * 처리가 끝나지 못한 카드는 목록에서 눈에 걸려야 한다. 다른 카드와 같은
+ * 무게로 두면 결과가 빠진 것을 모르고 지나친다.
+ */
+function cardTone(status: ClaimResult['status'], settled: boolean) {
+  if (status === 'failed' || status === 'timed_out') return 'attention'
+  return settled ? 'default' : 'muted'
+}
+
 export function ClaimCard({
   claim,
   transcriptSource,
@@ -77,7 +86,7 @@ export function ClaimCard({
   const toggleLabel = footerLabel(cited.length, references.length, hasDetail)
 
   return (
-    <Card tone={settled ? 'default' : 'muted'}>
+    <Card tone={cardTone(claim.status, settled)}>
       <div className={styles.head}>
         <Chip emphasis={STATUS_EMPHASIS[claim.status]} icon={STATUS_ICON[claim.status]}>
           {CLAIM_STATUS_LABEL[claim.status]}
