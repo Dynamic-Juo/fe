@@ -12,7 +12,7 @@ pnpm install
 pnpm dev
 ```
 
-`pnpm dev`는 mock으로 동작한다. 실제 API를 호출하지 않으므로 백엔드 인증이나 CORS 없이 화면을 만들 수 있다.
+`pnpm dev`는 mock으로 동작한다. 서버를 부르지 않으므로 백엔드 없이 화면을 만들 수 있다.
 
 | 명령 | 하는 일 |
 | --- | --- |
@@ -36,7 +36,9 @@ Vercel은 Preview도 `vite build`를 그대로 돌려 `import.meta.env.MODE`가 
 
 `vite.config.ts`가 Vercel의 `VERCEL_ENV`를 넘겨 두 번째 잠금으로 쓴다. 환경변수를 잘못 넣어도 Production에는 mock이 켜지지 않는다.
 
-로컬에서 실제 API를 보려면 `.env.local`에 `VITE_USE_MOCK=false`를 넣는다. 백엔드가 Cloudflare Access 인증과 CORS를 열어둔 뒤에 동작한다.
+**로컬에서는 실제 API를 볼 수 없다.** 분석 요청은 같은 출처의 `/api`로 나가고 그 앞에 Vercel Function이 있어야 하는데, `pnpm dev`는 Vite 개발 서버라 그 함수를 돌리지 않는다. `VITE_USE_MOCK=false`로 바꾸면 요청이 화면 HTML을 받아 오류가 난다.
+
+실제 API는 배포에서 확인한다. 연결 구조는 [공개 접수 연결](docs/reference/public-gateway.md)에 있다.
 
 ## 구조
 
@@ -51,6 +53,8 @@ src/
 ├── screens/      라우트가 가리키는 화면
 └── app/          라우터와 QueryClient
 ```
+
+`api/`는 저장소 최상위에 따로 있다. Vercel이 서버에서 실행하는 함수이고 화면 번들에 들어가지 않는다.
 
 `wireframes/`에는 화면 흐름을 정리한 와이어프레임이 있다. `.dc.html` 파일은 브라우저로 바로 열어 볼 수 있다.
 
@@ -69,6 +73,7 @@ src/
 | --- | --- |
 | [지원하는 입력](docs/reference/supported-input.md) | 어떤 영상을 받는지, 각 조건을 어디서 언제 확인하는지 |
 | [서비스 워커](docs/reference/service-worker.md) | 무엇을 캐시하고 무엇을 캐시하지 않는지, 확인하는 곳 |
+| [공개 접수 연결](docs/reference/public-gateway.md) | 중계를 두는 이유, 봇 확인과 조회 자격, 환경변수와 오류 |
 
 ## 작업 기준
 
@@ -78,10 +83,10 @@ src/
 | [제품 코드 기준](docs/conventions/product-rules.md) | 이 제품에서만 성립하는 규칙 |
 | [커밋과 브랜치](docs/conventions/git.md) | 커밋 제목 형식과 브랜치 이름 |
 
-화면을 바꾸는 작업에서는 제품 코드 기준의 '검토할 때 보는 것'을 함께 확인한다. 처리 상태와 판정을 섞지 않기, 조작이 없다고 단정하는 표현 쓰지 않기, 숫자 점수를 화면에 내보내지 않기가 거기 있다.
+화면을 바꾸는 작업에서는 제품 코드 기준의 '검토할 때 보는 것'을 함께 확인한다. 처리 상태와 판정을 섞지 않기, 조작이 없다고 단정하는 표현 쓰지 않기, 숫자 점수를 화면에 내보내지 않기, 조회 자격을 주소에 두지 않기가 거기 있다.
 
 ## 스택
 
 Vite · React · TypeScript · react-router · vanilla-extract · TanStack Query
 
-색과 아이콘, 안내 문구는 아직 정해지지 않았다. 지금은 모노톤이며 나중에 교체될 값을 토큰으로 모아 두었다.
+판정과 미디어 조작 단계의 색은 아직 정해지지 않았다. 지금은 문구와 테두리 두께로 구분하며, 교체될 값을 토큰으로 모아 두었다.
