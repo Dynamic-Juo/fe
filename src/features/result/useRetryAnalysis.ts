@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useSubmitAnalysis } from '../../api/queries'
 import type { JobResponse } from '../../api/types'
-import { readSession, writeSession } from '../../app/session'
+import { readAnalysis, writeAnalysis } from '../../app/analysis'
 
 /**
  * 다시 분석은 새 접수다. 서버에 결과 캐시가 없어 같은 주소로 다시 접수하는
@@ -18,12 +18,17 @@ export function useRetryAnalysis(job: JobResponse): { retry: () => void; pending
   return {
     pending: submit.isPending,
     retry: () => {
-      const session = readSession()
+      const stored = readAnalysis()
       submit.mutate(
-        { url: job.url, session_id: session.sessionId },
+        { url: job.url, session_id: stored?.sessionId ?? null },
         {
           onSuccess: (response) => {
-            writeSession({ sessionId: response.session_id, lastJobId: response.job_id })
+            writeAnalysis({
+              jobId: response.job_id,
+              jobAccessToken: response.job_access_token,
+              sessionId: response.session_id,
+              savedAt: Date.now(),
+            })
             void navigate(`/r/${response.job_id}`)
           },
         },

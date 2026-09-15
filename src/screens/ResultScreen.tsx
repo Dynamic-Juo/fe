@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 
 import { isJobGone } from '../api/errors'
+import { readAnalysis } from '../app/analysis'
 import { useJob, useVideoPreview } from '../api/queries'
 import { AppBar, Banner, Chip } from '../components'
 import { ERROR, PROGRESS } from '../copy/strings'
@@ -30,7 +31,10 @@ import * as styles from './ResultScreen.css'
  */
 export function ResultScreen() {
   const { jobId } = useParams<{ jobId: string }>()
-  const job = useJob(jobId)
+  // 조회 자격은 저장소에만 있다. 주소에는 두지 않는다.
+  const stored = readAnalysis()
+  const accessToken = stored !== null && stored.jobId === jobId ? stored.jobAccessToken : undefined
+  const job = useJob(jobId, accessToken)
   const data = job.data
   const result = data?.result
 

@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  /** 분석 API 기본 주소. 경로와 마지막 슬래시는 포함하지 않는다. */
+  /** Turnstile 공개 사이트 키. 위젯을 그리는 데 쓰며 번들에 들어가도 되는 값이다. */
+  readonly VITE_TURNSTILE_SITE_KEY: string
   /** mock 사용 여부. Production 배포에서는 항상 false다. */
   readonly VITE_USE_MOCK: string
   /** 피드백과 오분석 신고 창구 주소. 정해지기 전에는 비워 둔다. */

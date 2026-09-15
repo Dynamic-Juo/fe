@@ -72,7 +72,14 @@ export function realSubmitAnalysis(request: AnalyzeRequest): Promise<AnalyzeResp
   })
 }
 
-export function realGetJob(jobId: string, signal?: AbortSignal): Promise<JobResponse> {
+export function realGetJob(
+  jobId: string,
+  accessToken: string,
+  signal?: AbortSignal,
+): Promise<JobResponse> {
   const path = `/api/jobs/${encodeURIComponent(jobId)}`
-  return apiJson<JobResponse>(path, signal === undefined ? {} : { signal })
+  return apiJson<JobResponse>(path, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    ...(signal === undefined ? {} : { signal }),
+  })
 }

@@ -6,7 +6,7 @@ import { ApiError } from '../api/errors'
 import { MockScenarioPicker } from '../api/mock/ScenarioPicker'
 import { VideoUnavailableError } from '../api/preview'
 import { useSubmitAnalysis, useVideoPreview } from '../api/queries'
-import { readSession, writeSession } from '../app/session'
+import { readAnalysis, writeAnalysis } from '../app/analysis'
 import { AppBar, Banner, Button, Card, Logo, Skeleton, TextField } from '../components'
 import { InstallEntry } from '../features/install/InstallEntry'
 import { ShareButton } from '../features/share/ShareButton'
@@ -74,12 +74,18 @@ export function HomeScreen() {
     }
     if (videoId === null || unavailable) return
 
-    const session = readSession()
+    const stored = readAnalysis()
     submit.mutate(
-      { url: watchUrl(videoId), session_id: session.sessionId },
+      { url: watchUrl(videoId), session_id: stored?.sessionId ?? null },
       {
         onSuccess: (response) => {
-          writeSession({ sessionId: response.session_id, lastJobId: response.job_id })
+          // 결과 화면으로 넘어가기 전에 적는다. 조회 자격이 여기에만 있다.
+          writeAnalysis({
+            jobId: response.job_id,
+            jobAccessToken: response.job_access_token,
+            sessionId: response.session_id,
+            savedAt: Date.now(),
+          })
           void navigate(`/r/${response.job_id}`)
         },
       },
@@ -262,7 +268,7 @@ function SubmitFailure({ error }: { error: Error | null }) {
   if (error === null) return null
 
   if (isSessionBusy(error)) {
-    const lastJobId = readSession().lastJobId
+    const lastJobId = readAnalysis()?.jobId ?? null
     return (
       <Banner
         title={ERROR.sessionBusy}

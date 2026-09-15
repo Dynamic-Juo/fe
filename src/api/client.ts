@@ -1,5 +1,6 @@
 import { mockGetJob, mockSubmitAnalysis } from './mock/client'
 import { realGetJob, realSubmitAnalysis } from './realClient'
+import { requestTurnstileToken } from './turnstile'
 import type { AnalyzeRequest, AnalyzeResponse, JobResponse } from './types'
 
 /**
@@ -16,10 +17,29 @@ import type { AnalyzeRequest, AnalyzeResponse, JobResponse } from './types'
 export const USE_MOCK =
   import.meta.env.VITE_USE_MOCK === 'true' && import.meta.env.VITE_VERCEL_ENV !== 'production'
 
-export function submitAnalysis(request: AnalyzeRequest): Promise<AnalyzeResponse> {
-  return USE_MOCK ? mockSubmitAnalysis(request) : realSubmitAnalysis(request)
+/** 접수에 필요한 값이다. 봇 확인 토큰은 여기서 받아 붙이므로 화면이 넘기지 않는다. */
+export type SubmitRequest = Omit<AnalyzeRequest, 'turnstile_token'>
+
+/**
+ * 봇 확인 토큰을 받아 붙인 뒤 접수한다. 토큰은 한 번만 쓸 수 있어 접수마다
+ * 새로 받는다.
+ *
+ * mock에는 봇 확인이 없다. 확인을 거치지 않고 바로 접수한다.
+ */
+export async function submitAnalysis(request: SubmitRequest): Promise<AnalyzeResponse> {
+  if (USE_MOCK) return mockSubmitAnalysis({ ...request, turnstile_token: 'mock' })
+  const turnstileToken = await requestTurnstileToken()
+  return realSubmitAnalysis({ ...request, turnstile_token: turnstileToken })
 }
 
-export function getJob(jobId: string, signal?: AbortSignal): Promise<JobResponse> {
-  return USE_MOCK ? mockGetJob(jobId) : realGetJob(jobId, signal)
+/**
+ * 조회에는 접수할 때 받은 토큰이 필요하다. 토큰이 없으면 서버가 404를 준다.
+ * 작업이 살아 있는지와 무관하다.
+ */
+export function getJob(
+  jobId: string,
+  accessToken: string,
+  signal?: AbortSignal,
+): Promise<JobResponse> {
+  return USE_MOCK ? mockGetJob(jobId) : realGetJob(jobId, accessToken, signal)
 }

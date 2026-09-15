@@ -49,6 +49,11 @@ export interface ErrorResponse {
 export interface AnalyzeRequest {
   url: string
   session_id?: string | null
+  /**
+   * 봇 확인 토큰이다. 공개 접수에 필수다. 한 번만 쓸 수 있고 5분 뒤 만료되므로
+   * 접수할 때 새로 받는다.
+   */
+  turnstile_token: string
 }
 
 export interface AnalyzeResponse {
@@ -56,6 +61,14 @@ export interface AnalyzeResponse {
   status: JobStatus
   session_id: string
   deduplicated: boolean
+  /**
+   * 이 작업의 결과를 읽을 수 있는 자격이다. 조회할 때 `Authorization: Bearer`로
+   * 보낸다. 발급 후 24시간 유효하다.
+   *
+   * URL, 공유 링크, 로그, 분석 도구에 넣지 않는다. 가진 사람은 결과를 볼 수
+   * 있다. 작업 ID만으로는 이 값을 만들 수 없다.
+   */
+  job_access_token: string
 }
 
 export interface MediaResult {

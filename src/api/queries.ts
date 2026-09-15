@@ -6,10 +6,10 @@ import {
 } from '@tanstack/react-query'
 
 import { isTerminalStatus } from '../domain/job'
-import { getJob, submitAnalysis } from './client'
+import { getJob, submitAnalysis, type SubmitRequest } from './client'
 import { ApiError, isJobGone, retryAfterMs } from './errors'
 import { fetchVideoPreview, type VideoPreview } from './preview'
-import type { AnalyzeRequest, AnalyzeResponse, JobResponse } from './types'
+import type { AnalyzeResponse, JobResponse } from './types'
 
 /**
  * 계약이 권장하는 간격이다. 이전 요청이 끝난 뒤 다음 요청을 보내 겹치지
@@ -24,7 +24,7 @@ export function jobQueryKey(jobId: string): readonly unknown[] {
   return ['job', jobId]
 }
 
-export function useSubmitAnalysis(): UseMutationResult<AnalyzeResponse, Error, AnalyzeRequest> {
+export function useSubmitAnalysis(): UseMutationResult<AnalyzeResponse, Error, SubmitRequest> {
   return useMutation({
     mutationFn: submitAnalysis,
     // 접수 응답을 잃어도 이미 접수됐을 수 있다. 자동으로 다시 보내지 않는다.
@@ -35,12 +35,18 @@ export function useSubmitAnalysis(): UseMutationResult<AnalyzeResponse, Error, A
 /**
  * 작업 하나를 폴링한다. 최종 상태 네 가지와 404에서 멈춘다. `progress`가
  * 1이 된 것만으로는 멈추지 않는다.
+ *
+ * 조회에는 접수할 때 받은 토큰이 필요하다. 토큰이 없으면 아예 부르지 않는다.
+ * 부르면 404가 오는데, 작업이 사라진 것과 구분되지 않는다.
  */
-export function useJob(jobId: string | undefined): UseQueryResult<JobResponse, Error> {
+export function useJob(
+  jobId: string | undefined,
+  accessToken: string | undefined,
+): UseQueryResult<JobResponse, Error> {
   return useQuery({
     queryKey: jobQueryKey(jobId ?? ''),
-    queryFn: ({ signal }) => getJob(jobId ?? '', signal),
-    enabled: jobId !== undefined && jobId !== '',
+    queryFn: ({ signal }) => getJob(jobId ?? '', accessToken ?? '', signal),
+    enabled: jobId !== undefined && jobId !== '' && accessToken !== undefined,
     refetchInterval: (query) => {
       const error = query.state.error
       // 다시 보내도 같은 답이 오는 실패에서는 멈춘다.

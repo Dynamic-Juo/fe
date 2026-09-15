@@ -96,7 +96,14 @@ export async function mockSubmitAnalysis(request: AnalyzeRequest): Promise<Analy
   }
   writeRecords([...readRecords(), record])
 
-  return { job_id: record.jobId, status: 'queued', session_id: sessionId, deduplicated: false }
+  // 실 계약과 모양을 맞춘다. mock 조회는 토큰을 검사하지 않는다.
+  return {
+    job_id: record.jobId,
+    status: 'queued',
+    session_id: sessionId,
+    deduplicated: false,
+    job_access_token: `mock-token-${record.jobId.slice(0, 8)}`,
+  }
 }
 
 export async function mockGetJob(jobId: string): Promise<JobResponse> {
