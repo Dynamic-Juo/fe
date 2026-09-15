@@ -7,7 +7,7 @@ import { TurnstileError } from '../api/turnstile'
 import { MockScenarioPicker } from '../api/mock/ScenarioPicker'
 import { VideoUnavailableError } from '../api/preview'
 import { useSubmitAnalysis, useVideoPreview } from '../api/queries'
-import { readAnalysis, writeAnalysis } from '../app/analysis'
+import { clearAnalysis, readAnalysis, writeAnalysis } from '../app/analysis'
 import { AppBar, Banner, Button, Card, Logo, Skeleton, TextField } from '../components'
 import { InstallEntry } from '../features/install/InstallEntry'
 import { ShareButton } from '../features/share/ShareButton'
@@ -239,16 +239,23 @@ const FEATURE_ICON: Record<(typeof FEATURES)[number]['key'], ReactElement> = {
  *
  * 진행 중인지 끝났는지는 열어 봐야 안다. 여기서 미리 조회하지 않는다. 홈을
  * 열 때마다 서버를 부르게 되고, 새 분석을 하러 온 사람에게도 그렇게 된다.
+ *
+ * 닫으면 저장한 자격까지 지운다. 화면에서만 감추면 다음에 홈을 열 때 다시
+ * 나타나 닫은 적이 없는 것처럼 보인다. 서버 작업 자체를 멈추지는 않는다.
  */
 function PreviousAnalysis() {
   const navigate = useNavigate()
-  const [stored] = useState(readAnalysis)
+  const [stored, setStored] = useState(readAnalysis)
   if (stored === null) return null
 
   return (
     <Banner
       title={HOME.previousTitle}
       description={HOME.previousDetail}
+      onDismiss={() => {
+        clearAnalysis()
+        setStored(null)
+      }}
       action={
         <Button
           variant="outline"
