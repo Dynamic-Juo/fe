@@ -142,6 +142,11 @@ export const HOME = {
   installGuideClose: '닫기',
   submitting: '접수하는 중',
   viewRunning: '진행 중인 분석 보기',
+  /** 탭을 닫았다가 돌아온 경우다. 진행 중인지 끝났는지는 열어 봐야 안다. */
+  previousTitle: '직전에 요청한 분석이 있습니다',
+  previousDetail: '탭을 닫아도 분석은 계속됩니다. 진행 상태나 결과를 다시 볼 수 있습니다.',
+  viewPrevious: '이전 분석 보기',
+  previousGone: '이전 분석을 더 이상 확인할 수 없습니다',
   checkingVideo: '영상을 확인하는 중',
 } as const
 
@@ -275,6 +280,21 @@ export const ERROR = {
   downloadFailed: '영상을 가져오지 못했습니다',
   network: '서버에 연결하지 못했습니다',
   unknown: '알 수 없는 오류가 발생했습니다',
+
+  /** 게이트웨이가 아직 켜지지 않았거나 서버 설정이 빠진 상태다. */
+  notOpen: '아직 분석을 받고 있지 않습니다',
+  notOpenDetail: '준비가 끝나면 이용할 수 있습니다. 잠시 뒤에 다시 시도해주세요.',
+  /** 게이트웨이는 살아 있는데 분석 서버에 닿지 못했다. */
+  upstream: '분석 서버에 연결하지 못했습니다',
+  upstreamDetail: '잠시 뒤에 다시 시도해주세요.',
+
+  /** 봇 확인을 마치지 못했다. 원인에 따라 할 일이 다르다. */
+  checkUnavailable: '확인 절차를 불러오지 못했습니다',
+  checkUnavailableDetail: '광고 차단 기능을 끄거나 다른 브라우저에서 다시 시도해주세요.',
+  checkFailed: '사람인지 확인하지 못했습니다',
+  checkFailedDetail: '다시 시도해주세요.',
+  checkUnconfigured: '분석을 받을 수 없습니다',
+  checkUnconfiguredDetail: '확인 절차가 설정되지 않았습니다. 잠시 뒤에 다시 시도해주세요.',
 } as const
 
 export const A11Y = {

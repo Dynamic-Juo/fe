@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { isJobGone } from '../api/errors'
-import { readAnalysis } from '../app/analysis'
+import { clearAnalysis, readAnalysis } from '../app/analysis'
 import { useJob, useVideoPreview } from '../api/queries'
 import { AppBar, Banner, Chip } from '../components'
-import { ERROR, PROGRESS } from '../copy/strings'
+import { ERROR, HOME, PROGRESS } from '../copy/strings'
 import { ClaimSection } from '../features/result/ClaimSection'
 import { FinalSummary } from '../features/result/FinalSummary'
 import { DoneHeadline } from '../features/result/DoneHeadline'
@@ -31,10 +32,25 @@ import * as styles from './ResultScreen.css'
  */
 export function ResultScreen() {
   const { jobId } = useParams<{ jobId: string }>()
-  // 조회 자격은 저장소에만 있다. 주소에는 두지 않는다.
-  const stored = readAnalysis()
+  /**
+   * 조회 자격은 저장소에만 있다. 주소에는 두지 않는다. 링크를 받은 사람이
+   * 남의 결과를 열 수 있으면 안 된다.
+   *
+   * 한 번 읽어 두고 다시 읽지 않는다. 폴링마다 저장소를 읽으면 그때마다
+   * 새 값이 되어 조회가 다시 시작된다.
+   */
+  const [stored] = useState(readAnalysis)
   const accessToken = stored !== null && stored.jobId === jobId ? stored.jobAccessToken : undefined
   const job = useJob(jobId, accessToken)
+
+  /**
+   * 조회할 자격이 없거나 서버에 결과가 없으면 저장을 지운다. 지우지 않으면
+   * 홈에 이전 분석 보기가 남아 눌러도 같은 화면으로 돌아온다.
+   */
+  const gone = accessToken === undefined || isJobGone(job.error)
+  useEffect(() => {
+    if (gone) clearAnalysis()
+  }, [gone])
   const data = job.data
   const result = data?.result
 
@@ -67,7 +83,7 @@ export function ResultScreen() {
       {data === undefined ? (
         <div className={styles.section}>
           {job.isError ? (
-            <LoadFailure error={job.error} />
+            <LoadFailure error={job.error} missingToken={accessToken === undefined} />
           ) : (
             <VideoStrip title={null} author={null} thumbnailUrl={null} />
           )}
@@ -146,7 +162,11 @@ export function ResultScreen() {
  * 결과를 불러오지 못한 이유를 나눈다. 서버에 결과가 없는 것과 연결이 끊긴
  * 것은 사용자가 할 일이 다르다.
  */
-function LoadFailure({ error }: { error: Error | null }) {
+function LoadFailure({ error, missingToken }: { error: Error | null; missingToken: boolean }) {
+  // 자격이 없으면 서버를 부르지도 않았다. 오류가 없는 채로 여기 온다.
+  if (missingToken) {
+    return <Banner title={HOME.previousGone} description={ERROR.jobNotFoundDetail} assertive />
+  }
   if (isJobGone(error)) {
     return <Banner title={ERROR.jobNotFound} description={ERROR.jobNotFoundDetail} assertive />
   }
