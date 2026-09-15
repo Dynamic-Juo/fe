@@ -132,6 +132,27 @@ export function CloseIcon(props: IconProps) {
   )
 }
 
+/** 판정하지 않은 상태. 좋고 나쁨이 아니라 모른다는 뜻이다. */
+export function QuestionIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.4 9.2a2.7 2.7 0 1 1 3.4 2.6c-.5.2-.8.6-.8 1.1v.6" />
+      <path d="M12 16.8h.01" />
+    </Icon>
+  )
+}
+
+/** 수행하지 못한 분석. 결과가 아니라 빈 자리다. */
+export function SlashIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M5.6 5.6l12.8 12.8" />
+    </Icon>
+  )
+}
+
 export function ClockIcon(props: IconProps) {
   return (
     <Icon {...props}>

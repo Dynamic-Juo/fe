@@ -43,6 +43,33 @@ export const emphasis = styleVariants({
   },
 })
 
+/**
+ * 축마다 다른 계열의 색을 싣는다. `emphasis`의 두께·굵기는 그대로 둔다.
+ * 색을 지워도 읽혀야 하므로 색이 유일한 구분자가 되면 안 된다.
+ */
+export const tone = styleVariants({
+  neutral: {},
+  supported: { borderColor: vars.color.verdict.supported, color: vars.color.verdict.supported },
+  refuted: { borderColor: vars.color.verdict.refuted, color: vars.color.verdict.refuted },
+  unverified: { borderColor: vars.color.verdict.unverified, color: vars.color.verdict.unverified },
+  suspected: {
+    borderColor: vars.color.manipulation.suspected,
+    color: vars.color.manipulation.suspected,
+  },
+  noClearSigns: {
+    borderColor: vars.color.manipulation.noClearSigns,
+    color: vars.color.manipulation.noClearSigns,
+  },
+  inconclusive: {
+    borderColor: vars.color.manipulation.inconclusive,
+    color: vars.color.manipulation.inconclusive,
+  },
+  unavailable: {
+    borderColor: vars.color.manipulation.unavailable,
+    color: vars.color.manipulation.unavailable,
+  },
+})
+
 export const size = styleVariants({
   md: {},
   /** 근거 카드 안처럼 본문에 딸려 붙는 자리. */
