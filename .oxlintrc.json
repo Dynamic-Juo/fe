@@ -33,5 +33,5 @@
       }
     ]
   },
-  "ignorePatterns": ["dist", "wireframes"]
+  "ignorePatterns": ["dist", "wireframes", "api/gateway.mjs"]
 }
