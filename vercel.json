@@ -1,4 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "functions": { "api/gateway.mjs": { "maxDuration": 20 } },
+  "rewrites": [
+    { "source": "/api/analyze", "destination": "/api/gateway?operation=analyze" },
+    { "source": "/api/jobs/:jobId", "destination": "/api/gateway?operation=job&job_id=:jobId" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

@@ -17,18 +17,21 @@ import * as styles from './MockScreen.css'
  */
 export function MockScreen() {
   const [jobId, setJobId] = useState<string | undefined>(undefined)
+  const [accessToken, setAccessToken] = useState<string | undefined>(undefined)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const submit = useSubmitAnalysis()
-  const job = useJob(jobId)
+  const job = useJob(jobId, accessToken)
 
   const start = (url: string) => {
     setSubmitError(null)
     setJobId(undefined)
+    setAccessToken(undefined)
     submit.mutate(
       { url, session_id: null },
       {
         onSuccess: (response) => {
           setJobId(response.job_id)
+          setAccessToken(response.job_access_token)
         },
         onError: (error) => {
           setSubmitError(error.message)

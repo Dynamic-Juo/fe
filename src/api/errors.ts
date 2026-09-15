@@ -1,10 +1,10 @@
 import type { ApiErrorBody, ValidationField } from './types'
 
 /**
- * HTTP 응답으로 돌아온 오류다. 계약의 세 층 중 첫 번째 층이다.
+ * HTTP 응답으로 돌아온 오류다. 계약의 두 층 중 첫 번째 층이다.
  *
  * 두 번째 층인 작업 실패(`job.error`)는 HTTP 200 안에 들어 있어 이 오류로
- * 오지 않는다. 세 번째 층인 인증·CORS 실패는 `ApiTransportError`다.
+ * 오지 않는다.
  */
 export class ApiError extends Error {
   readonly httpStatus: number
@@ -33,13 +33,15 @@ export class ApiError extends Error {
 }
 
 /**
- * 서버의 오류 봉투가 아닌 실패다. Access 로그인 리다이렉트, CORS 차단,
- * 네트워크 오류가 여기 들어온다. 이 실패를 반복 재시도로 풀지 않는다.
+ * 서버의 오류 봉투가 아닌 실패다. 연결 실패와 JSON이 아닌 응답이 여기 들어온다.
+ *
+ * 게이트웨이는 어떤 경우에도 JSON 봉투를 주므로, JSON이 아니면 게이트웨이를
+ * 거치지 못한 것이다. rewrite가 빠졌거나 배포가 덜 된 상태다.
  */
 export class ApiTransportError extends Error {
-  readonly kind: 'auth' | 'network' | 'malformed'
+  readonly kind: 'network' | 'malformed'
 
-  constructor(kind: 'auth' | 'network' | 'malformed', message: string) {
+  constructor(kind: 'network' | 'malformed', message: string) {
     super(message)
     this.name = 'ApiTransportError'
     this.kind = kind
@@ -49,14 +51,6 @@ export class ApiTransportError extends Error {
 /** 404는 같은 작업을 다시 조회해도 살아나지 않는다. 폴링을 멈춘다. */
 export function isJobGone(error: unknown): boolean {
   return error instanceof ApiError && error.httpStatus === 404
-}
-
-/**
- * 로그인이 필요한 상태다. 다시 보내도 같은 결과라 재시도로 풀지 않는다.
- * 사용자가 API 주소에서 인증을 마쳐야 한다.
- */
-export function needsAuth(error: unknown): boolean {
-  return error instanceof ApiTransportError && error.kind === 'auth'
 }
 
 /** 서버가 말한 재시도 간격. 없으면 `null`이다. */

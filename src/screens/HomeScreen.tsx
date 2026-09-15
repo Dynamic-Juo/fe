@@ -2,15 +2,23 @@ import { useEffect, useRef, useState, type FormEvent, type ReactElement } from '
 import { useNavigate } from 'react-router-dom'
 
 import { USE_MOCK } from '../api/client'
-import { ApiError, needsAuth } from '../api/errors'
+import { ApiError } from '../api/errors'
+import { TurnstileError } from '../api/turnstile'
 import { MockScenarioPicker } from '../api/mock/ScenarioPicker'
 import { VideoUnavailableError } from '../api/preview'
 import { useSubmitAnalysis, useVideoPreview } from '../api/queries'
-import { readSession, writeSession } from '../app/session'
+import { readAnalysis, writeAnalysis } from '../app/analysis'
 import { AppBar, Banner, Button, Card, Logo, Skeleton, TextField } from '../components'
 import { InstallEntry } from '../features/install/InstallEntry'
 import { ShareButton } from '../features/share/ShareButton'
-import { ArrowRightIcon, DocumentIcon, GithubIcon, LinkIcon, ScanFaceIcon, SearchIcon } from '../components/icons'
+import {
+  ArrowRightIcon,
+  DocumentIcon,
+  GithubIcon,
+  LinkIcon,
+  ScanFaceIcon,
+  SearchIcon,
+} from '../components/icons'
 import { ERROR, FEATURES, FOOTER, HOME } from '../copy/strings'
 import { parseVideoId, watchUrl } from '../domain/youtube'
 import * as styles from './HomeScreen.css'
@@ -67,12 +75,18 @@ export function HomeScreen() {
     }
     if (videoId === null || unavailable) return
 
-    const session = readSession()
+    const stored = readAnalysis()
     submit.mutate(
-      { url: watchUrl(videoId), session_id: session.sessionId },
+      { url: watchUrl(videoId), session_id: stored?.sessionId ?? null },
       {
         onSuccess: (response) => {
-          writeSession({ sessionId: response.session_id, lastJobId: response.job_id })
+          // 결과 화면으로 넘어가기 전에 적는다. 조회 자격이 여기에만 있다.
+          writeAnalysis({
+            jobId: response.job_id,
+            jobAccessToken: response.job_access_token,
+            sessionId: response.session_id,
+            savedAt: Date.now(),
+          })
           void navigate(`/r/${response.job_id}`)
         },
       },
@@ -147,6 +161,8 @@ export function HomeScreen() {
 
           <SubmitFailure error={submit.error} />
 
+          <PreviousAnalysis />
+
           {videoId !== null && !malformed && !unavailable ? (
             <VideoPreviewCard
               loading={preview.isPending}
@@ -217,6 +233,37 @@ const FEATURE_ICON: Record<(typeof FEATURES)[number]['key'], ReactElement> = {
   media: <ScanFaceIcon size={26} />,
 }
 
+/**
+ * 탭을 닫았다가 돌아온 사용자를 이전 분석으로 되돌린다. 서버 작업은 화면을
+ * 떠나도 계속 돌고, 조회 자격이 저장소에 남아 있으면 다시 볼 수 있다.
+ *
+ * 진행 중인지 끝났는지는 열어 봐야 안다. 여기서 미리 조회하지 않는다. 홈을
+ * 열 때마다 서버를 부르게 되고, 새 분석을 하러 온 사람에게도 그렇게 된다.
+ */
+function PreviousAnalysis() {
+  const navigate = useNavigate()
+  const [stored] = useState(readAnalysis)
+  if (stored === null) return null
+
+  return (
+    <Banner
+      title={HOME.previousTitle}
+      description={HOME.previousDetail}
+      action={
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            void navigate(`/r/${stored.jobId}`)
+          }}
+        >
+          {HOME.viewPrevious}
+        </Button>
+      }
+    />
+  )
+}
+
 /** 세션당 활성 작업은 하나다. 이 상태에서는 새 접수를 막는다. */
 function isSessionBusy(error: Error | null): boolean {
   return error instanceof ApiError && error.code === 'session_busy'
@@ -255,7 +302,7 @@ function SubmitFailure({ error }: { error: Error | null }) {
   if (error === null) return null
 
   if (isSessionBusy(error)) {
-    const lastJobId = readSession().lastJobId
+    const lastJobId = readAnalysis()?.jobId ?? null
     return (
       <Banner
         title={ERROR.sessionBusy}
@@ -284,9 +331,36 @@ function SubmitFailure({ error }: { error: Error | null }) {
     )
   }
 
-  // 로그인 절차는 이 화면에서 끝낼 수 없다. 무엇을 해야 하는지만 알린다.
-  if (needsAuth(error)) {
-    return <Banner title={ERROR.authRequired} description={ERROR.authRequiredDetail} assertive />
+  // 게이트웨이가 아직 켜지지 않았거나 서버 설정이 빠졌다. 사용자가 할 일은 없다.
+  if (error instanceof ApiError && error.code === 'public_unavailable') {
+    return <Banner title={ERROR.notOpen} description={ERROR.notOpenDetail} assertive />
+  }
+
+  if (error instanceof ApiError && error.code === 'upstream_unavailable') {
+    return <Banner title={ERROR.upstream} description={ERROR.upstreamDetail} assertive />
+  }
+
+  // 봇 확인을 마치지 못한 경우다. 원인마다 할 일이 다르다.
+  if (error instanceof TurnstileError) {
+    if (error.kind === 'unavailable') {
+      return (
+        <Banner
+          title={ERROR.checkUnavailable}
+          description={ERROR.checkUnavailableDetail}
+          assertive
+        />
+      )
+    }
+    if (error.kind === 'unconfigured') {
+      return (
+        <Banner
+          title={ERROR.checkUnconfigured}
+          description={ERROR.checkUnconfiguredDetail}
+          assertive
+        />
+      )
+    }
+    return <Banner title={ERROR.checkFailed} description={ERROR.checkFailedDetail} assertive />
   }
 
   return <Banner title={ERROR.network} description={error.message} assertive />
