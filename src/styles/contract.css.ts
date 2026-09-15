@@ -101,6 +101,7 @@ export const vars = createThemeContract({
       lg: null,
       xl: null,
       xxl: null,
+      xxxl: null,
       /** 홈의 제품 이름. 좁은 화면 기준이다. */
       hero: null,
       heroLg: null,

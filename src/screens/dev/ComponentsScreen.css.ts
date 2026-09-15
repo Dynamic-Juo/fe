@@ -12,7 +12,7 @@ export const page = style({
 })
 
 export const pageTitle = style({
-  fontSize: vars.font.size.xxl,
+  fontSize: vars.font.size.xxxl,
 })
 
 export const lead = style({

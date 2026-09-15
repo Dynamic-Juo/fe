@@ -302,5 +302,6 @@ export const A11Y = {
   expand: '펼치기',
   collapse: '접기',
   openSource: '원문 열기',
+  dismiss: '닫기',
   seekTo: '해당 위치로 이동',
 } as const

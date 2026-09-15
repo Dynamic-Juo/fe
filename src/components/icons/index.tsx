@@ -65,12 +65,18 @@ export function GithubIcon(props: IconProps) {
   )
 }
 
+/**
+ * 점 셋을 선으로 이은 모양이다. 상자에서 화살표가 나가는 모양은 옆에 있는
+ * 설치(내려받기) 아이콘과 상자·화살표를 공유해 방향만으로 구분해야 한다.
+ */
 export function ShareIcon(props: IconProps) {
   return (
     <Icon {...props}>
-      <path d="M12 3v12" />
-      <path d="M8 7l4-4 4 4" />
-      <path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7" />
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="M8.6 10.6l6.8-4" />
+      <path d="M8.6 13.4l6.8 4" />
     </Icon>
   )
 }
