@@ -1,6 +1,21 @@
 import type { ManipulationResult } from '../../api/types'
 import { Chip } from '../../components'
+import { AlertIcon, QuestionIcon, ScanFaceIcon, SlashIcon } from '../../components/icons'
 import { CLAIM, MANIPULATION_LABEL } from '../../copy/strings'
+
+const TONE = {
+  suspected: 'suspected',
+  no_clear_signs: 'noClearSigns',
+  inconclusive: 'inconclusive',
+  unavailable: 'unavailable',
+} as const
+
+const ICON = {
+  suspected: <AlertIcon size={13} />,
+  no_clear_signs: <ScanFaceIcon size={13} />,
+  inconclusive: <QuestionIcon size={13} />,
+  unavailable: <SlashIcon size={13} />,
+} as const
 
 /**
  * 미디어 조작 단계 칩이다. 요약과 미디어 영역이 같은 값을 다르게 그리면
@@ -21,11 +36,18 @@ export function ManipulationChip({
   const missing = result === null || result === undefined
   if (missing && !finished) return <Chip emphasis="dashed">{CLAIM.analyzing}</Chip>
 
+  const status = missing ? 'unavailable' : result.status
   const label = missing
     ? MANIPULATION_LABEL.unavailable
     : (result.status_label ?? MANIPULATION_LABEL[result.status])
 
   return (
-    <Chip emphasis={label === MANIPULATION_LABEL.suspected ? 'strong' : 'normal'}>{label}</Chip>
+    <Chip
+      emphasis={status === 'suspected' ? 'strong' : 'normal'}
+      tone={TONE[status]}
+      icon={ICON[status]}
+    >
+      {label}
+    </Chip>
   )
 }

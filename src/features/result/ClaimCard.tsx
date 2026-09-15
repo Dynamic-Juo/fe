@@ -2,7 +2,16 @@ import { useState, type ReactNode } from 'react'
 
 import type { ClaimResult, EvidenceResult } from '../../api/types'
 import { Card, Chip } from '../../components'
-import { ChevronDownIcon, ChevronUpIcon, PlayIcon } from '../../components/icons'
+import {
+  AlertIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ClockIcon,
+  CloseIcon,
+  PlayIcon,
+  QuestionIcon,
+} from '../../components/icons'
 import { A11Y, CLAIM, CLAIM_STATUS_LABEL, RESULT, VERDICT_LABEL } from '../../copy/strings'
 import { mentionPositions, spokenAt, type SpokenAt } from '../../domain/format'
 import { finalVerdict } from '../../domain/job'
@@ -31,6 +40,29 @@ const STATUS_EMPHASIS = {
  * 나머지 카드를 놓친다. 펼침 상태는 서버 상태와 분리해 폴링이 와도 접히지
  * 않는다.
  */
+const VERDICT_ICON = {
+  supported: <CheckIcon size={13} />,
+  refuted: <CloseIcon size={13} />,
+  unverified: <QuestionIcon size={13} />,
+} as const
+
+const STATUS_ICON = {
+  pending: null,
+  verifying: null,
+  done: null,
+  failed: <AlertIcon size={13} />,
+  timed_out: <ClockIcon size={13} />,
+} as const
+
+/**
+ * 처리가 끝나지 못한 카드는 목록에서 눈에 걸려야 한다. 다른 카드와 같은
+ * 무게로 두면 결과가 빠진 것을 모르고 지나친다.
+ */
+function cardTone(status: ClaimResult['status'], settled: boolean) {
+  if (status === 'failed' || status === 'timed_out') return 'attention'
+  return settled ? 'default' : 'muted'
+}
+
 export function ClaimCard({
   claim,
   transcriptSource,
@@ -54,13 +86,17 @@ export function ClaimCard({
   const toggleLabel = footerLabel(cited.length, references.length, hasDetail)
 
   return (
-    <Card tone={settled ? 'default' : 'muted'}>
+    <Card tone={cardTone(claim.status, settled)}>
       <div className={styles.head}>
-        <Chip emphasis={STATUS_EMPHASIS[claim.status]}>{CLAIM_STATUS_LABEL[claim.status]}</Chip>
+        <Chip emphasis={STATUS_EMPHASIS[claim.status]} icon={STATUS_ICON[claim.status]}>
+          {CLAIM_STATUS_LABEL[claim.status]}
+        </Chip>
         {verdict === null ? null : (
           <>
             <span className={styles.spacer} />
-            <Chip emphasis="strong">{VERDICT_LABEL[verdict]}</Chip>
+            <Chip emphasis="strong" tone={verdict} icon={VERDICT_ICON[verdict]}>
+              {VERDICT_LABEL[verdict]}
+            </Chip>
           </>
         )}
       </div>

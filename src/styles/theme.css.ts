@@ -1,12 +1,13 @@
 import { createGlobalTheme } from '@vanilla-extract/css'
 
 import { vars } from './contract.css'
-import { brand, gray } from './palette'
+import { brand, gray, signal } from './palette'
 
 /**
- * 판정과 미디어 조작 단계의 색은 아직 정해지지 않았다. 지금은 모두 같은
- * 회색이며, 화면에서는 문구와 테두리 두께로 구분한다. 색이 정해지면 이
- * 파일의 값만 바꾼다.
+ * 판정과 미디어 조작 단계의 색이다. 축마다 계열이 다르다. 주장 판정은
+ * 초록·빨강, 미디어 조작은 주황·먹색을 쓴다. 판정하지 않은 상태는 양쪽 다
+ * 회색이다. 노랑을 쓰지 않는다. 중간 단계로 읽혀 우리가 하지 않은 판단을
+ * 한 것처럼 보인다.
  */
 createGlobalTheme(':root', vars, {
   color: {
@@ -49,16 +50,18 @@ createGlobalTheme(':root', vars, {
     skeleton: gray[300],
 
     verdict: {
-      supported: gray[700],
-      refuted: gray[700],
-      unverified: gray[700],
+      supported: signal.supported,
+      refuted: signal.refuted,
+      // 판정하지 않은 상태다. 색을 주면 판정한 것처럼 읽힌다.
+      unverified: gray[650],
     },
 
     manipulation: {
-      suspected: gray[700],
-      noClearSigns: gray[700],
-      inconclusive: gray[600],
-      unavailable: gray[500],
+      suspected: signal.suspected,
+      // 초록을 쓰지 않는다. 문구가 일부러 단정을 피했는데 색이 뒤집는다.
+      noClearSigns: gray[800],
+      inconclusive: gray[650],
+      unavailable: gray[550],
     },
 
     claimStatus: {
