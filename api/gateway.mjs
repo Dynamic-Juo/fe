@@ -62,10 +62,19 @@ export async function handlePublicRequest(request, env=process.env, fetcher=fetc
     const upstream=await fetcher(new URL(submit?'/api/analyze':`/api/jobs/${job}`,origin), {
       method:submit?'POST':'GET',headers,body,redirect:'manual',signal:controller.signal,
     });
-    if (upstream.status>=300 && upstream.status<400 || !upstream.headers.get('content-type')?.includes('application/json'))
+    if (upstream.status>=300 && upstream.status<400 || !upstream.headers.get('content-type')?.includes('application/json')) {
+      // Server log only. Never widen the client response: it must not reveal the private origin.
+      console.error('[gateway] upstream rejected', JSON.stringify({
+        op:submit?'analyze':'job', status:upstream.status, type:upstream.headers.get('content-type'),
+        location:upstream.headers.get('location')?.slice(0,120), ray:upstream.headers.get('cf-ray'),
+      }));
       return json(502,'upstream_unavailable','분석 서버 연결을 확인 중입니다.');
+    }
     const text=await limitedText(upstream,2*1024*1024);
-    if (text===null) return json(502,'upstream_unavailable','분석 결과를 가져오지 못했습니다.');
+    if (text===null) {
+      console.error('[gateway] upstream body too large');
+      return json(502,'upstream_unavailable','분석 결과를 가져오지 못했습니다.');
+    }
     JSON.parse(text);
     const output={'content-type':'application/json','cache-control':'no-store'};
     for (const name of ['retry-after','x-request-id']) {
@@ -73,7 +82,10 @@ export async function handlePublicRequest(request, env=process.env, fetcher=fetc
       if (value) output[name]=value;
     }
     return new Response(text,{status:upstream.status,headers:output});
-  } catch { return json(502,'upstream_unavailable','분석 서버 연결을 확인 중입니다.'); }
+  } catch (failure) {
+    console.error('[gateway] upstream failed', failure?.name, failure?.message, failure?.cause?.code);
+    return json(502,'upstream_unavailable','분석 서버 연결을 확인 중입니다.');
+  }
   finally {clearTimeout(timer);}
 }
 
