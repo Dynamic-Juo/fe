@@ -1,7 +1,7 @@
 import { createGlobalTheme } from '@vanilla-extract/css'
 
 import { vars } from './contract.css'
-import { gray } from './palette'
+import { brand, gray } from './palette'
 
 /**
  * 판정과 미디어 조작 단계의 색은 아직 정해지지 않았다. 지금은 모두 같은
@@ -15,6 +15,12 @@ createGlobalTheme(':root', vars, {
       raised: gray[0],
       sunken: gray[25],
       band: gray[100],
+    },
+    brand: {
+      ink: brand.ink,
+      cream: brand.cream,
+      beak: brand.beak,
+      deep: brand.deep,
     },
     text: {
       primary: gray[900],
@@ -77,8 +83,8 @@ createGlobalTheme(':root', vars, {
       lg: '0.875rem',
       xl: '0.9375rem',
       xxl: '1.1875rem',
-      hero: '1.6875rem',
-      heroLg: '2.375rem',
+      hero: '2.25rem',
+      heroLg: '3.5rem',
     },
     weight: {
       regular: '400',
@@ -110,11 +116,11 @@ createGlobalTheme(':root', vars, {
     xxxl: '3rem',
   },
 
-  /** 시안에 둥근 모서리가 없다. 이름은 남기고 값만 0으로 둔다. */
+  /** 참새 시안의 값이다. 칩과 입력이 `sm`, 카드와 안내가 `md`를 쓴다. */
   radius: {
     none: '0',
-    sm: '0',
-    md: '0',
+    sm: '0.5rem',
+    md: '0.75rem',
     full: '9999px',
   },
 

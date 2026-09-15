@@ -30,7 +30,7 @@ export const brand = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: vars.space.sm,
+  gap: vars.space.xxs,
   marginBottom: vars.space.xxl,
   textAlign: 'center',
 })
@@ -39,6 +39,11 @@ export const title = style({
   fontSize: vars.font.size.hero,
   fontWeight: vars.font.weight.bold,
   letterSpacing: vars.font.letterSpacing.tighter,
+  /**
+   * 본문 줄 높이(1.55)를 물려받으면 46px 글자가 71px 상자를 차지한다. 위아래로
+   * 12px씩 비어 표식과 부제가 멀어진다. 제목은 한 줄이라 줄 사이를 벌릴 이유가 없다.
+   */
+  lineHeight: 1.05,
   '@media': {
     [media.desktop]: {
       fontSize: vars.font.size.heroLg,
@@ -47,7 +52,55 @@ export const title = style({
   },
 })
 
+/** 이름과 설명 사이를 받는 줄. 이름보다 작고 설명보다 굵다. */
+export const subtitle = style({
+  fontSize: vars.font.size.xxl,
+  fontWeight: vars.font.weight.bold,
+  letterSpacing: vars.font.letterSpacing.tight,
+  lineHeight: vars.font.lineHeight.tight,
+  marginTop: vars.space.xxs,
+  '@media': {
+    [media.desktop]: {
+      fontSize: vars.font.size.hero,
+    },
+  },
+})
+
+/**
+ * 붓으로 칠한 듯한 강조다. 참새의 두 글자에만 얹어 이름이 부제 안에서
+ * 드러나게 한다.
+ *
+ * 글자 뒤에 깔아야 해서 쌓임 맥락을 만들고 배경을 음수 z로 내린다.
+ */
+export const brush = style({
+  position: 'relative',
+  display: 'inline-block',
+  isolation: 'isolate',
+  selectors: {
+    '&::before': {
+      content: '',
+      position: 'absolute',
+      top: '0.16em',
+      right: '-0.14em',
+      bottom: '0.02em',
+      left: '-0.14em',
+      zIndex: -1,
+      backgroundColor: vars.color.brand.beak,
+      opacity: 0.45,
+      borderRadius: '48% 52% 44% 56% / 56% 44% 56% 44%',
+      transform: 'rotate(-2deg)',
+    },
+  },
+})
+
+/** 설명 안에서 이름을 한 번 더 부른다. 굵기만 올리고 색은 건드리지 않는다. */
+export const taglineName = style({
+  fontWeight: vars.font.weight.bold,
+  color: vars.color.text.secondary,
+})
+
 export const tagline = style({
+  marginTop: vars.space.sm,
   color: vars.color.text.tertiary,
   fontSize: vars.font.size.md,
   lineHeight: vars.font.lineHeight.relaxed,
@@ -104,18 +157,108 @@ export const notice = style({
 
 export const footer = style({
   display: 'flex',
-  justifyContent: 'center',
-  padding: `0 ${vars.space.xl} ${vars.space.xl}`,
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: vars.space.md,
+  flexWrap: 'wrap',
+  flexShrink: 0,
+  padding: `${vars.space.md} ${vars.space.xl}`,
+  borderTop: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,
+  fontSize: vars.font.size.md,
+  color: vars.color.text.faint,
+  '@media': {
+    [media.desktop]: {
+      padding: `${vars.space.lg} ${vars.space.xxl}`,
+    },
+  },
+})
+
+export const footerBrand = style({
+  display: 'flex',
+  alignItems: 'baseline',
+  gap: vars.space.sm,
+  minWidth: 0,
+})
+
+export const footerName = style({
+  fontSize: vars.font.size.xxl,
+  fontWeight: vars.font.weight.bold,
+  letterSpacing: vars.font.letterSpacing.tight,
+  color: vars.color.text.primary,
+})
+
+export const footerLinks = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: vars.space.md,
 })
 
 export const feedback = style({
-  color: vars.color.text.faint,
-  fontSize: vars.font.size.xs,
-  textDecoration: 'underline',
-  textUnderlineOffset: '3px',
+  color: 'inherit',
+  textDecoration: 'none',
+  selectors: {
+    '&:hover': { textDecoration: 'underline' },
+  },
 })
 
-/** 접수 전 확인 카드. 입력 아래에 붙어 무엇을 분석하는지 보여준다. */
+/** 조직 주소가 정해지기 전이다. 눌러도 갈 곳이 없어 링크로 만들지 않는다. */
+export const repoPlaceholder = style({
+  display: 'inline-grid',
+  placeItems: 'center',
+  color: vars.color.text.disabled,
+})
+
+/**
+ * 기능 소개다. 넓은 화면에서만 그린다. 좁은 화면에서는 입력까지 닿는 길이
+ * 길어져서 첫 화면에 들어오지 않는다.
+ */
+export const features = style({
+  display: 'none',
+  '@media': {
+    [media.desktop]: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      width: '100%',
+      maxWidth: vars.layout.formMax,
+      marginTop: vars.space.xxxl,
+      paddingTop: vars.space.xl,
+      borderTop: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,
+    },
+  },
+})
+
+export const feature = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: vars.space.sm,
+  padding: `0 ${vars.space.md}`,
+  selectors: {
+    '& + &': {
+      borderLeft: `${vars.borderWidth.thin} solid ${vars.color.border.subtle}`,
+    },
+  },
+})
+
+export const featureIcon = style({
+  flexShrink: 0,
+  color: vars.color.text.secondary,
+})
+
+export const featureName = style({
+  display: 'block',
+  fontSize: vars.font.size.xl,
+  fontWeight: vars.font.weight.bold,
+  letterSpacing: vars.font.letterSpacing.tight,
+})
+
+export const featureDetail = style({
+  display: 'block',
+  marginTop: vars.space.xxs,
+  fontSize: vars.font.size.md,
+  color: vars.color.text.tertiary,
+  lineHeight: vars.font.lineHeight.relaxed,
+})
+
 export const preview = style({
   display: 'flex',
   alignItems: 'center',

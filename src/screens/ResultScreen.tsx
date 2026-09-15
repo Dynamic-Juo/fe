@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom'
 import { isJobGone, needsAuth } from '../api/errors'
 import { useJob, useVideoPreview } from '../api/queries'
 import { AppBar, Banner, Chip } from '../components'
-import { ERROR, JOB_STATE_LABEL, PROGRESS } from '../copy/strings'
+import { ERROR, PROGRESS } from '../copy/strings'
 import { ClaimSection } from '../features/result/ClaimSection'
 import { FinalSummary } from '../features/result/FinalSummary'
+import { DoneHeadline } from '../features/result/DoneHeadline'
 import { JobOutcome } from '../features/result/JobOutcome'
 import { outcomeOf } from '../features/result/outcome'
 import { MediaPanel } from '../features/result/MediaPanel'
@@ -51,10 +52,7 @@ export function ResultScreen() {
 
   return (
     <div className={styles.page}>
-      <AppBar
-        back
-        title={terminalStatus === null ? JOB_STATE_LABEL.running : JOB_STATE_LABEL[terminalStatus]}
-      >
+      <AppBar back>
         {data === undefined ? null : terminalStatus === null ? (
           <Chip emphasis="dashed">{PROGRESS.elapsed(clock(data.elapsed_sec))}</Chip>
         ) : canRetry(data) ? (
@@ -81,7 +79,11 @@ export function ResultScreen() {
               <div className={`${styles.orderHeadline} ${styles.section}`}>
                 <JobOutcome outcome={outcome} />
               </div>
-            ) : null}
+            ) : (
+              <div className={`${styles.orderHeadline} ${styles.section}`}>
+                <DoneHeadline />
+              </div>
+            )}
             <div className={`${styles.orderClaims} ${dividerTop}`}>
               <div className={styles.section}>
                 <ClaimSection
@@ -89,6 +91,7 @@ export function ResultScreen() {
                   transcriptSource={result?.media?.transcript_source}
                   videoId={videoId}
                   finished={terminalStatus !== null}
+                  asPageTitle={terminalStatus !== null && outcome !== null}
                 />
               </div>
             </div>

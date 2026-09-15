@@ -115,10 +115,22 @@ export const DISCLOSURE = {
 } as const
 
 export const HOME = {
-  title: 'Conan AI',
-  /** 좁은 화면에서 두 줄로 끊는다. 넓은 화면에서는 이어 붙인다. */
-  taglineHead: '영상의 조작 가능성과 주장의 사실성을 ',
-  taglineTail: '따로 확인합니다',
+  title: '참새',
+  /** 상단바에서 이름 옆에 붙는다. 이름만 두면 무엇을 하는지 모른다. */
+  headerTagline: '진짜 소식을 물어와드려요!',
+  /**
+   * 부제 두 줄이다. `mark`에 들어가는 글자가 이름을 이룬다. 참새의 참과 새라서
+   * 그 두 글자에만 붓칠 강조를 얹는다.
+   */
+  subtitle: [
+    { before: '그 영상, ', mark: '참', after: '이야?' },
+    { before: '', mark: '새', after: '빨간 거짓이야?' },
+  ],
+  /** 두 문장이라 어느 폭에서나 줄을 끊는다. */
+  taglineHead: '영상 속 주장과 사실을 AI가 꼼꼼히 확인합니다.',
+  taglineLead: '그냥 넘기지 말고, ',
+  taglineName: '참새',
+  taglineTail: '에게 물어보세요.',
   inputPlaceholder: 'YouTube 영상 링크 붙여넣기',
   submit: '분석하기',
   supportNotice: '길이 3분 이하인 공개 YouTube 영상을 분석합니다.',
@@ -131,6 +143,36 @@ export const HOME = {
   submitting: '접수하는 중',
   viewRunning: '진행 중인 분석 보기',
   checkingVideo: '영상을 확인하는 중',
+} as const
+
+/**
+ * 홈 아래쪽 기능 소개다. 넓은 화면에서만 그린다. 좁은 화면에서는 입력까지
+ * 닿는 길이 길어진다.
+ *
+ * 우리가 실제로 하는 일만 적는다. 영상 요약은 하지 않으므로 쓰지 않는다.
+ */
+export const FEATURES = [
+  { key: 'claims', name: '주장 추출', detail: '영상 속 주요 주장을 AI가 찾아냅니다.' },
+  { key: 'evidence', name: '근거 찾기', detail: '주장을 뒷받침하거나 반박하는 자료를 찾아 붙입니다.' },
+  { key: 'media', name: '조작 징후', detail: '얼굴 합성 같은 조작 징후를 함께 확인합니다.' },
+] as const
+
+/**
+ * 공유 진입점 문구다. 기기 공유 창이 받는 제목과 설명, 복사했을 때의 알림을
+ * 함께 둔다.
+ */
+export const SHARE = {
+  label: '공유하기',
+  title: '참새 AI',
+  text: '그 영상, 참인지 새빨간 거짓인지 확인해 보세요.',
+  copied: '링크를 복사했어요',
+  failed: '복사하지 못했어요',
+} as const
+
+export const FOOTER = {
+  name: '참새',
+  tagline: '그 영상, 참인지 새빨간 거짓인지.',
+  github: '저장소',
 } as const
 
 export const PROGRESS = {
@@ -194,6 +236,8 @@ export const OUTCOME = {
 } as const
 
 export const RESULT = {
+  /** 깨끗하게 끝났을 때의 머리말. 개수와 판정은 아래 목록과 요약이 말한다. */
+  done: '참새가 물어온 결과입니다',
   noClaims: '영상에서 외부 근거로 확인할 수 있는 주장을 찾지 못했습니다.',
   claimUnavailable: '발언을 텍스트로 옮기지 못해 주장을 검증할 수 없습니다.',
   /** 이유를 모를 때 쓴다. 서버가 이유를 주면 그쪽을 먼저 쓴다. */

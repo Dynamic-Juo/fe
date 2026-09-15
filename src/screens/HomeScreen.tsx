@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent, type ReactElement } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { USE_MOCK } from '../api/client'
@@ -9,8 +9,9 @@ import { useSubmitAnalysis, useVideoPreview } from '../api/queries'
 import { readSession, writeSession } from '../app/session'
 import { AppBar, Banner, Button, Card, Logo, Skeleton, TextField } from '../components'
 import { InstallEntry } from '../features/install/InstallEntry'
-import { LinkIcon } from '../components/icons'
-import { ERROR, HOME } from '../copy/strings'
+import { ShareButton } from '../features/share/ShareButton'
+import { ArrowRightIcon, DocumentIcon, GithubIcon, LinkIcon, ScanFaceIcon, SearchIcon } from '../components/icons'
+import { ERROR, FEATURES, FOOTER, HOME } from '../copy/strings'
 import { parseVideoId, watchUrl } from '../domain/youtube'
 import * as styles from './HomeScreen.css'
 
@@ -81,6 +82,7 @@ export function HomeScreen() {
   return (
     <div className={styles.page}>
       <AppBar>
+        <ShareButton />
         <InstallEntry />
       </AppBar>
 
@@ -88,9 +90,21 @@ export function HomeScreen() {
         <div className={styles.brand}>
           <Logo size="md" />
           <h1 className={styles.title}>{HOME.title}</h1>
+          <p className={styles.subtitle}>
+            {HOME.subtitle.map((line, index) => (
+              <span key={line.mark}>
+                {index === 0 ? null : <br />}
+                {line.before}
+                <span className={styles.brush}>{line.mark}</span>
+                {line.after}
+              </span>
+            ))}
+          </p>
           <p className={styles.tagline}>
             {HOME.taglineHead}
-            <br className={styles.breakMobile} />
+            <br />
+            {HOME.taglineLead}
+            <span className={styles.taglineName}>{HOME.taglineName}</span>
             {HOME.taglineTail}
           </p>
         </div>
@@ -119,6 +133,7 @@ export function HomeScreen() {
             </div>
             <Button type="submit" className={styles.submit} disabled={blocked}>
               {submit.isPending ? HOME.submitting : HOME.submit}
+              {submit.isPending ? null : <ArrowRightIcon size={16} />}
             </Button>
           </div>
 
@@ -156,22 +171,50 @@ export function HomeScreen() {
             }}
           />
         ) : null}
+
+        <section className={styles.features}>
+          {FEATURES.map((item) => (
+            <div key={item.key} className={styles.feature}>
+              <span className={styles.featureIcon}>{FEATURE_ICON[item.key]}</span>
+              <div>
+                <b className={styles.featureName}>{item.name}</b>
+                <span className={styles.featureDetail}>{item.detail}</span>
+              </div>
+            </div>
+          ))}
+        </section>
       </main>
 
       <footer className={styles.footer}>
-        {FEEDBACK_URL === undefined || FEEDBACK_URL === '' ? null : (
-          <a
-            className={styles.feedback}
-            href={FEEDBACK_URL}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            {HOME.feedback}
-          </a>
-        )}
+        <div className={styles.footerBrand}>
+          <span className={styles.footerName}>{FOOTER.name}</span>
+          <span>{FOOTER.tagline}</span>
+        </div>
+        <div className={styles.footerLinks}>
+          {FEEDBACK_URL === undefined || FEEDBACK_URL === '' ? null : (
+            <a
+              className={styles.feedback}
+              href={FEEDBACK_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              {HOME.feedback}
+            </a>
+          )}
+          <span className={styles.repoPlaceholder} title={FOOTER.github}>
+            <GithubIcon size={36} label={FOOTER.github} />
+          </span>
+        </div>
       </footer>
     </div>
   )
+}
+
+/** 기능 소개의 아이콘. 문구는 `strings.ts`에 있고 여기서는 그림만 잇는다. */
+const FEATURE_ICON: Record<(typeof FEATURES)[number]['key'], ReactElement> = {
+  claims: <SearchIcon size={26} />,
+  evidence: <DocumentIcon size={26} />,
+  media: <ScanFaceIcon size={26} />,
 }
 
 /** 세션당 활성 작업은 하나다. 이 상태에서는 새 접수를 막는다. */

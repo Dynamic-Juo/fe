@@ -6,7 +6,7 @@
  * 새 ID를 만들어 세션 제한을 우회하지 않는다.
  */
 
-const KEY = 'conan.session'
+const KEY = 'chamsae.session'
 
 export interface StoredSession {
   sessionId: string | null

@@ -14,32 +14,49 @@ import * as styles from './AppBar.css'
  * 이어지지 않는다. 나갈 길이 화면 안에 있어야 한다.
  *
  * 오른쪽은 화면마다 다르다. 홈은 설치 진입점, 결과는 진행 상태다.
+ *
+ * 돌아가는 길이 있는 화면에서는 표식을 가운데에 둔다. 양옆을 같은 비율로
+ * 잡아 내용 길이와 상관없이 가운데가 흔들리지 않게 한다. 결과 화면을 공유하거나
+ * 갈무리했을 때 어느 서비스인지 남아야 한다.
+ *
+ * 작업 상태는 여기에 적지 않는다. 진행 중에는 본문 제목이, 끝난 뒤에는 요약
+ * 카드의 칩이 같은 말을 하고 있다. 띠는 스크롤하면 사라져서 남겨 둘 값도 없다.
+ *
+ * 가운데 표식은 누르는 것이 아니다. 왼쪽에 돌아가는 길이 이미 있어서, 같은
+ * 곳으로 가는 길을 둘 두면 어느 쪽을 눌러야 하는지 헷갈린다.
  */
 export function AppBar({
   back = false,
-  title,
   children,
 }: {
   back?: boolean
-  title?: string
   children?: ReactNode
 }) {
   return (
     <header className={styles.bar}>
       {back ? (
-        <Link className={styles.back} to="/" aria-label={A11Y.goHome}>
-          <BackIcon size={20} />
-        </Link>
-      ) : null}
-      {back ? (
-        <span className={styles.title}>{title}</span>
+        <>
+          <div className={styles.side}>
+            <Link className={styles.back} to="/" aria-label={A11Y.goHome}>
+              <BackIcon size={20} />
+            </Link>
+          </div>
+          <span className={styles.centerBrand}>
+            <Logo />
+            {HOME.title}
+          </span>
+          <div className={`${styles.side} ${styles.sideEnd}`}>{children}</div>
+        </>
       ) : (
-        <Link className={styles.brand} to="/">
-          <Logo />
-          {HOME.title}
-        </Link>
+        <>
+          <Link className={styles.brand} to="/">
+            <Logo />
+            {HOME.title}
+            <span className={styles.brandTagline}>{HOME.headerTagline}</span>
+          </Link>
+          {children === undefined ? null : <div className={styles.actions}>{children}</div>}
+        </>
       )}
-      {children === undefined ? null : <div className={styles.actions}>{children}</div>}
     </header>
   )
 }

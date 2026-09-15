@@ -20,7 +20,7 @@ import { MOCK_SCENARIOS, pickScenario, type MockClaim, type MockScenario } from 
  * 응답은 서버와 같은 전체 스냅샷이다. 이전 응답에 덧붙이지 않는다.
  */
 
-const STORAGE_KEY = 'conan.mock.jobs'
+const STORAGE_KEY = 'chamsae.mock.jobs'
 /** 서버 보관 상한과 같은 성격이다. 오래된 작업부터 버린다. */
 const MAX_JOBS = 20
 /** 카드가 `pending`에서 `verifying`으로 바뀌는 시점. 검증이 끝나기 몇 초 전인지. */
